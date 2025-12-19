@@ -131,11 +131,11 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
                       margin: const EdgeInsets.symmetric(horizontal: 40.0),
                       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(20.0),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.purple.withOpacity(0.15),
+                            color: Colors.purple.withValues(alpha: 0.15),
                             blurRadius: 15.0,
                             offset: const Offset(0, 5),
                           ),
@@ -153,7 +153,7 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
                           ),
                           const SizedBox(height: 8.0),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               _GridSizeOption(
                                 label: '3×3',
@@ -162,6 +162,7 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
                                 color: const Color(0xFFFF6B6B),
                                 onChanged: (v) => gameNotifier.changeGridSize(v!),
                               ),
+                              const SizedBox(width: 12.0),
                               _GridSizeOption(
                                 label: '4×4',
                                 value: 4,
@@ -169,6 +170,7 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
                                 color: const Color(0xFF8AC926),
                                 onChanged: (v) => gameNotifier.changeGridSize(v!),
                               ),
+                              const SizedBox(width: 12.0),
                               _GridSizeOption(
                                 label: '5×5',
                                 value: 5,
@@ -188,11 +190,11 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
                       margin: const EdgeInsets.symmetric(horizontal: 40.0),
                       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white.withValues(alpha: 0.85),
                         borderRadius: BorderRadius.circular(16.0),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.blue.withOpacity(0.1),
+                            color: Colors.blue.withValues(alpha: 0.1),
                             blurRadius: 10.0,
                             offset: const Offset(0, 3),
                           ),
@@ -211,7 +213,7 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
                             height: 40,
                             width: 2,
                             decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
+                              color: Colors.grey.withValues(alpha: 0.3),
                               borderRadius: BorderRadius.circular(1),
                             ),
                           ),
@@ -244,7 +246,7 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
                                     borderRadius: BorderRadius.circular(30.0),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.orange.withOpacity(0.4),
+                                        color: Colors.orange.withValues(alpha: 0.4),
                                         blurRadius: 15.0,
                                         offset: const Offset(0, 5),
                                       ),
@@ -316,12 +318,10 @@ class _GridSizeOption extends StatelessWidget {
     final isSelected = value == groupValue;
     return GestureDetector(
       onTap: () => onChanged(value),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOutBack,
+      child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         decoration: BoxDecoration(
-          color: isSelected ? color : Colors.transparent,
+          color: isSelected ? color : Colors.white,
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(
             color: color,
@@ -330,12 +330,12 @@ class _GridSizeOption extends StatelessWidget {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: color.withOpacity(0.4),
+                    color: color.withValues(alpha: 0.4),
                     blurRadius: 8.0,
                     offset: const Offset(0, 3),
                   ),
                 ]
-              : [],
+              : null,
         ),
         child: Text(
           label,
@@ -449,7 +449,7 @@ class _ShuffleButtonState extends State<_ShuffleButton> with SingleTickerProvide
             borderRadius: BorderRadius.circular(30.0),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF6A4C93).withOpacity(0.4),
+                color: const Color(0xFF6A4C93).withValues(alpha: 0.4),
                 blurRadius: 15.0,
                 offset: const Offset(0, 6),
               ),

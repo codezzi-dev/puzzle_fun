@@ -3,33 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'config_pd.dart';
 
-// Vibrant rainbow color palette for children
-const List<Color> tileColors = [
-  Color(0xFFFF6B6B), // Coral Red
-  Color(0xFFFFBE0B), // Sunny Yellow
-  Color(0xFF8AC926), // Lime Green
-  Color(0xFF1982C4), // Ocean Blue
-  Color(0xFF6A4C93), // Purple
-  Color(0xFFFF595E), // Salmon
-  Color(0xFFFFCA3A), // Gold
-  Color(0xFF38B000), // Grass Green
-  Color(0xFF3A86FF), // Sky Blue
-  Color(0xFF9B5DE5), // Violet
-  Color(0xFFFF85A1), // Pink
-  Color(0xFFFFD166), // Light Orange
-  Color(0xFF06D6A0), // Teal
-  Color(0xFF118AB2), // Deep Blue
-  Color(0xFFEF476F), // Magenta
-  Color(0xFFFFD700), // Golden Yellow
-  Color(0xFF00C49A), // Emerald
-  Color(0xFF845EC2), // Royal Purple
-  Color(0xFFFF6F91), // Hot Pink
-  Color(0xFFFFC75F), // Amber
-  Color(0xFF4B7BE5), // Cobalt Blue
-  Color(0xFF00C9B7), // Aqua
-  Color(0xFFD65DB1), // Orchid
-  Color(0xFFFF9671), // Peach
-];
 
 class GameContainer extends ConsumerStatefulWidget {
   const GameContainer({super.key});
@@ -107,13 +80,6 @@ class _GameContainerState extends ConsumerState<GameContainer> with TickerProvid
   bool _isCorrectPosition(int index, String value) {
     if (value == 'X') return false;
     return (index + 1).toString() == value;
-  }
-
-  Color _getTileColor(int value) {
-    if (value <= 0 || value > tileColors.length) {
-      return tileColors[0];
-    }
-    return tileColors[(value - 1) % tileColors.length];
   }
 
   @override
@@ -204,7 +170,7 @@ class _GameContainerState extends ConsumerState<GameContainer> with TickerProvid
                   child: isEmptyTile
                       ? _buildEmptyTile()
                       : _buildColorfulTile(
-                          value: numValue,
+                          color: gameState.getTileColor(numValue),
                           displayText: tileValue,
                           isCorrect: isCorrect,
                           tileSize: tileSize,
@@ -221,10 +187,10 @@ class _GameContainerState extends ConsumerState<GameContainer> with TickerProvid
   Widget _buildEmptyTile() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           width: 2.0,
           strokeAlign: BorderSide.strokeAlignInside,
         ),
@@ -233,12 +199,12 @@ class _GameContainerState extends ConsumerState<GameContainer> with TickerProvid
   }
 
   Widget _buildColorfulTile({
-    required int value,
+    required Color color,
     required String displayText,
     required bool isCorrect,
     required double tileSize,
   }) {
-    final baseColor = _getTileColor(value);
+    final baseColor = color;
     final darkerColor = HSLColor.fromColor(baseColor).withLightness(
       (HSLColor.fromColor(baseColor).lightness - 0.15).clamp(0.0, 1.0),
     ).toColor();
@@ -256,12 +222,12 @@ class _GameContainerState extends ConsumerState<GameContainer> with TickerProvid
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            color: baseColor.withOpacity(0.4),
+            color: baseColor.withValues(alpha: 0.4),
             blurRadius: 8.0,
             offset: const Offset(0, 4),
           ),
           BoxShadow(
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
             blurRadius: 1.0,
             offset: const Offset(-1, -1),
           ),
@@ -283,8 +249,8 @@ class _GameContainerState extends ConsumerState<GameContainer> with TickerProvid
                 borderRadius: BorderRadius.circular(8.0),
                 gradient: LinearGradient(
                   colors: [
-                    Colors.white.withOpacity(0.4),
-                    Colors.white.withOpacity(0.0),
+                    Colors.white.withValues(alpha: 0.4),
+                    Colors.white.withValues(alpha: 0.0),
                   ],
                 ),
               ),
@@ -320,7 +286,7 @@ class _GameContainerState extends ConsumerState<GameContainer> with TickerProvid
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 4,
                     ),
                   ],
