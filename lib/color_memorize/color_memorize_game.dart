@@ -388,9 +388,9 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 40),
 
-            // Large character display - colored character on neutral background
+            // Large color display - just the color, no character
             AnimatedBuilder(
               animation: _characterBounceAnim,
               builder: (context, child) {
@@ -402,62 +402,49 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
               child: ScaleTransition(
                 scale: _colorPulseAnim,
                 child: Container(
-                  width: 280,
-                  height: 280,
+                  width: 250,
+                  height: 250,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: state.currentColor.color,
                     borderRadius: BorderRadius.circular(40),
                     boxShadow: [
                       BoxShadow(
-                        color: state.currentColor.color.withValues(alpha: 0.3),
+                        color: state.currentColor.color.withValues(alpha: 0.5),
                         blurRadius: 40,
                         offset: const Offset(0, 20),
                       ),
                       BoxShadow(
-                        color: Colors.grey.withValues(alpha: 0.1),
+                        color: Colors.white.withValues(alpha: 0.4),
                         blurRadius: 2,
                         offset: const Offset(-4, -4),
                       ),
                     ],
-                    border: Border.all(
-                      color: state.currentColor.color.withValues(alpha: 0.3),
-                      width: 4,
-                    ),
                   ),
                   child: Stack(
                     children: [
-                      // Decorative corner shapes
+                      // Shine effect
                       Positioned(
-                        top: 15,
-                        left: 15,
+                        top: 20,
+                        left: 20,
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 30,
+                        right: 30,
                         child: Container(
                           width: 30,
                           height: 30,
                           decoration: BoxDecoration(
-                            color: state.currentColor.color.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 15,
-                        right: 15,
-                        child: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: state.currentColor.color.withValues(alpha: 0.1),
+                            color: Colors.white.withValues(alpha: 0.2),
                             shape: BoxShape.circle,
                           ),
-                        ),
-                      ),
-                      
-                      // Character in the actual color
-                      Center(
-                        child: CharacterWidget(
-                          characterType: state.currentCharacter.name,
-                          color: state.currentColor.color,
-                          size: 180,
                         ),
                       ),
                     ],
