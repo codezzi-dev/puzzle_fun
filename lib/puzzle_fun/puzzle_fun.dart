@@ -35,6 +35,11 @@ class _HomePageState extends ConsumerState<PuzzleFun> with TickerProviderStateMi
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(parent: _winController, curve: Curves.elasticOut));
+
+    // Reset game state when entering
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(gameProvider.notifier).resetGame();
+    });
   }
 
   @override
@@ -80,6 +85,38 @@ class _HomePageState extends ConsumerState<PuzzleFun> with TickerProviderStateMi
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Back button row
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => Navigator.of(context).pop(),
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.9),
+                                borderRadius: BorderRadius.circular(14),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.purple.withValues(alpha: 0.15),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.arrow_back_rounded,
+                                color: Color(0xFF6A4C93),
+                                size: 24,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    
                     // Animated Title
                     ScaleTransition(
                       scale: _titleScale,

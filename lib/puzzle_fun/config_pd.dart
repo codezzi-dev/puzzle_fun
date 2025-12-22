@@ -128,6 +128,10 @@ class GameNotifier extends Notifier<GameState> {
     state = GameState.initial(gridSize: newSize);
   }
 
+  void resetGame() {
+    state = GameState.initial(gridSize: state.gridSize);
+  }
+
   void suffle() {
     final newTilesList = List<String>.from(state.tilesList);
     newTilesList.shuffle();
