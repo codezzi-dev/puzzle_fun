@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:math' as math;
 
 import 'config_cm.dart';
@@ -12,8 +13,10 @@ class ColorMemorize extends ConsumerStatefulWidget {
   ConsumerState<ColorMemorize> createState() => _ColorMemorizeState();
 }
 
-class _ColorMemorizeState extends ConsumerState<ColorMemorize>
-    with TickerProviderStateMixin {
+class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProviderStateMixin {
+  // Text-to-Speech
+  final FlutterTts _flutterTts = FlutterTts();
+
   // Learning page animations
   late AnimationController _characterBounceController;
   late Animation<double> _characterBounceAnim;
@@ -30,27 +33,35 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
   late AnimationController _buttonController;
   late Animation<double> _buttonScaleAnim;
 
+  // Track last spoken phase to avoid repeat
+  GamePhase? _lastSpokenPhase;
+
   @override
   void initState() {
     super.initState();
+
+    // Initialize TTS
+    _initTts();
 
     // Character bounce animation
     _characterBounceController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     )..repeat(reverse: true);
-    _characterBounceAnim = Tween<double>(begin: 0.0, end: 12.0).animate(
-      CurvedAnimation(parent: _characterBounceController, curve: Curves.easeInOut),
-    );
+    _characterBounceAnim = Tween<double>(
+      begin: 0.0,
+      end: 12.0,
+    ).animate(CurvedAnimation(parent: _characterBounceController, curve: Curves.easeInOut));
 
     // Color pulse animation
     _colorPulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
-    _colorPulseAnim = Tween<double>(begin: 1.0, end: 1.1).animate(
-      CurvedAnimation(parent: _colorPulseController, curve: Curves.easeInOut),
-    );
+    _colorPulseAnim = Tween<double>(
+      begin: 1.0,
+      end: 1.1,
+    ).animate(CurvedAnimation(parent: _colorPulseController, curve: Curves.easeInOut));
 
     // Sparkle animation
     _sparkleController = AnimationController(
@@ -64,18 +75,20 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _overlayScaleAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _overlayController, curve: Curves.elasticOut),
-    );
+    _overlayScaleAnim = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _overlayController, curve: Curves.elasticOut));
 
     // Button animation
     _buttonController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
-    _buttonScaleAnim = Tween<double>(begin: 1.0, end: 0.92).animate(
-      CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut),
-    );
+    _buttonScaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 0.92,
+    ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
 
     // Reset game state when entering
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -83,8 +96,36 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
     });
   }
 
+  Future<void> _initTts() async {
+    await _flutterTts.setLanguage('en-US');
+    await _flutterTts.setSpeechRate(0.4); // Slow for kids
+    await _flutterTts.setVolume(1.0);
+    await _flutterTts.setPitch(1.2); // Slightly higher pitch for friendly voice
+  }
+
+  Future<void> _speakColor(String colorName) async {
+    await _flutterTts.speak(colorName);
+  }
+
+  Future<void> _speakFindColor(String colorName, String characterName) async {
+    await _flutterTts.speak('Can you find the $colorName $characterName?');
+  }
+
+  Future<void> _speakSuccess() async {
+    final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
+    final message = messages[math.Random().nextInt(messages.length)];
+    await _flutterTts.speak(message);
+  }
+
+  Future<void> _speakFailure() async {
+    final messages = ['Oops! Try again', 'Not this one', 'Let\'s try one more time'];
+    final message = messages[math.Random().nextInt(messages.length)];
+    await _flutterTts.speak(message);
+  }
+
   @override
   void dispose() {
+    _flutterTts.stop();
     _characterBounceController.dispose();
     _colorPulseController.dispose();
     _sparkleController.dispose();
@@ -98,10 +139,23 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
     final gameState = ref.watch(colorMemorizeProvider);
     final gameNotifier = ref.read(colorMemorizeProvider.notifier);
 
-    // Trigger overlay animation on phase change
-    if (gameState.phase == GamePhase.success ||
-        gameState.phase == GamePhase.failure) {
-      _overlayController.forward(from: 0);
+    // Trigger overlay animation and TTS on phase change
+    if (gameState.phase != _lastSpokenPhase) {
+      _lastSpokenPhase = gameState.phase;
+
+      if (gameState.phase == GamePhase.learning) {
+        // Speak the color name when showing
+        _speakColor(gameState.currentColor.name);
+      } else if (gameState.phase == GamePhase.testing) {
+        // Speak "Can you find the [color] [character]?"
+        _speakFindColor(gameState.currentColor.name, gameState.currentCharacter.name);
+      } else if (gameState.phase == GamePhase.success) {
+        _overlayController.forward(from: 0);
+        _speakSuccess();
+      } else if (gameState.phase == GamePhase.failure) {
+        _overlayController.forward(from: 0);
+        _speakFailure();
+      }
     }
 
     return Scaffold(
@@ -124,13 +178,11 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
             children: [
               // Floating decorations
               ..._buildFloatingDecorations(),
-              
+
               Column(
                 children: [
                   _buildAppBar(context, gameNotifier, gameState),
-                  Expanded(
-                    child: _buildGameContent(gameState, gameNotifier),
-                  ),
+                  Expanded(child: _buildGameContent(gameState, gameNotifier)),
                 ],
               ),
 
@@ -161,11 +213,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
               angle: _sparkleAnim.value * 2 * math.pi,
               child: Opacity(
                 opacity: 0.3,
-                child: Icon(
-                  Icons.star,
-                  size: 30,
-                  color: Colors.amber.shade300,
-                ),
+                child: Icon(Icons.star, size: 30, color: Colors.amber.shade300),
               ),
             );
           },
@@ -181,11 +229,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
               offset: Offset(0, math.sin(_sparkleAnim.value * 2 * math.pi) * 10),
               child: Opacity(
                 opacity: 0.25,
-                child: Icon(
-                  Icons.favorite,
-                  size: 25,
-                  color: Colors.pink.shade300,
-                ),
+                child: Icon(Icons.favorite, size: 25, color: Colors.pink.shade300),
               ),
             );
           },
@@ -201,11 +245,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
               scale: 0.8 + (math.sin(_sparkleAnim.value * 2 * math.pi) * 0.2),
               child: Opacity(
                 opacity: 0.2,
-                child: Icon(
-                  Icons.circle,
-                  size: 20,
-                  color: Colors.blue.shade300,
-                ),
+                child: Icon(Icons.circle, size: 20, color: Colors.blue.shade300),
               ),
             );
           },
@@ -214,8 +254,11 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
     ];
   }
 
-  Widget _buildAppBar(BuildContext context, ColorMemorizeNotifier notifier,
-      ColorMemorizeState state) {
+  Widget _buildAppBar(
+    BuildContext context,
+    ColorMemorizeNotifier notifier,
+    ColorMemorizeState state,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
@@ -233,12 +276,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.amber.shade400,
-                  Colors.orange.shade400,
-                ],
-              ),
+              gradient: LinearGradient(colors: [Colors.amber.shade400, Colors.orange.shade400]),
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
@@ -282,11 +320,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.flag_rounded,
-                  color: state.currentColor.color,
-                  size: 18,
-                ),
+                Icon(Icons.flag_rounded, color: state.currentColor.color, size: 18),
                 const SizedBox(width: 6),
                 Text(
                   '${state.currentRound}/${state.totalRounds}',
@@ -329,8 +363,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
     );
   }
 
-  Widget _buildGameContent(
-      ColorMemorizeState state, ColorMemorizeNotifier notifier) {
+  Widget _buildGameContent(ColorMemorizeState state, ColorMemorizeNotifier notifier) {
     switch (state.phase) {
       case GamePhase.learning:
         return _buildLearningPage(state, notifier);
@@ -342,8 +375,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
     }
   }
 
-  Widget _buildLearningPage(
-      ColorMemorizeState state, ColorMemorizeNotifier notifier) {
+  Widget _buildLearningPage(ColorMemorizeState state, ColorMemorizeNotifier notifier) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -463,7 +495,12 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
                   colors: [
                     state.currentColor.color,
                     HSLColor.fromColor(state.currentColor.color)
-                        .withLightness((HSLColor.fromColor(state.currentColor.color).lightness + 0.1).clamp(0.0, 1.0))
+                        .withLightness(
+                          (HSLColor.fromColor(state.currentColor.color).lightness + 0.1).clamp(
+                            0.0,
+                            1.0,
+                          ),
+                        )
                         .toColor(),
                   ],
                 ),
@@ -486,10 +523,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
                       color: Colors.white,
                       shape: BoxShape.circle,
                       boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 4,
-                        ),
+                        BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 4),
                       ],
                     ),
                   ),
@@ -501,13 +535,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
                       letterSpacing: 3,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black26,
-                          offset: Offset(2, 2),
-                          blurRadius: 4,
-                        ),
-                      ],
+                      shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)],
                     ),
                   ),
                 ],
@@ -529,8 +557,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
     );
   }
 
-  Widget _buildTestPage(
-      ColorMemorizeState state, ColorMemorizeNotifier notifier) {
+  Widget _buildTestPage(ColorMemorizeState state, ColorMemorizeNotifier notifier) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -632,8 +659,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
     );
   }
 
-  Widget _buildSuccessOverlay(
-      ColorMemorizeState state, ColorMemorizeNotifier notifier) {
+  Widget _buildSuccessOverlay(ColorMemorizeState state, ColorMemorizeNotifier notifier) {
     return Container(
       color: Colors.black.withValues(alpha: 0.5),
       child: Center(
@@ -687,13 +713,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
                     fontSize: 36,
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black26,
-                        offset: Offset(2, 2),
-                        blurRadius: 4,
-                      ),
-                    ],
+                    shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)],
                   ),
                 ),
 
@@ -716,9 +736,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
                   icon: state.currentRound >= state.totalRounds
                       ? Icons.refresh_rounded
                       : Icons.arrow_forward_rounded,
-                  text: state.currentRound >= state.totalRounds
-                      ? 'Play Again!'
-                      : 'Next Color!',
+                  text: state.currentRound >= state.totalRounds ? 'Play Again!' : 'Next Color!',
                 ),
               ],
             ),
@@ -728,8 +746,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
     );
   }
 
-  Widget _buildFailureOverlay(
-      ColorMemorizeState state, ColorMemorizeNotifier notifier) {
+  Widget _buildFailureOverlay(ColorMemorizeState state, ColorMemorizeNotifier notifier) {
     return Container(
       color: Colors.black.withValues(alpha: 0.5),
       child: Center(
@@ -764,10 +781,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
                       color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    child: const Text(
-                      '🤔',
-                      style: TextStyle(fontSize: 70),
-                    ),
+                    child: const Text('🤔', style: TextStyle(fontSize: 70)),
                   ),
 
                   const SizedBox(height: 20),
@@ -780,13 +794,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize>
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
                       height: 1.3,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black26,
-                          offset: Offset(2, 2),
-                          blurRadius: 4,
-                        ),
-                      ],
+                      shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)],
                     ),
                   ),
 
@@ -894,13 +902,11 @@ class _CharacterOptionCardState extends State<_CharacterOptionCard>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 150),
-    );
-    _scaleAnim = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 150));
+    _scaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -925,10 +931,7 @@ class _CharacterOptionCardState extends State<_CharacterOptionCard>
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: widget.color.color.withValues(alpha: 0.3),
-              width: 3,
-            ),
+            border: Border.all(color: widget.color.color.withValues(alpha: 0.3), width: 3),
             boxShadow: [
               BoxShadow(
                 color: widget.color.color.withValues(alpha: 0.2),
@@ -957,21 +960,18 @@ class _ShakingWidget extends StatefulWidget {
   State<_ShakingWidget> createState() => _ShakingWidgetState();
 }
 
-class _ShakingWidgetState extends State<_ShakingWidget>
-    with SingleTickerProviderStateMixin {
+class _ShakingWidgetState extends State<_ShakingWidget> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-    _animation = Tween<double>(begin: -5, end: 5).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.elasticIn),
-    );
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    _animation = Tween<double>(
+      begin: -5,
+      end: 5,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticIn));
     _controller.repeat(reverse: true);
   }
 
@@ -986,10 +986,7 @@ class _ShakingWidgetState extends State<_ShakingWidget>
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
-        return Transform.translate(
-          offset: Offset(_animation.value, 0),
-          child: widget.child,
-        );
+        return Transform.translate(offset: Offset(_animation.value, 0), child: widget.child);
       },
     );
   }
@@ -1009,10 +1006,8 @@ class _CelebrationWidgetState extends State<_CelebrationWidget>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    )..repeat();
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))
+      ..repeat();
   }
 
   @override

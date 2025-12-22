@@ -8,22 +8,18 @@ class ColorItem {
   final Color color;
   final String emoji;
 
-  const ColorItem({
-    required this.name,
-    required this.color,
-    required this.emoji,
-  });
+  const ColorItem({required this.name, required this.color, required this.emoji});
 }
 
 const List<ColorItem> colorPalette = [
-  ColorItem(name: 'Red', color: Color(0xFFFF6B6B), emoji: '❤️'),
-  ColorItem(name: 'Blue', color: Color(0xFF1982C4), emoji: '💙'),
-  ColorItem(name: 'Green', color: Color(0xFF8AC926), emoji: '💚'),
-  ColorItem(name: 'Yellow', color: Color(0xFFFFBE0B), emoji: '💛'),
-  ColorItem(name: 'Orange', color: Color(0xFFFF9671), emoji: '🧡'),
-  ColorItem(name: 'Purple', color: Color(0xFF6A4C93), emoji: '💜'),
-  ColorItem(name: 'Pink', color: Color(0xFFFF85A1), emoji: '💗'),
-  ColorItem(name: 'Teal', color: Color(0xFF06D6A0), emoji: '🩵'),
+  ColorItem(name: 'Red', color: Colors.red, emoji: '❤️'),
+  ColorItem(name: 'Blue', color: Colors.blue, emoji: '💙'),
+  ColorItem(name: 'Green', color: Colors.green, emoji: '💚'),
+  ColorItem(name: 'Yellow', color: Colors.yellow, emoji: '💛'),
+  ColorItem(name: 'Orange', color: Colors.orange, emoji: '🧡'),
+  ColorItem(name: 'Purple', color: Colors.purple, emoji: '💜'),
+  ColorItem(name: 'Pink', color: Colors.pink, emoji: '💗'),
+  ColorItem(name: 'Teal', color: Colors.teal, emoji: '🩵'),
 ];
 
 // Characters for the test phase
@@ -123,16 +119,10 @@ class _OptionsResult {
 
 _OptionsResult _generateOptions(ColorItem correctColor, Random random) {
   // Get 2 random wrong colors for 3 total options
-  final wrongColors = colorPalette
-      .where((c) => c.name != correctColor.name)
-      .toList()
+  final wrongColors = colorPalette.where((c) => c.name != correctColor.name).toList()
     ..shuffle(random);
 
-  final options = [
-    correctColor,
-    wrongColors[0],
-    wrongColors[1],
-  ]..shuffle(random);
+  final options = [correctColor, wrongColors[0], wrongColors[1]]..shuffle(random);
 
   final correctIndex = options.indexWhere((c) => c.name == correctColor.name);
 
@@ -168,18 +158,11 @@ class ColorMemorizeNotifier extends Notifier<ColorMemorizeState> {
   void checkAnswer(int selectedIndex) {
     if (selectedIndex == state.correctIndex) {
       // Correct answer!
-      state = state.copyWith(
-        phase: GamePhase.success,
-        score: state.score + 1,
-      );
+      state = state.copyWith(phase: GamePhase.success, score: state.score + 1);
     } else {
       // Wrong answer
-      final message =
-          motivationalMessages[_random.nextInt(motivationalMessages.length)];
-      state = state.copyWith(
-        phase: GamePhase.failure,
-        motivationalMessage: message,
-      );
+      final message = motivationalMessages[_random.nextInt(motivationalMessages.length)];
+      state = state.copyWith(phase: GamePhase.failure, motivationalMessage: message);
     }
   }
 
@@ -213,7 +196,6 @@ class ColorMemorizeNotifier extends Notifier<ColorMemorizeState> {
   }
 }
 
-final colorMemorizeProvider =
-    NotifierProvider<ColorMemorizeNotifier, ColorMemorizeState>(() {
+final colorMemorizeProvider = NotifierProvider<ColorMemorizeNotifier, ColorMemorizeState>(() {
   return ColorMemorizeNotifier();
 });
