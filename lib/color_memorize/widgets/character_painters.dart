@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 
 /// A collection of child-friendly, colorful custom painted characters
 /// for the Color Memorizing game.

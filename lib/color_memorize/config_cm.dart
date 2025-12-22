@@ -198,4 +198,4 @@ class ColorMemorizeNotifier extends Notifier<ColorMemorizeState> {
 
 final colorMemorizeProvider = NotifierProvider<ColorMemorizeNotifier, ColorMemorizeState>(() {
   return ColorMemorizeNotifier();
-});
+}, isAutoDispose: true);

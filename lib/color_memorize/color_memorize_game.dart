@@ -90,10 +90,6 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
       end: 0.92,
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
 
-    // Reset game state when entering
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(colorMemorizeProvider.notifier).startNewGame();
-    });
   }
 
   Future<void> _initTts() async {
