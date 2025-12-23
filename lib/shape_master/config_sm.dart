@@ -19,7 +19,6 @@ const List<ShapeItem> shapePalette = [
   ShapeItem(name: 'Pentagon', emoji: '⬠'),
   ShapeItem(name: 'Hexagon', emoji: '⬡'),
   ShapeItem(name: 'Diamond', emoji: '🔷'),
-  ShapeItem(name: 'Heart', emoji: '❤️'),
   ShapeItem(name: 'Star', emoji: '⭐'),
 ];
 

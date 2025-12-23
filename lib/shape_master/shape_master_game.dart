@@ -580,16 +580,15 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
 
             const SizedBox(height: 24),
 
-            // Shape options - 3 items stacked vertically
+            // Shape options - 3 items stacked vertically (all same color as learning phase)
             ...List.generate(state.testOptions.length, (index) {
               final option = state.testOptions[index];
-              final optionColor = state.testColors[index];
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: _ShapeOptionCard(
                     shape: option,
-                    color: optionColor.color,
+                    color: state.displayColor.color,
                     index: index,
                     onTap: () {
                       if (state.phase == ShapeGamePhase.testing) {
