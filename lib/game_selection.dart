@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'color_memorize/color_memorize_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
+import 'shape_master/shape_master_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -31,6 +32,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Learn colors!',
       gradientColors: [const Color(0xFFFF6B6B), const Color(0xFFFFBE0B)],
       page: const ColorMemorize(),
+    ),
+    _GameInfo(
+      title: 'Shape Master',
+      emoji: '🔷',
+      description: 'Learn shapes!',
+      gradientColors: [const Color(0xFF00B4D8), const Color(0xFF90E0EF)],
+      page: const ShapeMaster(),
     ),
   ];
 

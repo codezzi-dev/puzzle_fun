@@ -4,25 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
-import 'config_cm.dart';
-import 'widgets/character_painters.dart';
+import 'config_sm.dart';
+import 'widgets/shape_painters.dart';
 
-class ColorMemorize extends ConsumerStatefulWidget {
-  const ColorMemorize({super.key});
+class ShapeMaster extends ConsumerStatefulWidget {
+  const ShapeMaster({super.key});
 
   @override
-  ConsumerState<ColorMemorize> createState() => _ColorMemorizeState();
+  ConsumerState<ShapeMaster> createState() => _ShapeMasterState();
 }
 
-class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProviderStateMixin {
+class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderStateMixin {
   // Text-to-Speech
   final FlutterTts _flutterTts = FlutterTts();
 
   // Learning page animations
-  late AnimationController _characterBounceController;
-  late Animation<double> _characterBounceAnim;
-  late AnimationController _colorPulseController;
-  late Animation<double> _colorPulseAnim;
+  late AnimationController _shapeBounceController;
+  late Animation<double> _shapeBounceAnim;
+  late AnimationController _shapePulseController;
+  late Animation<double> _shapePulseAnim;
   late AnimationController _sparkleController;
   late Animation<double> _sparkleAnim;
 
@@ -35,7 +35,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
   late Animation<double> _buttonScaleAnim;
 
   // Track last spoken phase to avoid repeat
-  GamePhase? _lastSpokenPhase;
+  ShapeGamePhase? _lastSpokenPhase;
 
   @override
   void initState() {
@@ -44,25 +44,25 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
     // Initialize TTS
     _initTts();
 
-    // Character bounce animation
-    _characterBounceController = AnimationController(
+    // Shape bounce animation
+    _shapeBounceController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     )..repeat(reverse: true);
-    _characterBounceAnim = Tween<double>(
+    _shapeBounceAnim = Tween<double>(
       begin: 0.0,
       end: 12.0,
-    ).animate(CurvedAnimation(parent: _characterBounceController, curve: Curves.easeInOut));
+    ).animate(CurvedAnimation(parent: _shapeBounceController, curve: Curves.easeInOut));
 
-    // Color pulse animation
-    _colorPulseController = AnimationController(
+    // Shape pulse animation
+    _shapePulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
-    _colorPulseAnim = Tween<double>(
+    _shapePulseAnim = Tween<double>(
       begin: 1.0,
       end: 1.1,
-    ).animate(CurvedAnimation(parent: _colorPulseController, curve: Curves.easeInOut));
+    ).animate(CurvedAnimation(parent: _shapePulseController, curve: Curves.easeInOut));
 
     // Sparkle animation
     _sparkleController = AnimationController(
@@ -99,12 +99,12 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
     await _flutterTts.setPitch(1.2); // Slightly higher pitch for friendly voice
   }
 
-  Future<void> _speakColor(String colorName) async {
-    await _flutterTts.speak(colorName);
+  Future<void> _speakShape(String shapeName) async {
+    await _flutterTts.speak(shapeName);
   }
 
-  Future<void> _speakFindColor(String colorName, String characterName) async {
-    await _flutterTts.speak('Find $colorName $characterName?');
+  Future<void> _speakFindShape(String shapeName) async {
+    await _flutterTts.speak('Find $shapeName!');
   }
 
   Future<void> _speakSuccess() async {
@@ -122,8 +122,8 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
   @override
   void dispose() {
     _flutterTts.stop();
-    _characterBounceController.dispose();
-    _colorPulseController.dispose();
+    _shapeBounceController.dispose();
+    _shapePulseController.dispose();
     _sparkleController.dispose();
     _overlayController.dispose();
     _buttonController.dispose();
@@ -132,26 +132,26 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    final gameState = ref.watch(colorMemorizeProvider);
-    final gameNotifier = ref.read(colorMemorizeProvider.notifier);
+    final gameState = ref.watch(shapeMasterProvider);
+    final gameNotifier = ref.read(shapeMasterProvider.notifier);
 
     // Trigger overlay animation and TTS on phase change
     if (gameState.phase != _lastSpokenPhase) {
       _lastSpokenPhase = gameState.phase;
 
-      if (gameState.phase == GamePhase.learning) {
-        // Speak the color name when showing
-        _speakColor(gameState.currentColor.name);
-      } else if (gameState.phase == GamePhase.testing) {
-        // Speak "Can you find the [color] [character]?"
-        _speakFindColor(gameState.currentColor.name, gameState.currentCharacter.name);
-      } else if (gameState.phase == GamePhase.success) {
+      if (gameState.phase == ShapeGamePhase.learning) {
+        // Speak the shape name when showing
+        _speakShape(gameState.currentShape.name);
+      } else if (gameState.phase == ShapeGamePhase.testing) {
+        // Speak "Find the [shape]!"
+        _speakFindShape(gameState.currentShape.name);
+      } else if (gameState.phase == ShapeGamePhase.success) {
         _overlayController.forward(from: 0);
         _speakSuccess();
-      } else if (gameState.phase == GamePhase.failure) {
+      } else if (gameState.phase == ShapeGamePhase.failure) {
         _overlayController.forward(from: 0);
         // _speakFailure();
-        _speakFindColor(gameState.currentColor.name, gameState.currentCharacter.name);
+        _speakFindShape(gameState.currentShape.name);
       }
     }
 
@@ -162,10 +162,10 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              gameState.currentColor.color.withValues(alpha: 0.15),
+              gameState.displayColor.color.withValues(alpha: 0.15),
               const Color(0xFFFFF8E1),
               const Color(0xFFE3F2FD),
-              gameState.currentColor.color.withValues(alpha: 0.1),
+              gameState.displayColor.color.withValues(alpha: 0.1),
             ],
             stops: const [0.0, 0.3, 0.7, 1.0],
           ),
@@ -184,11 +184,11 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
               ),
 
               // Success Overlay
-              if (gameState.phase == GamePhase.success)
+              if (gameState.phase == ShapeGamePhase.success)
                 _buildSuccessOverlay(gameState, gameNotifier),
 
               // Failure Overlay
-              if (gameState.phase == GamePhase.failure)
+              if (gameState.phase == ShapeGamePhase.failure)
                 _buildFailureOverlay(gameState, gameNotifier),
             ],
           ),
@@ -210,7 +210,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
               angle: _sparkleAnim.value * 2 * math.pi,
               child: Opacity(
                 opacity: 0.3,
-                child: Icon(Icons.star, size: 30, color: Colors.amber.shade300),
+                child: Icon(Icons.change_history, size: 30, color: Colors.cyan.shade300),
               ),
             );
           },
@@ -226,7 +226,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
               offset: Offset(0, math.sin(_sparkleAnim.value * 2 * math.pi) * 10),
               child: Opacity(
                 opacity: 0.25,
-                child: Icon(Icons.favorite, size: 25, color: Colors.pink.shade300),
+                child: Icon(Icons.circle_outlined, size: 25, color: Colors.purple.shade300),
               ),
             );
           },
@@ -242,7 +242,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
               scale: 0.8 + (math.sin(_sparkleAnim.value * 2 * math.pi) * 0.2),
               child: Opacity(
                 opacity: 0.2,
-                child: Icon(Icons.circle, size: 20, color: Colors.blue.shade300),
+                child: Icon(Icons.star_outline, size: 20, color: Colors.amber.shade300),
               ),
             );
           },
@@ -251,11 +251,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
     ];
   }
 
-  Widget _buildAppBar(
-    BuildContext context,
-    ColorMemorizeNotifier notifier,
-    ColorMemorizeState state,
-  ) {
+  Widget _buildAppBar(BuildContext context, ShapeMasterNotifier notifier, ShapeMasterState state) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
@@ -264,7 +260,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
           _buildIconButton(
             icon: Icons.arrow_back_rounded,
             onTap: () => Navigator.of(context).pop(),
-            color: const Color(0xFF6A4C93),
+            color: const Color(0xFF00B4D8),
           ),
 
           const Spacer(),
@@ -273,11 +269,11 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [Colors.amber.shade400, Colors.orange.shade400]),
+              gradient: LinearGradient(colors: [Colors.cyan.shade400, Colors.teal.shade400]),
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.orange.withValues(alpha: 0.3),
+                  color: Colors.cyan.withValues(alpha: 0.3),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -309,7 +305,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.purple.withValues(alpha: 0.1),
+                  color: Colors.cyan.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -317,14 +313,14 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
             ),
             child: Row(
               children: [
-                Icon(Icons.flag_rounded, color: state.currentColor.color, size: 18),
+                Icon(Icons.flag_rounded, color: state.displayColor.color, size: 18),
                 const SizedBox(width: 6),
                 Text(
                   '${state.currentRound}/${state.totalRounds}',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: state.currentColor.color,
+                    color: state.displayColor.color,
                   ),
                 ),
               ],
@@ -360,26 +356,26 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
     );
   }
 
-  Widget _buildGameContent(ColorMemorizeState state, ColorMemorizeNotifier notifier) {
+  Widget _buildGameContent(ShapeMasterState state, ShapeMasterNotifier notifier) {
     switch (state.phase) {
-      case GamePhase.learning:
+      case ShapeGamePhase.learning:
         return _buildLearningPage(state, notifier);
-      case GamePhase.testing:
+      case ShapeGamePhase.testing:
         return _buildTestPage(state, notifier);
-      case GamePhase.success:
-      case GamePhase.failure:
+      case ShapeGamePhase.success:
+      case ShapeGamePhase.failure:
         return _buildTestPage(state, notifier);
     }
   }
 
-  Widget _buildLearningPage(ColorMemorizeState state, ColorMemorizeNotifier notifier) {
+  Widget _buildLearningPage(ShapeMasterState state, ShapeMasterNotifier notifier) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Title with character preview
+            // Title with shape preview
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               decoration: BoxDecoration(
@@ -387,7 +383,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: state.currentColor.color.withValues(alpha: 0.2),
+                    color: state.displayColor.color.withValues(alpha: 0.2),
                     blurRadius: 15,
                     offset: const Offset(0, 5),
                   ),
@@ -395,10 +391,10 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
               ),
               child: Column(
                 children: [
-                  Text(
-                    '🎨 Look at this ${state.currentCharacter.name}!',
+                  const Text(
+                    '🔷 Look at this shape!',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF333333),
@@ -406,7 +402,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Remember the color!',
+                    'Remember this shape!',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -419,64 +415,37 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
 
             const SizedBox(height: 40),
 
-            // Large color display - just the color, no character
+            // Large shape display
             AnimatedBuilder(
-              animation: _characterBounceAnim,
+              animation: _shapeBounceAnim,
               builder: (context, child) {
                 return Transform.translate(
-                  offset: Offset(0, -_characterBounceAnim.value),
+                  offset: Offset(0, -_shapeBounceAnim.value),
                   child: child,
                 );
               },
               child: ScaleTransition(
-                scale: _colorPulseAnim,
+                scale: _shapePulseAnim,
                 child: Container(
-                  width: 250,
-                  height: 250,
+                  width: 220,
+                  height: 220,
                   decoration: BoxDecoration(
-                    color: state.currentColor.color,
-                    borderRadius: BorderRadius.circular(40),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
-                        color: state.currentColor.color.withValues(alpha: 0.5),
-                        blurRadius: 40,
-                        offset: const Offset(0, 20),
-                      ),
-                      BoxShadow(
-                        color: Colors.white.withValues(alpha: 0.4),
-                        blurRadius: 2,
-                        offset: const Offset(-4, -4),
+                        color: state.displayColor.color.withValues(alpha: 0.4),
+                        blurRadius: 30,
+                        offset: const Offset(0, 15),
                       ),
                     ],
                   ),
-                  child: Stack(
-                    children: [
-                      // Shine effect
-                      Positioned(
-                        top: 20,
-                        left: 20,
-                        child: Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 30,
-                        right: 30,
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: Center(
+                    child: ShapeWidget(
+                      shapeType: state.currentShape.name,
+                      color: state.displayColor.color,
+                      size: 160,
+                    ),
                   ),
                 ),
               ),
@@ -484,16 +453,16 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
 
             const SizedBox(height: 30),
 
-            // Color name badge
+            // Shape name badge
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    state.currentColor.color,
-                    HSLColor.fromColor(state.currentColor.color)
+                    state.displayColor.color,
+                    HSLColor.fromColor(state.displayColor.color)
                         .withLightness(
-                          (HSLColor.fromColor(state.currentColor.color).lightness + 0.1).clamp(
+                          (HSLColor.fromColor(state.displayColor.color).lightness + 0.1).clamp(
                             0.0,
                             1.0,
                           ),
@@ -504,7 +473,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                    color: state.currentColor.color.withValues(alpha: 0.4),
+                    color: state.displayColor.color.withValues(alpha: 0.4),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -513,22 +482,12 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 4),
-                      ],
-                    ),
-                  ),
+                  Text(state.currentShape.emoji, style: const TextStyle(fontSize: 28)),
                   const SizedBox(width: 16),
                   Text(
-                    state.currentColor.name.toUpperCase(),
+                    state.currentShape.name.toUpperCase(),
                     style: const TextStyle(
-                      fontSize: 32,
+                      fontSize: 28,
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
                       letterSpacing: 3,
@@ -544,7 +503,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
             // Ready button
             _buildAnimatedButton(
               onPressed: () => notifier.goToTest(),
-              gradientColors: const [Color(0xFF8AC926), Color(0xFF06D6A0)],
+              gradientColors: const [Color(0xFF00B4D8), Color(0xFF90E0EF)],
               icon: Icons.play_arrow_rounded,
               text: "I'm Ready!",
             ),
@@ -554,7 +513,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
     );
   }
 
-  Widget _buildTestPage(ColorMemorizeState state, ColorMemorizeNotifier notifier) {
+  Widget _buildTestPage(ShapeMasterState state, ShapeMasterNotifier notifier) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -568,7 +527,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.purple.withValues(alpha: 0.1),
+                    color: Colors.cyan.withValues(alpha: 0.1),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -590,11 +549,11 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
-                          color: state.currentColor.color,
+                          color: const Color(0xFF00B4D8),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          state.currentColor.name.toUpperCase(),
+                          state.currentShape.name.toUpperCase(),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
@@ -605,44 +564,27 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CharacterWidget(
-                        characterType: state.currentCharacter.name,
-                        color: Colors.grey.shade400,
-                        size: 50,
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        state.currentCharacter.name,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF6A4C93),
-                        ),
-                      ),
-                    ],
-                  ),
+                  const SizedBox(height: 8),
+                  Text(state.currentShape.emoji, style: const TextStyle(fontSize: 40)),
                 ],
               ),
             ),
 
             const SizedBox(height: 24),
 
-            // Character options - 3 items stacked vertically, centered
+            // Shape options - 3 items stacked vertically
             ...List.generate(state.testOptions.length, (index) {
               final option = state.testOptions[index];
+              final optionColor = state.testColors[index];
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 16),
-                  child: _CharacterOptionCard(
-                    character: state.currentCharacter,
-                    color: option,
+                  child: _ShapeOptionCard(
+                    shape: option,
+                    color: optionColor.color,
                     index: index,
                     onTap: () {
-                      if (state.phase == GamePhase.testing) {
+                      if (state.phase == ShapeGamePhase.testing) {
                         notifier.checkAnswer(index);
                       }
                     },
@@ -656,7 +598,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
     );
   }
 
-  Widget _buildSuccessOverlay(ColorMemorizeState state, ColorMemorizeNotifier notifier) {
+  Widget _buildSuccessOverlay(ShapeMasterState state, ShapeMasterNotifier notifier) {
     return Container(
       color: Colors.black.withValues(alpha: 0.5),
       child: Center(
@@ -669,12 +611,12 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
               gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Color(0xFFFFD700), Color(0xFFFFA500), Color(0xFFFF8C00)],
+                colors: [Color(0xFF00B4D8), Color(0xFF0077B6), Color(0xFF023E8A)],
               ),
               borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.orange.withValues(alpha: 0.5),
+                  color: Colors.cyan.withValues(alpha: 0.5),
                   blurRadius: 40,
                   offset: const Offset(0, 20),
                 ),
@@ -688,16 +630,16 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
 
                 const SizedBox(height: 20),
 
-                // Correct character display
+                // Correct shape display
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  child: CharacterWidget(
-                    characterType: state.currentCharacter.name,
-                    color: state.currentColor.color,
+                  child: ShapeWidget(
+                    shapeType: state.currentShape.name,
+                    color: state.displayColor.color,
                     size: 100,
                   ),
                 ),
@@ -717,7 +659,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
                 const SizedBox(height: 8),
 
                 Text(
-                  'The ${state.currentCharacter.name} was ${state.currentColor.name}!',
+                  'You found the ${state.currentShape.name}!',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -733,7 +675,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
                   icon: state.currentRound >= state.totalRounds
                       ? Icons.refresh_rounded
                       : Icons.arrow_forward_rounded,
-                  text: state.currentRound >= state.totalRounds ? 'Play Again!' : 'Next Color!',
+                  text: state.currentRound >= state.totalRounds ? 'Play Again!' : 'Next Shape!',
                 ),
               ],
             ),
@@ -743,7 +685,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
     );
   }
 
-  Widget _buildFailureOverlay(ColorMemorizeState state, ColorMemorizeNotifier notifier) {
+  Widget _buildFailureOverlay(ShapeMasterState state, ShapeMasterNotifier notifier) {
     return Container(
       color: Colors.black.withValues(alpha: 0.5),
       child: Center(
@@ -798,7 +740,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
                   const SizedBox(height: 12),
 
                   Text(
-                    'Look for the ${state.currentColor.name} ${state.currentCharacter.name}',
+                    'Look for the ${state.currentShape.name}',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -873,26 +815,25 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
   }
 }
 
-// Character Option Card with improved design
-class _CharacterOptionCard extends StatefulWidget {
-  final CharacterItem character;
-  final ColorItem color;
+// Shape Option Card with improved design
+class _ShapeOptionCard extends StatefulWidget {
+  final ShapeItem shape;
+  final Color color;
   final int index;
   final VoidCallback onTap;
 
-  const _CharacterOptionCard({
-    required this.character,
+  const _ShapeOptionCard({
+    required this.shape,
     required this.color,
     required this.index,
     required this.onTap,
   });
 
   @override
-  State<_CharacterOptionCard> createState() => _CharacterOptionCardState();
+  State<_ShapeOptionCard> createState() => _ShapeOptionCardState();
 }
 
-class _CharacterOptionCardState extends State<_CharacterOptionCard>
-    with SingleTickerProviderStateMixin {
+class _ShapeOptionCardState extends State<_ShapeOptionCard> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnim;
 
@@ -928,20 +869,16 @@ class _CharacterOptionCardState extends State<_CharacterOptionCard>
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: widget.color.color.withValues(alpha: 0.3), width: 3),
+            border: Border.all(color: widget.color.withValues(alpha: 0.3), width: 3),
             boxShadow: [
               BoxShadow(
-                color: widget.color.color.withValues(alpha: 0.2),
+                color: widget.color.withValues(alpha: 0.2),
                 blurRadius: 12,
                 offset: const Offset(0, 5),
               ),
             ],
           ),
-          child: CharacterWidget(
-            characterType: widget.character.name,
-            color: widget.color.color,
-            size: 100,
-          ),
+          child: ShapeWidget(shapeType: widget.shape.name, color: widget.color, size: 100),
         ),
       ),
     );
