@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import 'color_memorize/color_memorize_game.dart';
+import 'digit_master/digit_master_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
 import 'shape_master/shape_master_game.dart';
 
@@ -39,6 +40,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Learn shapes!',
       gradientColors: [const Color(0xFF00B4D8), const Color(0xFF90E0EF)],
       page: const ShapeMaster(),
+    ),
+    _GameInfo(
+      title: 'Digit Master',
+      emoji: '🔢',
+      description: 'Learn numbers!',
+      gradientColors: [const Color(0xFFFF9F1C), const Color(0xFFFFBF69)],
+      page: const DigitMaster(),
     ),
   ];
 
