@@ -89,7 +89,6 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
       begin: 1.0,
       end: 0.92,
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
-
   }
 
   Future<void> _initTts() async {
@@ -104,7 +103,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
   }
 
   Future<void> _speakFindColor(String colorName, String characterName) async {
-    await _flutterTts.speak('Can you find the $colorName $characterName?');
+    await _flutterTts.speak('Find $colorName $characterName?');
   }
 
   Future<void> _speakSuccess() async {

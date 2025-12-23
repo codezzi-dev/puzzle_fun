@@ -11,8 +11,7 @@ class GameSelectionScreen extends StatefulWidget {
   State<GameSelectionScreen> createState() => _GameSelectionScreenState();
 }
 
-class _GameSelectionScreenState extends State<GameSelectionScreen>
-    with TickerProviderStateMixin {
+class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerProviderStateMixin {
   late AnimationController _titleController;
   late Animation<double> _titleScale;
   late List<AnimationController> _cardControllers;
@@ -44,22 +43,21 @@ class _GameSelectionScreenState extends State<GameSelectionScreen>
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
-    _titleScale = Tween<double>(begin: 1.0, end: 1.08).animate(
-      CurvedAnimation(parent: _titleController, curve: Curves.easeInOut),
-    );
+    _titleScale = Tween<double>(
+      begin: 1.0,
+      end: 1.08,
+    ).animate(CurvedAnimation(parent: _titleController, curve: Curves.easeInOut));
 
     // Card entrance animations
     _cardControllers = List.generate(
       games.length,
-      (index) => AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 600),
-      ),
+      (index) => AnimationController(vsync: this, duration: const Duration(milliseconds: 600)),
     );
     _cardAnimations = _cardControllers.map((controller) {
-      return Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: controller, curve: Curves.elasticOut),
-      );
+      return Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).animate(CurvedAnimation(parent: controller, curve: Curves.elasticOut));
     }).toList();
 
     // Stagger the card animations
@@ -87,12 +85,7 @@ class _GameSelectionScreenState extends State<GameSelectionScreen>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFE8F5E9),
-              Color(0xFFE3F2FD),
-              Color(0xFFFCE4EC),
-              Color(0xFFFFF8E1),
-            ],
+            colors: [Color(0xFFE8F5E9), Color(0xFFE3F2FD), Color(0xFFFCE4EC), Color(0xFFFFF8E1)],
             stops: [0.0, 0.3, 0.6, 1.0],
           ),
         ),
@@ -100,7 +93,7 @@ class _GameSelectionScreenState extends State<GameSelectionScreen>
           child: Column(
             children: [
               const SizedBox(height: 40),
-              
+
               // Animated Title
               ScaleTransition(
                 scale: _titleScale,
@@ -125,9 +118,9 @@ class _GameSelectionScreenState extends State<GameSelectionScreen>
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 12),
-              
+
               Text(
                 'Choose a game to play!',
                 style: TextStyle(
@@ -136,9 +129,9 @@ class _GameSelectionScreenState extends State<GameSelectionScreen>
                   color: Colors.grey[600],
                 ),
               ),
-              
+
               const SizedBox(height: 40),
-              
+
               // Game Cards
               Expanded(
                 child: Padding(
@@ -158,7 +151,7 @@ class _GameSelectionScreenState extends State<GameSelectionScreen>
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 20),
             ],
           ),
@@ -175,9 +168,10 @@ class _GameSelectionScreenState extends State<GameSelectionScreen>
           return FadeTransition(
             opacity: animation,
             child: ScaleTransition(
-              scale: Tween<double>(begin: 0.8, end: 1.0).animate(
-                CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
-              ),
+              scale: Tween<double>(
+                begin: 0.8,
+                end: 1.0,
+              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutBack)),
               child: child,
             ),
           );
@@ -214,8 +208,7 @@ class _GameCard extends StatefulWidget {
   State<_GameCard> createState() => _GameCardState();
 }
 
-class _GameCardState extends State<_GameCard>
-    with SingleTickerProviderStateMixin {
+class _GameCardState extends State<_GameCard> with SingleTickerProviderStateMixin {
   late AnimationController _hoverController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _emojiRotation;
@@ -227,12 +220,14 @@ class _GameCardState extends State<_GameCard>
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _hoverController, curve: Curves.easeInOut),
-    );
-    _emojiRotation = Tween<double>(begin: 0.0, end: 0.1).animate(
-      CurvedAnimation(parent: _hoverController, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _hoverController, curve: Curves.easeInOut));
+    _emojiRotation = Tween<double>(
+      begin: 0.0,
+      end: 0.1,
+    ).animate(CurvedAnimation(parent: _hoverController, curve: Curves.easeInOut));
   }
 
   @override
@@ -304,7 +299,7 @@ class _GameCardState extends State<_GameCard>
                       ),
                     ),
                   ),
-                  
+
                   // Content
                   Padding(
                     padding: const EdgeInsets.all(24.0),
@@ -321,15 +316,12 @@ class _GameCardState extends State<_GameCard>
                               borderRadius: BorderRadius.circular(18.0),
                             ),
                             child: Center(
-                              child: Text(
-                                widget.info.emoji,
-                                style: const TextStyle(fontSize: 36),
-                              ),
+                              child: Text(widget.info.emoji, style: const TextStyle(fontSize: 36)),
                             ),
                           ),
                         ),
                         const SizedBox(width: 16),
-                        
+
                         // Text content
                         Expanded(
                           child: Column(
@@ -366,7 +358,7 @@ class _GameCardState extends State<_GameCard>
                             ],
                           ),
                         ),
-                        
+
                         // Arrow icon
                         Container(
                           padding: const EdgeInsets.all(12),
