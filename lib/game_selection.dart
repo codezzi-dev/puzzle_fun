@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'color_memorize/color_memorize_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
-import 'color_memorize/color_memorize.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
