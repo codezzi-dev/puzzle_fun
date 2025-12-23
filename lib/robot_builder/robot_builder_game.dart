@@ -29,6 +29,7 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
 
   RobotBuilderPhase? _lastSpokenPhase;
   List<RobotPart>? _shuffledParts;
+  bool _showReference = false;
 
   @override
   void initState() {
@@ -258,19 +259,47 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
   }
 
   Widget _buildBuildingPage(RobotBuilderState state, RobotBuilderNotifier notifier) {
-    return Column(
+    return Stack(
       children: [
-        // Instructions
-        Container(
-          margin: const EdgeInsets.all(16),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.1), blurRadius: 15, offset: const Offset(0, 5))],
-          ),
-          child: const Text('🔧 Drag shapes to the right spots!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF333333))),
-        ),
+        Column(
+          children: [
+            // Instructions with reference button
+            Container(
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.1), blurRadius: 15, offset: const Offset(0, 5))],
+              ),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text('🔧 Drag shapes to the right spots!', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF333333))),
+                  ),
+                  // Reference button
+                  GestureDetector(
+                    onTap: () => setState(() => _showReference = true),
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [Colors.amber.shade400, Colors.orange.shade400]),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [BoxShadow(color: Colors.amber.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 3))],
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.visibility, color: Colors.white, size: 20),
+                          SizedBox(width: 6),
+                          Text('Hint', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
         // Robot with drop zones
         Expanded(
@@ -331,6 +360,43 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
             ],
           ),
         ),
+          ],
+        ),
+        // Reference overlay
+        if (_showReference)
+          GestureDetector(
+            onTap: () => setState(() => _showReference = false),
+            child: Container(
+              color: Colors.black.withValues(alpha: 0.7),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.3), blurRadius: 30, offset: const Offset(0, 15))],
+                      ),
+                      child: RobotDisplay(robot: state.currentRobot, showOutlineOnly: false),
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.9),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(state.currentRobot.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF7B68EE))),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text('Tap anywhere to close', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                  ],
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }
