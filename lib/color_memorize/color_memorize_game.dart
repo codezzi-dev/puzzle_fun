@@ -419,64 +419,67 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
 
             const SizedBox(height: 40),
 
-            // Large color display - just the color, no character
-            AnimatedBuilder(
-              animation: _characterBounceAnim,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(0, -_characterBounceAnim.value),
-                  child: child,
-                );
-              },
-              child: ScaleTransition(
-                scale: _colorPulseAnim,
-                child: Container(
-                  width: 250,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    color: state.currentColor.color,
-                    borderRadius: BorderRadius.circular(40),
-                    boxShadow: [
-                      BoxShadow(
-                        color: state.currentColor.color.withValues(alpha: 0.5),
-                        blurRadius: 40,
-                        offset: const Offset(0, 20),
-                      ),
-                      BoxShadow(
-                        color: Colors.white.withValues(alpha: 0.4),
-                        blurRadius: 2,
-                        offset: const Offset(-4, -4),
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      // Shine effect
-                      Positioned(
-                        top: 20,
-                        left: 20,
-                        child: Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(20),
+            // Large color display - tap to hear "Find [color] [character]!"
+            GestureDetector(
+              onTap: () => _speakColor(state.currentColor.name),
+              child: AnimatedBuilder(
+                animation: _characterBounceAnim,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(0, -_characterBounceAnim.value),
+                    child: child,
+                  );
+                },
+                child: ScaleTransition(
+                  scale: _colorPulseAnim,
+                  child: Container(
+                    width: 250,
+                    height: 250,
+                    decoration: BoxDecoration(
+                      color: state.currentColor.color,
+                      borderRadius: BorderRadius.circular(40),
+                      boxShadow: [
+                        BoxShadow(
+                          color: state.currentColor.color.withValues(alpha: 0.5),
+                          blurRadius: 40,
+                          offset: const Offset(0, 20),
+                        ),
+                        BoxShadow(
+                          color: Colors.white.withValues(alpha: 0.4),
+                          blurRadius: 2,
+                          offset: const Offset(-4, -4),
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        // Shine effect
+                        Positioned(
+                          top: 20,
+                          left: 20,
+                          child: Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.3),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 30,
-                        right: 30,
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            shape: BoxShape.circle,
+                        Positioned(
+                          bottom: 30,
+                          right: 30,
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              shape: BoxShape.circle,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -485,57 +488,62 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
             const SizedBox(height: 30),
 
             // Color name badge
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    state.currentColor.color,
-                    HSLColor.fromColor(state.currentColor.color)
-                        .withLightness(
-                          (HSLColor.fromColor(state.currentColor.color).lightness + 0.1).clamp(
-                            0.0,
-                            1.0,
-                          ),
-                        )
-                        .toColor(),
+            GestureDetector(
+              onTap: () => _speakColor(state.currentColor.name),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      state.currentColor.color,
+                      HSLColor.fromColor(state.currentColor.color)
+                          .withLightness(
+                            (HSLColor.fromColor(state.currentColor.color).lightness + 0.1).clamp(
+                              0.0,
+                              1.0,
+                            ),
+                          )
+                          .toColor(),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: state.currentColor.color.withValues(alpha: 0.4),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                    color: state.currentColor.color.withValues(alpha: 0.4),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 4),
-                      ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 4),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Text(
-                    state.currentColor.name.toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                      letterSpacing: 3,
-                      shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)],
+                    const SizedBox(width: 16),
+                    Text(
+                      state.currentColor.name.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 3,
+                        shadows: [
+                          Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
 

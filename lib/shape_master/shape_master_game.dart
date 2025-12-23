@@ -415,36 +415,39 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
 
             const SizedBox(height: 40),
 
-            // Large shape display
-            AnimatedBuilder(
-              animation: _shapeBounceAnim,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(0, -_shapeBounceAnim.value),
-                  child: child,
-                );
-              },
-              child: ScaleTransition(
-                scale: _shapePulseAnim,
-                child: Container(
-                  width: 220,
-                  height: 220,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: state.displayColor.color.withValues(alpha: 0.4),
-                        blurRadius: 30,
-                        offset: const Offset(0, 15),
+            // Large shape display - tap to hear "Find [shape]!"
+            GestureDetector(
+              onTap: () => _speakShape(state.currentShape.name),
+              child: AnimatedBuilder(
+                animation: _shapeBounceAnim,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(0, -_shapeBounceAnim.value),
+                    child: child,
+                  );
+                },
+                child: ScaleTransition(
+                  scale: _shapePulseAnim,
+                  child: Container(
+                    width: 220,
+                    height: 220,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: state.displayColor.color.withValues(alpha: 0.4),
+                          blurRadius: 30,
+                          offset: const Offset(0, 15),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: ShapeWidget(
+                        shapeType: state.currentShape.name,
+                        color: state.displayColor.color,
+                        size: 160,
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: ShapeWidget(
-                      shapeType: state.currentShape.name,
-                      color: state.displayColor.color,
-                      size: 160,
                     ),
                   ),
                 ),
@@ -454,47 +457,52 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
             const SizedBox(height: 30),
 
             // Shape name badge
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    state.displayColor.color,
-                    HSLColor.fromColor(state.displayColor.color)
-                        .withLightness(
-                          (HSLColor.fromColor(state.displayColor.color).lightness + 0.1).clamp(
-                            0.0,
-                            1.0,
-                          ),
-                        )
-                        .toColor(),
+            GestureDetector(
+              onTap: () => _speakShape(state.currentShape.name),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      state.displayColor.color,
+                      HSLColor.fromColor(state.displayColor.color)
+                          .withLightness(
+                            (HSLColor.fromColor(state.displayColor.color).lightness + 0.1).clamp(
+                              0.0,
+                              1.0,
+                            ),
+                          )
+                          .toColor(),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: state.displayColor.color.withValues(alpha: 0.4),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                    color: state.displayColor.color.withValues(alpha: 0.4),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(state.currentShape.emoji, style: const TextStyle(fontSize: 28)),
-                  const SizedBox(width: 16),
-                  Text(
-                    state.currentShape.name.toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                      letterSpacing: 3,
-                      shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(state.currentShape.emoji, style: const TextStyle(fontSize: 28)),
+                    const SizedBox(width: 16),
+                    Text(
+                      state.currentShape.name.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 3,
+                        shadows: [
+                          Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
 
