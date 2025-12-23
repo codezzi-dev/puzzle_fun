@@ -6,6 +6,7 @@ import 'body_parts/body_parts_game.dart';
 import 'color_memorize/color_memorize_game.dart';
 import 'digit_master/digit_master_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
+import 'robot_builder/robot_builder_game.dart';
 import 'shape_master/shape_master_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
@@ -56,6 +57,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Learn body parts!',
       gradientColors: [const Color(0xFFE63946), const Color(0xFFF77F00)],
       page: const BodyPartsGame(),
+    ),
+    _GameInfo(
+      title: 'Robot Builder',
+      emoji: '🤖',
+      description: 'Build with shapes!',
+      gradientColors: [const Color(0xFF7B68EE), const Color(0xFF9B59B6)],
+      page: const RobotBuilderGame(),
     ),
   ];
 
