@@ -143,12 +143,12 @@ List<ColorOption> _generateColors(Random random) {
 
 // Motivational messages for failure
 const List<String> motivationalMessages = [
-  "Almost there! Try again! 💪",
-  "You can do it! 🌟",
-  "Keep trying, superstar! ⭐",
-  "So close! One more try! 🎯",
-  "You're doing great! 🔷",
-  "Don't give up! 🚀",
+  "Almost there! Try again!",
+  "You can do it!",
+  "Keep trying, superstar!",
+  "So close! One more try!",
+  "You're doing great!",
+  "Don't give up!",
 ];
 
 class ShapeMasterNotifier extends Notifier<ShapeMasterState> {

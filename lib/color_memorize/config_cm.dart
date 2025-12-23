@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -131,12 +132,12 @@ _OptionsResult _generateOptions(ColorItem correctColor, Random random) {
 
 // Motivational messages for failure
 const List<String> motivationalMessages = [
-  "Almost there! Try again! 💪",
-  "You can do it! 🌟",
-  "Keep trying, superstar! ⭐",
-  "So close! One more try! 🎯",
-  "You're doing great! 🎨",
-  "Don't give up! 🚀",
+  "Almost there! Try again!",
+  "You can do it!",
+  "Keep trying, superstar!",
+  "So close! One more try!",
+  "You're doing great!",
+  "Don't give up!",
 ];
 
 class ColorMemorizeNotifier extends Notifier<ColorMemorizeState> {

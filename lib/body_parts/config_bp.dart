@@ -2,29 +2,30 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// List of digits with names
-class DigitItem {
-  final int value;
+class BodyPartItem {
   final String name;
   final String emoji;
 
-  const DigitItem({required this.value, required this.name, required this.emoji});
+  const BodyPartItem({required this.name, required this.emoji});
 }
 
-const List<DigitItem> digitPalette = [
-  DigitItem(value: 0, name: 'Zero', emoji: '0️⃣'),
-  DigitItem(value: 1, name: 'One', emoji: '1️⃣'),
-  DigitItem(value: 2, name: 'Two', emoji: '2️⃣'),
-  DigitItem(value: 3, name: 'Three', emoji: '3️⃣'),
-  DigitItem(value: 4, name: 'Four', emoji: '4️⃣'),
-  DigitItem(value: 5, name: 'Five', emoji: '5️⃣'),
-  DigitItem(value: 6, name: 'Six', emoji: '6️⃣'),
-  DigitItem(value: 7, name: 'Seven', emoji: '7️⃣'),
-  DigitItem(value: 8, name: 'Eight', emoji: '8️⃣'),
-  DigitItem(value: 9, name: 'Nine', emoji: '9️⃣'),
+const List<BodyPartItem> bodyPartsPalette = [
+  BodyPartItem(name: 'Eye', emoji: '👁️'),
+  BodyPartItem(name: 'Ear', emoji: '👂'),
+  BodyPartItem(name: 'Nose', emoji: '👃'),
+  BodyPartItem(name: 'Mouth', emoji: '👄'),
+  BodyPartItem(name: 'Tongue', emoji: '👅'),
+  BodyPartItem(name: 'Tooth', emoji: '🦷'),
+  BodyPartItem(name: 'Arm', emoji: '💪'),
+  BodyPartItem(name: 'Leg', emoji: '🦵'),
+  BodyPartItem(name: 'Foot', emoji: '🦶'),
+  BodyPartItem(name: 'Hand', emoji: '✋'),
+  BodyPartItem(name: 'Brain', emoji: '🧠'),
+  BodyPartItem(name: 'Heart', emoji: '❤️'),
+  BodyPartItem(name: 'Lungs', emoji: '🫁'),
+  BodyPartItem(name: 'Bone', emoji: '🦴'),
 ];
 
-// Colors for visual display
 class ColorOption {
   final String name;
   final Color color;
@@ -40,24 +41,23 @@ const List<ColorOption> colorOptions = [
   ColorOption(name: 'Purple', color: Colors.purple),
   ColorOption(name: 'Pink', color: Colors.pink),
   ColorOption(name: 'Teal', color: Colors.teal),
-  ColorOption(name: 'Amber', color: Colors.amber),
 ];
 
-enum DigitGamePhase { learning, testing, success, failure }
+enum BodyPartsGamePhase { learning, testing, success, failure }
 
-class DigitMasterState {
-  final DigitItem currentDigit;
+class BodyPartsState {
+  final BodyPartItem currentBodyPart;
   final ColorOption displayColor;
-  final List<DigitItem> testOptions;
+  final List<BodyPartItem> testOptions;
   final int correctIndex;
-  final DigitGamePhase phase;
+  final BodyPartsGamePhase phase;
   final int score;
   final int totalRounds;
   final int currentRound;
   final String motivationalMessage;
 
-  const DigitMasterState({
-    required this.currentDigit,
+  const BodyPartsState({
+    required this.currentBodyPart,
     required this.displayColor,
     required this.testOptions,
     required this.correctIndex,
@@ -68,18 +68,18 @@ class DigitMasterState {
     required this.motivationalMessage,
   });
 
-  factory DigitMasterState.initial() {
+  factory BodyPartsState.initial() {
     final random = Random();
-    final digit = digitPalette[random.nextInt(digitPalette.length)];
+    final bodyPart = bodyPartsPalette[random.nextInt(bodyPartsPalette.length)];
     final displayColor = colorOptions[random.nextInt(colorOptions.length)];
-    final options = _generateOptions(digit, random);
+    final options = _generateOptions(bodyPart, random);
 
-    return DigitMasterState(
-      currentDigit: digit,
+    return BodyPartsState(
+      currentBodyPart: bodyPart,
       displayColor: displayColor,
       testOptions: options.options,
       correctIndex: options.correctIndex,
-      phase: DigitGamePhase.learning,
+      phase: BodyPartsGamePhase.learning,
       score: 0,
       totalRounds: 5,
       currentRound: 1,
@@ -87,19 +87,19 @@ class DigitMasterState {
     );
   }
 
-  DigitMasterState copyWith({
-    DigitItem? currentDigit,
+  BodyPartsState copyWith({
+    BodyPartItem? currentBodyPart,
     ColorOption? displayColor,
-    List<DigitItem>? testOptions,
+    List<BodyPartItem>? testOptions,
     int? correctIndex,
-    DigitGamePhase? phase,
+    BodyPartsGamePhase? phase,
     int? score,
     int? totalRounds,
     int? currentRound,
     String? motivationalMessage,
   }) {
-    return DigitMasterState(
-      currentDigit: currentDigit ?? this.currentDigit,
+    return BodyPartsState(
+      currentBodyPart: currentBodyPart ?? this.currentBodyPart,
       displayColor: displayColor ?? this.displayColor,
       testOptions: testOptions ?? this.testOptions,
       correctIndex: correctIndex ?? this.correctIndex,
@@ -113,18 +113,16 @@ class DigitMasterState {
 }
 
 class _OptionsResult {
-  final List<DigitItem> options;
+  final List<BodyPartItem> options;
   final int correctIndex;
 
   _OptionsResult({required this.options, required this.correctIndex});
 }
 
-_OptionsResult _generateOptions(DigitItem correctDigit, Random random) {
-  final wrongDigits = digitPalette.where((d) => d.value != correctDigit.value).toList()
-    ..shuffle(random);
-
-  final options = [correctDigit, wrongDigits[0], wrongDigits[1]]..shuffle(random);
-  final correctIndex = options.indexWhere((d) => d.value == correctDigit.value);
+_OptionsResult _generateOptions(BodyPartItem correctPart, Random random) {
+  final wrongParts = bodyPartsPalette.where((p) => p.name != correctPart.name).toList()..shuffle(random);
+  final options = [correctPart, wrongParts[0], wrongParts[1]]..shuffle(random);
+  final correctIndex = options.indexWhere((p) => p.name == correctPart.name);
 
   return _OptionsResult(options: options, correctIndex: correctIndex);
 }
@@ -138,49 +136,49 @@ const List<String> motivationalMessages = [
   "Don't give up!",
 ];
 
-class DigitMasterNotifier extends Notifier<DigitMasterState> {
+class BodyPartsNotifier extends Notifier<BodyPartsState> {
   final Random _random = Random();
 
   @override
-  DigitMasterState build() {
-    return DigitMasterState.initial();
+  BodyPartsState build() {
+    return BodyPartsState.initial();
   }
 
   void startNewGame() {
-    state = DigitMasterState.initial();
+    state = BodyPartsState.initial();
   }
 
   void goToTest() {
-    state = state.copyWith(phase: DigitGamePhase.testing);
+    state = state.copyWith(phase: BodyPartsGamePhase.testing);
   }
 
   void checkAnswer(int selectedIndex) {
     if (selectedIndex == state.correctIndex) {
-      state = state.copyWith(phase: DigitGamePhase.success, score: state.score + 1);
+      state = state.copyWith(phase: BodyPartsGamePhase.success, score: state.score + 1);
     } else {
       final message = motivationalMessages[_random.nextInt(motivationalMessages.length)];
-      state = state.copyWith(phase: DigitGamePhase.failure, motivationalMessage: message);
+      state = state.copyWith(phase: BodyPartsGamePhase.failure, motivationalMessage: message);
     }
   }
 
   void retryQuestion() {
-    state = state.copyWith(phase: DigitGamePhase.testing);
+    state = state.copyWith(phase: BodyPartsGamePhase.testing);
   }
 
   void nextRound() {
     if (state.currentRound >= state.totalRounds) {
-      state = DigitMasterState.initial();
+      state = BodyPartsState.initial();
     } else {
-      final newDigit = digitPalette[_random.nextInt(digitPalette.length)];
+      final newBodyPart = bodyPartsPalette[_random.nextInt(bodyPartsPalette.length)];
       final newDisplayColor = colorOptions[_random.nextInt(colorOptions.length)];
-      final options = _generateOptions(newDigit, _random);
+      final options = _generateOptions(newBodyPart, _random);
 
-      state = DigitMasterState(
-        currentDigit: newDigit,
+      state = BodyPartsState(
+        currentBodyPart: newBodyPart,
         displayColor: newDisplayColor,
         testOptions: options.options,
         correctIndex: options.correctIndex,
-        phase: DigitGamePhase.learning,
+        phase: BodyPartsGamePhase.learning,
         score: state.score,
         totalRounds: state.totalRounds,
         currentRound: state.currentRound + 1,
@@ -190,6 +188,6 @@ class DigitMasterNotifier extends Notifier<DigitMasterState> {
   }
 }
 
-final digitMasterProvider = NotifierProvider<DigitMasterNotifier, DigitMasterState>(() {
-  return DigitMasterNotifier();
+final bodyPartsProvider = NotifierProvider<BodyPartsNotifier, BodyPartsState>(() {
+  return BodyPartsNotifier();
 }, isAutoDispose: true);

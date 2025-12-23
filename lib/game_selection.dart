@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
+
+import 'body_parts/body_parts_game.dart';
 import 'color_memorize/color_memorize_game.dart';
 import 'digit_master/digit_master_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
@@ -47,6 +49,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Learn numbers!',
       gradientColors: [const Color(0xFFFF9F1C), const Color(0xFFFFBF69)],
       page: const DigitMaster(),
+    ),
+    _GameInfo(
+      title: 'Body Parts',
+      emoji: '🧍',
+      description: 'Learn body parts!',
+      gradientColors: [const Color(0xFFE63946), const Color(0xFFF77F00)],
+      page: const BodyPartsGame(),
     ),
   ];
 
