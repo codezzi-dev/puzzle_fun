@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'body_parts/body_parts_game.dart';
+import 'color_match/color_match_game.dart';
 import 'color_memorize/color_memorize_game.dart';
 import 'digit_master/digit_master_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
@@ -36,6 +37,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Learn colors!',
       gradientColors: [const Color(0xFFFF6B6B), const Color(0xFFFFBE0B)],
       page: const ColorMemorize(),
+    ),
+    _GameInfo(
+      title: 'Color Match',
+      emoji: '🔗',
+      description: 'Match the colors!',
+      gradientColors: [const Color(0xFFE91E63), const Color(0xFFFF9800)],
+      page: const ColorMatchGame(),
     ),
     _GameInfo(
       title: 'Shape Master',
