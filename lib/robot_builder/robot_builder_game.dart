@@ -586,17 +586,21 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
                   const SizedBox(height: 8),
                   SizedBox(
                     height: 85,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: (_shuffledParts ?? state.currentRobot.parts).length,
-                      separatorBuilder: (context, index) => const SizedBox(width: 12),
-                      itemBuilder: (context, index) {
-                        final parts = _shuffledParts ?? state.currentRobot.parts;
-                        final part = parts[index];
-                        // Check usedDraggables to see if this draggable has been used
-                        final isUsed = state.usedDraggables.contains(part.id);
-                        return DraggableShape(part: part, isPlaced: isUsed);
-                      },
+                    child: Center(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: (_shuffledParts ?? state.currentRobot.parts).map((part) {
+                            final isUsed = state.usedDraggables.contains(part.id);
+                            if (isUsed) return const SizedBox.shrink();
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 6),
+                              child: DraggableShape(part: part, isPlaced: false),
+                            );
+                          }).toList(),
+                        ),
+                      ),
                     ),
                   ),
                 ],
