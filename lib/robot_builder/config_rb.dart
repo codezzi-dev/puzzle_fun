@@ -27,82 +27,238 @@ class RobotTemplate {
   const RobotTemplate({required this.name, required this.parts});
 }
 
-/// Predefined robot templates with robot-specific shapes
+/// Child-friendly robot templates with vibrant colors and personalities
 final List<RobotTemplate> robotTemplates = [
-  // Robot 1: Classic robot with gears and claws
+  // Robot 1: Friendly helper robot - Buddy Bot (Coral/Pink theme)
   RobotTemplate(
-    name: 'Gear Bot',
+    name: 'Buddy Bot',
     parts: [
-      // Head - Circle with antenna on top conceptually
-      const RobotPart(id: 'head', shapeType: 'Circle', position: Offset(75, 20), size: Size(70, 70), color: Colors.blue),
-      // Antenna
-      const RobotPart(id: 'antenna', shapeType: 'Antenna', position: Offset(97, 0), size: Size(25, 25), color: Colors.lightBlue),
-      // Body - Rectangle
-      const RobotPart(id: 'body', shapeType: 'Rectangle', position: Offset(60, 95), size: Size(100, 70), color: Colors.blueGrey),
+      // Head - RobotHead with friendly face
+      RobotPart(
+        id: 'head',
+        shapeType: 'RobotHead',
+        position: const Offset(70, 15),
+        size: const Size(80, 80),
+        color: Colors.pink.shade300,
+      ),
+      // Antenna - Glowing
+      RobotPart(
+        id: 'antenna',
+        shapeType: 'Antenna',
+        position: const Offset(95, 0),
+        size: const Size(28, 28),
+        color: Colors.pinkAccent.shade100,
+      ),
+      // Body - RobotPanel with LED
+      RobotPart(
+        id: 'body',
+        shapeType: 'RobotPanel',
+        position: const Offset(55, 100),
+        size: const Size(110, 75),
+        color: Colors.pink.shade200,
+      ),
       // Left Arm - Claw
-      const RobotPart(id: 'left_arm', shapeType: 'Claw', position: Offset(5, 100), size: Size(50, 50), color: Colors.orange),
+      RobotPart(
+        id: 'left_arm',
+        shapeType: 'Claw',
+        position: const Offset(0, 105),
+        size: const Size(50, 50),
+        color: Colors.orange.shade400,
+      ),
       // Right Arm - Claw
-      const RobotPart(id: 'right_arm', shapeType: 'Claw', position: Offset(165, 100), size: Size(50, 50), color: Colors.orange),
+      RobotPart(
+        id: 'right_arm',
+        shapeType: 'Claw',
+        position: const Offset(170, 105),
+        size: const Size(50, 50),
+        color: Colors.orange.shade400,
+      ),
       // Left Leg - Gear
-      const RobotPart(id: 'left_leg', shapeType: 'Gear', position: Offset(60, 170), size: Size(45, 45), color: Colors.grey),
+      RobotPart(
+        id: 'left_leg',
+        shapeType: 'Gear',
+        position: const Offset(58, 178),
+        size: const Size(48, 48),
+        color: Colors.grey.shade500,
+      ),
       // Right Leg - Gear
-      const RobotPart(id: 'right_leg', shapeType: 'Gear', position: Offset(115, 170), size: Size(45, 45), color: Colors.grey),
+      RobotPart(
+        id: 'right_leg',
+        shapeType: 'Gear',
+        position: const Offset(114, 178),
+        size: const Size(48, 48),
+        color: Colors.grey.shade500,
+      ),
     ],
   ),
-  // Robot 2: Mechanical robot with bolts
+  // Robot 2: Electric robot - Spark Bot (Blue/Cyan theme)
   RobotTemplate(
-    name: 'Bolt Bot',
+    name: 'Spark Bot',
     parts: [
-      // Head - SemiCircle dome
-      const RobotPart(id: 'head', shapeType: 'SemiCircle', position: Offset(70, 10), size: Size(80, 50), color: Colors.purple),
+      // Head - SemiCircle dome with LED eyes
+      RobotPart(
+        id: 'head',
+        shapeType: 'SemiCircle',
+        position: const Offset(70, 5),
+        size: const Size(80, 50),
+        color: Colors.cyan.shade400,
+      ),
       // Body - Hexagon
-      const RobotPart(id: 'body', shapeType: 'Hexagon', position: Offset(55, 65), size: Size(110, 90), color: Colors.deepPurple),
-      // Left Arm - Bolt
-      const RobotPart(id: 'left_arm', shapeType: 'Bolt', position: Offset(5, 80), size: Size(45, 50), color: Colors.amber),
+      RobotPart(
+        id: 'body',
+        shapeType: 'Hexagon',
+        position: const Offset(55, 58),
+        size: const Size(110, 85),
+        color: Colors.blue.shade400,
+      ),
+      // Left Arm - Bolt (electric connector)
+      RobotPart(
+        id: 'left_arm',
+        shapeType: 'Bolt',
+        position: const Offset(2, 75),
+        size: const Size(45, 52),
+        color: Colors.yellow.shade600,
+      ),
       // Right Arm - Bolt
-      const RobotPart(id: 'right_arm', shapeType: 'Bolt', position: Offset(170, 80), size: Size(45, 50), color: Colors.amber),
+      RobotPart(
+        id: 'right_arm',
+        shapeType: 'Bolt',
+        position: const Offset(173, 75),
+        size: const Size(45, 52),
+        color: Colors.yellow.shade600,
+      ),
       // Left Leg - Rectangle
-      const RobotPart(id: 'left_leg', shapeType: 'Rectangle', position: Offset(65, 160), size: Size(35, 55), color: Colors.indigo),
+      RobotPart(
+        id: 'left_leg',
+        shapeType: 'Rectangle',
+        position: const Offset(68, 148),
+        size: const Size(35, 50),
+        color: Colors.indigo.shade400,
+      ),
       // Right Leg - Rectangle
-      const RobotPart(id: 'right_leg', shapeType: 'Rectangle', position: Offset(120, 160), size: Size(35, 55), color: Colors.indigo),
+      RobotPart(
+        id: 'right_leg',
+        shapeType: 'Rectangle',
+        position: const Offset(117, 148),
+        size: const Size(35, 50),
+        color: Colors.indigo.shade400,
+      ),
     ],
   ),
-  // Robot 3: Space robot with star head
+  // Robot 3: Space explorer - Star Bot (Yellow/Gold theme)
   RobotTemplate(
     name: 'Star Bot',
     parts: [
-      // Head - Star
-      const RobotPart(id: 'head', shapeType: 'Star', position: Offset(72, 0), size: Size(75, 75), color: Colors.amber),
-      // Body - Oval
-      const RobotPart(id: 'body', shapeType: 'Oval', position: Offset(50, 80), size: Size(120, 80), color: Colors.cyan),
-      // Left Arm - Triangle
-      const RobotPart(id: 'left_arm', shapeType: 'Triangle', position: Offset(0, 90), size: Size(45, 45), color: Colors.teal),
+      // Head - Star (space helmet vibe)
+      RobotPart(
+        id: 'head',
+        shapeType: 'Star',
+        position: const Offset(70, 0),
+        size: const Size(80, 80),
+        color: Colors.amber.shade400,
+      ),
+      // Body - Oval (space suit)
+      RobotPart(
+        id: 'body',
+        shapeType: 'Oval',
+        position: const Offset(45, 82),
+        size: const Size(130, 85),
+        color: Colors.teal.shade400,
+      ),
+      // Left Arm - Triangle (rocket boosters)
+      RobotPart(
+        id: 'left_arm',
+        shapeType: 'Triangle',
+        position: const Offset(0, 92),
+        size: const Size(48, 48),
+        color: Colors.deepOrange.shade400,
+      ),
       // Right Arm - Triangle
-      const RobotPart(id: 'right_arm', shapeType: 'Triangle', position: Offset(175, 90), size: Size(45, 45), color: Colors.teal),
-      // Left Leg - Gear
-      const RobotPart(id: 'left_leg', shapeType: 'Gear', position: Offset(55, 165), size: Size(50, 50), color: Colors.blueGrey),
+      RobotPart(
+        id: 'right_arm',
+        shapeType: 'Triangle',
+        position: const Offset(172, 92),
+        size: const Size(48, 48),
+        color: Colors.deepOrange.shade400,
+      ),
+      // Left Leg - Gear (space wheels)
+      RobotPart(
+        id: 'left_leg',
+        shapeType: 'Gear',
+        position: const Offset(52, 172),
+        size: const Size(52, 52),
+        color: Colors.blueGrey.shade500,
+      ),
       // Right Leg - Gear
-      const RobotPart(id: 'right_leg', shapeType: 'Gear', position: Offset(115, 165), size: Size(50, 50), color: Colors.blueGrey),
+      RobotPart(
+        id: 'right_leg',
+        shapeType: 'Gear',
+        position: const Offset(116, 172),
+        size: const Size(52, 52),
+        color: Colors.blueGrey.shade500,
+      ),
     ],
   ),
-  // Robot 4: Construction robot
+  // Robot 4: Builder robot - Claw Bot (Green/Lime theme)
   RobotTemplate(
     name: 'Claw Bot',
     parts: [
-      // Head - Circle
-      const RobotPart(id: 'head', shapeType: 'Circle', position: Offset(80, 15), size: Size(60, 60), color: Colors.yellow),
-      // Antenna
-      const RobotPart(id: 'antenna', shapeType: 'Antenna', position: Offset(98, 0), size: Size(22, 22), color: Colors.red),
-      // Body - Square
-      const RobotPart(id: 'body', shapeType: 'Square', position: Offset(60, 80), size: Size(100, 80), color: Colors.orange),
-      // Left Arm - Claw
-      const RobotPart(id: 'left_arm', shapeType: 'Claw', position: Offset(5, 90), size: Size(50, 50), color: Colors.brown),
+      // Head - Circle with friendly face
+      RobotPart(
+        id: 'head',
+        shapeType: 'RobotHead',
+        position: const Offset(75, 12),
+        size: const Size(70, 70),
+        color: Colors.lime.shade400,
+      ),
+      // Antenna - Signal beacon
+      RobotPart(
+        id: 'antenna',
+        shapeType: 'Antenna',
+        position: const Offset(96, 0),
+        size: const Size(26, 26),
+        color: Colors.red.shade400,
+      ),
+      // Body - Square (sturdy construction)
+      RobotPart(
+        id: 'body',
+        shapeType: 'Square',
+        position: const Offset(55, 85),
+        size: const Size(110, 85),
+        color: Colors.green.shade400,
+      ),
+      // Left Arm - Claw (grabber)
+      RobotPart(
+        id: 'left_arm',
+        shapeType: 'Claw',
+        position: const Offset(0, 95),
+        size: const Size(52, 52),
+        color: Colors.brown.shade400,
+      ),
       // Right Arm - Claw
-      const RobotPart(id: 'right_arm', shapeType: 'Claw', position: Offset(165, 90), size: Size(50, 50), color: Colors.brown),
-      // Left Leg - Bolt
-      const RobotPart(id: 'left_leg', shapeType: 'Bolt', position: Offset(65, 165), size: Size(40, 50), color: Colors.grey),
+      RobotPart(
+        id: 'right_arm',
+        shapeType: 'Claw',
+        position: const Offset(168, 95),
+        size: const Size(52, 52),
+        color: Colors.brown.shade400,
+      ),
+      // Left Leg - Bolt (sturdy support)
+      RobotPart(
+        id: 'left_leg',
+        shapeType: 'Bolt',
+        position: const Offset(62, 175),
+        size: const Size(42, 52),
+        color: Colors.grey.shade600,
+      ),
       // Right Leg - Bolt
-      const RobotPart(id: 'right_leg', shapeType: 'Bolt', position: Offset(115, 165), size: Size(40, 50), color: Colors.grey),
+      RobotPart(
+        id: 'right_leg',
+        shapeType: 'Bolt',
+        position: const Offset(116, 175),
+        size: const Size(42, 52),
+        color: Colors.grey.shade600,
+      ),
     ],
   ),
 ];
@@ -112,7 +268,8 @@ enum RobotBuilderPhase { learning, building, success }
 class RobotBuilderState {
   final RobotTemplate currentRobot;
   final RobotBuilderPhase phase;
-  final Map<String, bool> placedParts; // Which parts have been correctly placed
+  final Map<String, bool> placedParts; // Which SLOTS have been filled
+  final Set<String> usedDraggables; // Which DRAGGABLES have been used
   final int score;
   final int totalRobots;
   final int currentRobotIndex;
@@ -121,6 +278,7 @@ class RobotBuilderState {
     required this.currentRobot,
     required this.phase,
     required this.placedParts,
+    required this.usedDraggables,
     required this.score,
     required this.totalRobots,
     required this.currentRobotIndex,
@@ -132,6 +290,7 @@ class RobotBuilderState {
       currentRobot: robot,
       phase: RobotBuilderPhase.learning,
       placedParts: {for (var part in robot.parts) part.id: false},
+      usedDraggables: {},
       score: 0,
       totalRobots: robotTemplates.length,
       currentRobotIndex: 0,
@@ -146,6 +305,7 @@ class RobotBuilderState {
     RobotTemplate? currentRobot,
     RobotBuilderPhase? phase,
     Map<String, bool>? placedParts,
+    Set<String>? usedDraggables,
     int? score,
     int? totalRobots,
     int? currentRobotIndex,
@@ -154,6 +314,7 @@ class RobotBuilderState {
       currentRobot: currentRobot ?? this.currentRobot,
       phase: phase ?? this.phase,
       placedParts: placedParts ?? this.placedParts,
+      usedDraggables: usedDraggables ?? this.usedDraggables,
       score: score ?? this.score,
       totalRobots: totalRobots ?? this.totalRobots,
       currentRobotIndex: currentRobotIndex ?? this.currentRobotIndex,
@@ -177,16 +338,26 @@ class RobotBuilderNotifier extends Notifier<RobotBuilderState> {
     state = state.copyWith(phase: RobotBuilderPhase.building);
   }
 
-  void placePart(String partId) {
+  void placePartInSlot(String slotId, String draggedId) {
+    // Mark the slot as filled
     final newPlacedParts = Map<String, bool>.from(state.placedParts);
-    newPlacedParts[partId] = true;
+    newPlacedParts[slotId] = true;
 
-    state = state.copyWith(placedParts: newPlacedParts);
+    // Mark the dragged item as used
+    final newUsedDraggables = Set<String>.from(state.usedDraggables);
+    newUsedDraggables.add(draggedId);
+
+    state = state.copyWith(placedParts: newPlacedParts, usedDraggables: newUsedDraggables);
 
     // Check if all parts are placed
     if (state.allPartsPlaced) {
       state = state.copyWith(phase: RobotBuilderPhase.success, score: state.score + 1);
     }
+  }
+
+  // Keep old method for compatibility
+  void placePart(String partId) {
+    placePartInSlot(partId, partId);
   }
 
   void nextRobot() {
@@ -201,6 +372,7 @@ class RobotBuilderNotifier extends Notifier<RobotBuilderState> {
         currentRobot: nextRobot,
         phase: RobotBuilderPhase.learning,
         placedParts: {for (var part in nextRobot.parts) part.id: false},
+        usedDraggables: {},
         score: state.score,
         totalRobots: state.totalRobots,
         currentRobotIndex: nextIndex,

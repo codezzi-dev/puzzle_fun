@@ -36,17 +36,41 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
     super.initState();
     _initTts();
 
-    _bounceController = AnimationController(vsync: this, duration: const Duration(milliseconds: 800))..repeat(reverse: true);
-    _bounceAnim = Tween<double>(begin: 0.0, end: 10.0).animate(CurvedAnimation(parent: _bounceController, curve: Curves.easeInOut));
+    _bounceController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    )..repeat(reverse: true);
+    _bounceAnim = Tween<double>(
+      begin: 0.0,
+      end: 10.0,
+    ).animate(CurvedAnimation(parent: _bounceController, curve: Curves.easeInOut));
 
-    _pulseController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))..repeat(reverse: true);
-    _pulseAnim = Tween<double>(begin: 1.0, end: 1.05).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut));
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+    _pulseAnim = Tween<double>(
+      begin: 1.0,
+      end: 1.05,
+    ).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut));
 
-    _overlayController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
-    _overlayScaleAnim = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _overlayController, curve: Curves.elasticOut));
+    _overlayController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _overlayScaleAnim = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _overlayController, curve: Curves.elasticOut));
 
-    _buttonController = AnimationController(vsync: this, duration: const Duration(milliseconds: 150));
-    _buttonScaleAnim = Tween<double>(begin: 1.0, end: 0.92).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
+    _buttonController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+    _buttonScaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 0.92,
+    ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
   Future<void> _initTts() async {
@@ -107,10 +131,10 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFE8F5E9), Color(0xFFFFF8E1), Color(0xFFE3F2FD), Color(0xFFFCE4EC)],
-            stops: [0.0, 0.3, 0.7, 1.0],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFE3F2FD), Color(0xFFFCE4EC), Color(0xFFFFF8E1), Color(0xFFE8F5E9)],
+            stops: [0.0, 0.35, 0.65, 1.0],
           ),
         ),
         child: SafeArea(
@@ -122,7 +146,8 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
                   Expanded(child: _buildGameContent(gameState, gameNotifier)),
                 ],
               ),
-              if (gameState.phase == RobotBuilderPhase.success) _buildSuccessOverlay(gameState, gameNotifier),
+              if (gameState.phase == RobotBuilderPhase.success)
+                _buildSuccessOverlay(gameState, gameNotifier),
             ],
           ),
         ),
@@ -130,25 +155,46 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
     );
   }
 
-  Widget _buildAppBar(BuildContext context, RobotBuilderNotifier notifier, RobotBuilderState state) {
+  Widget _buildAppBar(
+    BuildContext context,
+    RobotBuilderNotifier notifier,
+    RobotBuilderState state,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          _buildIconButton(icon: Icons.arrow_back_rounded, onTap: () => Navigator.of(context).pop(), color: const Color(0xFF7B68EE)),
+          _buildIconButton(
+            icon: Icons.arrow_back_rounded,
+            onTap: () => Navigator.of(context).pop(),
+            color: const Color(0xFF7B68EE),
+          ),
           const Spacer(),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [Colors.purple.shade400, Colors.indigo.shade400]),
               borderRadius: BorderRadius.circular(25),
-              boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.purple.withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Row(
               children: [
                 const Icon(Icons.smart_toy, color: Colors.white, size: 22),
                 const SizedBox(width: 8),
-                Text('${state.placedCount}/${state.currentRobot.parts.length}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                Text(
+                  '${state.placedCount}/${state.currentRobot.parts.length}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ),
           ),
@@ -158,13 +204,26 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(25),
-              boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 2))],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.purple.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             child: Row(
               children: [
                 Icon(Icons.flag_rounded, color: Colors.purple.shade400, size: 18),
                 const SizedBox(width: 6),
-                Text('${state.currentRobotIndex + 1}/${state.totalRobots}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.purple.shade400)),
+                Text(
+                  '${state.currentRobotIndex + 1}/${state.totalRobots}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.purple.shade400,
+                  ),
+                ),
               ],
             ),
           ),
@@ -173,7 +232,11 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
     );
   }
 
-  Widget _buildIconButton({required IconData icon, required VoidCallback onTap, required Color color}) {
+  Widget _buildIconButton({
+    required IconData icon,
+    required VoidCallback onTap,
+    required Color color,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -181,7 +244,13 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: color.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))],
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Icon(icon, color: color, size: 24),
       ),
@@ -201,56 +270,159 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
   Widget _buildLearningPage(RobotBuilderState state, RobotBuilderNotifier notifier) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
+            // Sparkle decorations
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _SparkleIcon(delay: 0),
+                const SizedBox(width: 8),
+                _SparkleIcon(delay: 200),
+                const SizedBox(width: 8),
+                _SparkleIcon(delay: 400),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // Speech bubble
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.2), blurRadius: 15, offset: const Offset(0, 5))],
+                gradient: LinearGradient(
+                  colors: [Colors.white, Colors.pink.shade50],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.pink.withValues(alpha: 0.15),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+                border: Border.all(color: Colors.pink.shade100, width: 2),
               ),
               child: Column(
                 children: [
-                  const Text('🤖 Meet the Robot!', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF333333))),
-                  const SizedBox(height: 4),
-                  Text('Remember where each shape goes!', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey.shade600)),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('👋', style: TextStyle(fontSize: 28)),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Hi! I\'m ${state.currentRobot.name}!',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.pink.shade600,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Remember where my parts go! 🧩',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 30),
+            // Robot display with bounce and glow
+            AnimatedBuilder(
+              animation: _bounceAnim,
+              builder: (context, child) =>
+                  Transform.translate(offset: Offset(0, -_bounceAnim.value), child: child),
+              child: ScaleTransition(
+                scale: _pulseAnim,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Glow effect behind robot
+                    Container(
+                      width: 260,
+                      height: 260,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [Colors.pink.withValues(alpha: 0.15), Colors.transparent],
+                        ),
+                      ),
+                    ),
+                    // Robot container
+                    Container(
+                      padding: const EdgeInsets.all(22),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(32),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.pink.withValues(alpha: 0.2),
+                            blurRadius: 25,
+                            offset: const Offset(0, 12),
+                          ),
+                          BoxShadow(
+                            color: Colors.blue.withValues(alpha: 0.1),
+                            blurRadius: 40,
+                            offset: const Offset(0, 20),
+                          ),
+                        ],
+                        border: Border.all(color: Colors.pink.shade100, width: 3),
+                      ),
+                      child: RobotDisplay(robot: state.currentRobot, showOutlineOnly: false),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Robot name badge
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.pink.shade400, Colors.deepOrange.shade400],
+                ),
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.pink.withValues(alpha: 0.4),
+                    blurRadius: 15,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('🤖', style: TextStyle(fontSize: 22)),
+                  const SizedBox(width: 10),
+                  Text(
+                    state.currentRobot.name,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 40),
-            AnimatedBuilder(
-              animation: _bounceAnim,
-              builder: (context, child) => Transform.translate(offset: Offset(0, -_bounceAnim.value), child: child),
-              child: ScaleTransition(
-                scale: _pulseAnim,
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.3), blurRadius: 30, offset: const Offset(0, 15))],
-                  ),
-                  child: RobotDisplay(robot: state.currentRobot, showOutlineOnly: false),
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [Colors.purple.shade400, Colors.indigo.shade400]),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Text(state.currentRobot.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 2)),
-            ),
-            const SizedBox(height: 50),
+            // Build button
             _buildAnimatedButton(
               onPressed: () => notifier.goToBuilding(),
-              gradientColors: const [Color(0xFF7B68EE), Color(0xFF9B59B6)],
+              gradientColors: const [Color(0xFF8AC926), Color(0xFF06D6A0)],
               icon: Icons.build_rounded,
-              text: "Build it!",
+              text: "Let's Build! 🔧",
             ),
           ],
         ),
@@ -270,12 +442,25 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.1), blurRadius: 15, offset: const Offset(0, 5))],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.purple.withValues(alpha: 0.1),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
                   const Expanded(
-                    child: Text('🔧 Drag shapes to the right spots!', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF333333))),
+                    child: Text(
+                      '🔧 Drag shapes to the right spots!',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF333333),
+                      ),
+                    ),
                   ),
                   // Reference button
                   GestureDetector(
@@ -283,16 +468,31 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [Colors.amber.shade400, Colors.orange.shade400]),
+                        gradient: LinearGradient(
+                          colors: [Colors.amber.shade400, Colors.orange.shade400],
+                        ),
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: [BoxShadow(color: Colors.amber.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 3))],
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.amber.withValues(alpha: 0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                       ),
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.visibility, color: Colors.white, size: 20),
                           SizedBox(width: 6),
-                          Text('Hint', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                          Text(
+                            'Hint',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -301,65 +501,107 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
               ),
             ),
 
-        // Robot with drop zones
-        Expanded(
-          child: Center(
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 10))],
-              ),
-              child: SizedBox(
-                width: 220,
-                height: 220,
-                child: Stack(
-                  children: state.currentRobot.parts.map((part) {
-                    final isPlaced = state.placedParts[part.id] ?? false;
-                    return Positioned(
-                      left: part.position.dx,
-                      top: part.position.dy,
-                      child: DroppableSlot(
-                        part: part,
-                        isPlaced: isPlaced,
-                        onAccept: (droppedPart) {
-                          notifier.placePart(droppedPart.id);
-                          _speakPlaced(droppedPart.shapeType);
-                        },
+            // Robot with drop zones - takes maximum space
+            Expanded(
+              child: Center(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.pink.withValues(alpha: 0.2),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
                       ),
-                    );
-                  }).toList(),
+                    ],
+                    border: Border.all(color: Colors.pink.shade100, width: 2),
+                  ),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: SizedBox(
+                        width: 220,
+                        height: 220,
+                        child: Stack(
+                          children: state.currentRobot.parts.map((part) {
+                            final isPlaced = state.placedParts[part.id] ?? false;
+                            return Positioned(
+                              left: part.position.dx,
+                              top: part.position.dy,
+                              child: DroppableSlot(
+                                part: part,
+                                isPlaced: isPlaced,
+                                onAccept: (slotPart, draggedPart) {
+                                  // Mark slot as filled AND dragged item as used
+                                  notifier.placePartInSlot(slotPart.id, draggedPart.id);
+                                  _speakPlaced(slotPart.shapeType);
+                                },
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
 
-        // Draggable shapes at bottom
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-            boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.1), blurRadius: 15, offset: const Offset(0, -5))],
-          ),
-          child: Column(
-            children: [
-              Text('Available Shapes', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.grey.shade600)),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                alignment: WrapAlignment.center,
-                children: (_shuffledParts ?? state.currentRobot.parts).map((part) {
-                  final isPlaced = state.placedParts[part.id] ?? false;
-                  return DraggableShape(part: part, isPlaced: isPlaced);
-                }).toList(),
+            // Draggable shapes at bottom - horizontal scrollable row
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.pink.withValues(alpha: 0.15),
+                    blurRadius: 15,
+                    offset: const Offset(0, -5),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('🎯', style: TextStyle(fontSize: 16)),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Pick the pieces!',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.pink.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    height: 85,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: (_shuffledParts ?? state.currentRobot.parts).length,
+                      separatorBuilder: (context, index) => const SizedBox(width: 12),
+                      itemBuilder: (context, index) {
+                        final parts = _shuffledParts ?? state.currentRobot.parts;
+                        final part = parts[index];
+                        // Check usedDraggables to see if this draggable has been used
+                        final isUsed = state.usedDraggables.contains(part.id);
+                        return DraggableShape(part: part, isPlaced: isUsed);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
         // Reference overlay
@@ -377,7 +619,13 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
-                        boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.3), blurRadius: 30, offset: const Offset(0, 15))],
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.purple.withValues(alpha: 0.3),
+                            blurRadius: 30,
+                            offset: const Offset(0, 15),
+                          ),
+                        ],
                       ),
                       child: RobotDisplay(robot: state.currentRobot, showOutlineOnly: false),
                     ),
@@ -388,10 +636,20 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
                         color: Colors.white.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Text(state.currentRobot.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF7B68EE))),
+                      child: Text(
+                        state.currentRobot.name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF7B68EE),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 16),
-                    const Text('Tap anywhere to close', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                    const Text(
+                      'Tap anywhere to close',
+                      style: TextStyle(color: Colors.white70, fontSize: 14),
+                    ),
                   ],
                 ),
               ),
@@ -403,38 +661,88 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
 
   Widget _buildSuccessOverlay(RobotBuilderState state, RobotBuilderNotifier notifier) {
     return Container(
-      color: Colors.black.withValues(alpha: 0.5),
+      color: Colors.black.withValues(alpha: 0.6),
       child: Center(
         child: ScaleTransition(
           scale: _overlayScaleAnim,
           child: Container(
-            margin: const EdgeInsets.all(24),
-            padding: const EdgeInsets.all(32),
+            margin: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFF7B68EE), Color(0xFF9B59B6), Color(0xFFE91E63)]),
-              borderRadius: BorderRadius.circular(32),
-              boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.5), blurRadius: 40, offset: const Offset(0, 20))],
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.pink.shade400, Colors.deepOrange.shade400, Colors.amber.shade400],
+              ),
+              borderRadius: BorderRadius.circular(36),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.pink.withValues(alpha: 0.5),
+                  blurRadius: 40,
+                  offset: const Offset(0, 15),
+                ),
+              ],
+              border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 3),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const _CelebrationWidget(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20)),
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.15),
+                        blurRadius: 15,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
                   child: RobotDisplay(robot: state.currentRobot, showOutlineOnly: false),
                 ),
                 const SizedBox(height: 20),
-                const Text('🎉 Robot Built! 🎉', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.white, shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)])),
-                const SizedBox(height: 8),
-                Text('You built ${state.currentRobot.name}!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.9))),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('🎉', style: TextStyle(fontSize: 36)),
+                    const SizedBox(width: 8),
+                    Column(
+                      children: [
+                        const Text(
+                          'Amazing!',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            shadows: [
+                              Shadow(color: Colors.black38, offset: Offset(2, 2), blurRadius: 4),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          'You built ${state.currentRobot.name}!',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white.withValues(alpha: 0.95),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 8),
+                    Text('🎉', style: TextStyle(fontSize: 36)),
+                  ],
+                ),
                 const SizedBox(height: 24),
                 _buildAnimatedButton(
                   onPressed: () => notifier.nextRobot(),
-                  gradientColors: const [Color(0xFF8AC926), Color(0xFF06D6A0)],
+                  gradientColors: const [Color(0xFF06D6A0), Color(0xFF8AC926)],
                   icon: Icons.arrow_forward_rounded,
-                  text: 'Next Robot!',
+                  text: 'Next Robot! 🤖',
                 ),
               ],
             ),
@@ -444,7 +752,12 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
     );
   }
 
-  Widget _buildAnimatedButton({required VoidCallback onPressed, required List<Color> gradientColors, required IconData icon, required String text}) {
+  Widget _buildAnimatedButton({
+    required VoidCallback onPressed,
+    required List<Color> gradientColors,
+    required IconData icon,
+    required String text,
+  }) {
     return GestureDetector(
       onTapDown: (_) => _buttonController.forward(),
       onTapUp: (_) {
@@ -459,14 +772,28 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: gradientColors),
             borderRadius: BorderRadius.circular(30),
-            boxShadow: [BoxShadow(color: gradientColors[0].withValues(alpha: 0.4), blurRadius: 20, offset: const Offset(0, 8))],
+            boxShadow: [
+              BoxShadow(
+                color: gradientColors[0].withValues(alpha: 0.4),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, color: Colors.white, size: 26),
               const SizedBox(width: 12),
-              Text(text, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 0.5)),
+              Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 0.5,
+                ),
+              ),
             ],
           ),
         ),
@@ -482,13 +809,15 @@ class _CelebrationWidget extends StatefulWidget {
   State<_CelebrationWidget> createState() => _CelebrationWidgetState();
 }
 
-class _CelebrationWidgetState extends State<_CelebrationWidget> with SingleTickerProviderStateMixin {
+class _CelebrationWidgetState extends State<_CelebrationWidget>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))..repeat();
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))
+      ..repeat();
   }
 
   @override
@@ -506,12 +835,82 @@ class _CelebrationWidgetState extends State<_CelebrationWidget> with SingleTicke
         builder: (context, child) => Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Transform.rotate(angle: _controller.value * 2 * math.pi, child: const Text('⭐', style: TextStyle(fontSize: 28))),
+            Transform.rotate(
+              angle: _controller.value * 2 * math.pi,
+              child: const Text('⭐', style: TextStyle(fontSize: 28)),
+            ),
             const SizedBox(width: 12),
-            Transform.translate(offset: Offset(0, math.sin(_controller.value * 4 * math.pi) * 8), child: const Text('🤖', style: TextStyle(fontSize: 36))),
+            Transform.translate(
+              offset: Offset(0, math.sin(_controller.value * 4 * math.pi) * 8),
+              child: const Text('🤖', style: TextStyle(fontSize: 36)),
+            ),
             const SizedBox(width: 12),
-            Transform.rotate(angle: -_controller.value * 2 * math.pi, child: const Text('⭐', style: TextStyle(fontSize: 28))),
+            Transform.rotate(
+              angle: -_controller.value * 2 * math.pi,
+              child: const Text('⭐', style: TextStyle(fontSize: 28)),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Animated sparkle/star icon for child-friendly visual appeal
+class _SparkleIcon extends StatefulWidget {
+  final int delay;
+
+  const _SparkleIcon({this.delay = 0});
+
+  @override
+  State<_SparkleIcon> createState() => _SparkleIconState();
+}
+
+class _SparkleIconState extends State<_SparkleIcon> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnim;
+  late Animation<double> _rotateAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200));
+    _scaleAnim = Tween<double>(
+      begin: 0.8,
+      end: 1.2,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _rotateAnim = Tween<double>(
+      begin: 0,
+      end: 0.2,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    Future.delayed(Duration(milliseconds: widget.delay), () {
+      if (mounted) {
+        _controller.repeat(reverse: true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) => Transform.scale(
+        scale: _scaleAnim.value,
+        child: Transform.rotate(
+          angle: _rotateAnim.value,
+          child: Text(
+            '✨',
+            style: TextStyle(
+              fontSize: 24,
+              shadows: [Shadow(color: Colors.amber.withValues(alpha: 0.6), blurRadius: 8)],
+            ),
+          ),
         ),
       ),
     );

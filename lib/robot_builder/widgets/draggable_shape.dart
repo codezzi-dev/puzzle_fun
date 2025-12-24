@@ -3,8 +3,17 @@ import '../../shape_master/widgets/shape_painters.dart';
 import '../config_rb.dart';
 import 'robot_shapes.dart';
 
-/// List of robot-specific shape types
-const robotShapeTypes = ['semicircle', 'gear', 'antenna', 'bolt', 'claw'];
+/// List of robot-specific shape types (including new child-friendly shapes)
+const robotShapeTypes = [
+  'semicircle',
+  'gear',
+  'antenna',
+  'bolt',
+  'claw',
+  'robothead',
+  'robotpanel',
+  'heart',
+];
 
 /// Returns the appropriate shape widget based on shape type
 Widget getShapeWidget({required String shapeType, required Color color, required double size}) {
@@ -35,7 +44,13 @@ class DraggableShape extends StatelessWidget {
           scale: 1.1,
           child: Container(
             decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color: part.color.withValues(alpha: 0.4), blurRadius: 15, spreadRadius: 2)],
+              boxShadow: [
+                BoxShadow(
+                  color: part.color.withValues(alpha: 0.4),
+                  blurRadius: 15,
+                  spreadRadius: 2,
+                ),
+              ],
             ),
             child: getShapeWidget(shapeType: part.shapeType, color: part.color, size: 60),
           ),
@@ -50,7 +65,13 @@ class DraggableShape extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [BoxShadow(color: part.color.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 3))],
+          boxShadow: [
+            BoxShadow(
+              color: part.color.withValues(alpha: 0.2),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: getShapeWidget(shapeType: part.shapeType, color: part.color, size: 50),
       ),
@@ -60,11 +81,16 @@ class DraggableShape extends StatelessWidget {
 
 /// A droppable slot on the robot where shapes can be placed
 class DroppableSlot extends StatelessWidget {
-  final RobotPart part;
+  final RobotPart part; // This slot's part
   final bool isPlaced;
-  final Function(RobotPart) onAccept;
+  final Function(RobotPart slotPart, RobotPart draggedPart) onAccept; // Pass both!
 
-  const DroppableSlot({super.key, required this.part, required this.isPlaced, required this.onAccept});
+  const DroppableSlot({
+    super.key,
+    required this.part,
+    required this.isPlaced,
+    required this.onAccept,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +101,7 @@ class DroppableSlot extends StatelessWidget {
     return DragTarget<RobotPart>(
       // Accept any part with the same shape type (allows either gear to go in either leg slot)
       onWillAcceptWithDetails: (details) => details.data.shapeType == part.shapeType,
-      onAcceptWithDetails: (details) => onAccept(part), // Use slot's part ID, not dragged part
+      onAcceptWithDetails: (details) => onAccept(part, details.data), // Pass BOTH slot and dragged
       builder: (context, candidateData, rejectedData) {
         final isHovering = candidateData.isNotEmpty;
 
@@ -84,12 +110,21 @@ class DroppableSlot extends StatelessWidget {
           width: part.size.width,
           height: part.size.height,
           decoration: BoxDecoration(
-            border: Border.all(color: isHovering ? Colors.green : Colors.grey.shade400, width: isHovering ? 3 : 2),
+            border: Border.all(
+              color: isHovering ? Colors.green : Colors.grey.shade400,
+              width: isHovering ? 3 : 2,
+            ),
             borderRadius: BorderRadius.circular(8),
-            color: isHovering ? Colors.green.withValues(alpha: 0.2) : Colors.grey.shade100.withValues(alpha: 0.5),
+            color: isHovering
+                ? Colors.green.withValues(alpha: 0.2)
+                : Colors.grey.shade100.withValues(alpha: 0.5),
           ),
           child: Center(
-            child: Icon(isHovering ? Icons.check : Icons.add, color: isHovering ? Colors.green : Colors.grey.shade400, size: part.size.width * 0.4),
+            child: Icon(
+              isHovering ? Icons.check : Icons.add,
+              color: isHovering ? Colors.green : Colors.grey.shade400,
+              size: part.size.width * 0.4,
+            ),
           ),
         );
       },
