@@ -161,9 +161,11 @@ class ColorMemorizeNotifier extends Notifier<ColorMemorizeState> {
       // Correct answer!
       state = state.copyWith(phase: GamePhase.success, score: state.score + 1);
     } else {
-      // Wrong answer
+      // Wrong answer - stay in testing phase (failure overlay is disabled)
+      // Just update motivational message to trigger UI feedback if needed
       final message = motivationalMessages[_random.nextInt(motivationalMessages.length)];
-      state = state.copyWith(phase: GamePhase.failure, motivationalMessage: message);
+      state = state.copyWith(motivationalMessage: message);
+      // Note: The game widget will detect this and speak "Find [color]" again
     }
   }
 

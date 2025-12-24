@@ -159,8 +159,9 @@ class DigitMasterNotifier extends Notifier<DigitMasterState> {
     if (selectedIndex == state.correctIndex) {
       state = state.copyWith(phase: DigitGamePhase.success, score: state.score + 1);
     } else {
+      // Wrong answer - stay in testing phase (failure overlay is disabled)
       final message = motivationalMessages[_random.nextInt(motivationalMessages.length)];
-      state = state.copyWith(phase: DigitGamePhase.failure, motivationalMessage: message);
+      state = state.copyWith(motivationalMessage: message);
     }
   }
 

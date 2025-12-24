@@ -39,17 +39,19 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
       vsync: this,
       duration: const Duration(milliseconds: 800),
     )..repeat(reverse: true);
-    _digitBounceAnim = Tween<double>(begin: 0.0, end: 12.0).animate(
-      CurvedAnimation(parent: _digitBounceController, curve: Curves.easeInOut),
-    );
+    _digitBounceAnim = Tween<double>(
+      begin: 0.0,
+      end: 12.0,
+    ).animate(CurvedAnimation(parent: _digitBounceController, curve: Curves.easeInOut));
 
     _digitPulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
-    _digitPulseAnim = Tween<double>(begin: 1.0, end: 1.1).animate(
-      CurvedAnimation(parent: _digitPulseController, curve: Curves.easeInOut),
-    );
+    _digitPulseAnim = Tween<double>(
+      begin: 1.0,
+      end: 1.1,
+    ).animate(CurvedAnimation(parent: _digitPulseController, curve: Curves.easeInOut));
 
     _sparkleController = AnimationController(
       vsync: this,
@@ -61,17 +63,19 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _overlayScaleAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _overlayController, curve: Curves.elasticOut),
-    );
+    _overlayScaleAnim = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _overlayController, curve: Curves.elasticOut));
 
     _buttonController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
-    _buttonScaleAnim = Tween<double>(begin: 1.0, end: 0.92).animate(
-      CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut),
-    );
+    _buttonScaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 0.92,
+    ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
   Future<void> _initTts() async {
@@ -122,8 +126,9 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
         _overlayController.forward(from: 0);
         _speakSuccess();
       } else if (gameState.phase == DigitGamePhase.failure) {
-        _overlayController.forward(from: 0);
-        _speakFindDigit(gameState.currentDigit.name);
+        // Failure overlay disabled
+        // _overlayController.forward(from: 0);
+        // _speakFindDigit(gameState.currentDigit.name);
       }
     }
 
@@ -154,8 +159,8 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
               ),
               if (gameState.phase == DigitGamePhase.success)
                 _buildSuccessOverlay(gameState, gameNotifier),
-              if (gameState.phase == DigitGamePhase.failure)
-                _buildFailureOverlay(gameState, gameNotifier),
+              // if (gameState.phase == DigitGamePhase.failure)
+              //   _buildFailureOverlay(gameState, gameNotifier),
             ],
           ),
         ),
@@ -233,7 +238,11 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
               gradient: LinearGradient(colors: [Colors.orange.shade400, Colors.amber.shade400]),
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
-                BoxShadow(color: Colors.orange.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4)),
+                BoxShadow(
+                  color: Colors.orange.withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
               ],
             ),
             child: Row(
@@ -242,7 +251,11 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                 const SizedBox(width: 8),
                 Text(
                   '${state.score}/${state.totalRounds}',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -254,7 +267,11 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
               color: Colors.white,
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
-                BoxShadow(color: Colors.orange.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 2)),
+                BoxShadow(
+                  color: Colors.orange.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
               ],
             ),
             child: Row(
@@ -263,7 +280,11 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                 const SizedBox(width: 6),
                 Text(
                   '${state.currentRound}/${state.totalRounds}',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: state.displayColor.color),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: state.displayColor.color,
+                  ),
                 ),
               ],
             ),
@@ -273,7 +294,11 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
     );
   }
 
-  Widget _buildIconButton({required IconData icon, required VoidCallback onTap, required Color color}) {
+  Widget _buildIconButton({
+    required IconData icon,
+    required VoidCallback onTap,
+    required Color color,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -281,7 +306,13 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: color.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))],
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Icon(icon, color: color, size: 24),
       ),
@@ -312,7 +343,11 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
-                  BoxShadow(color: state.displayColor.color.withValues(alpha: 0.2), blurRadius: 15, offset: const Offset(0, 5)),
+                  BoxShadow(
+                    color: state.displayColor.color.withValues(alpha: 0.2),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
                 ],
               ),
               child: Column(
@@ -320,12 +355,20 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                   const Text(
                     '🔢 Look at this number!',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF333333)),
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF333333),
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Remember this digit!',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey.shade600),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade600,
+                    ),
                   ),
                 ],
               ),
@@ -336,7 +379,10 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
               child: AnimatedBuilder(
                 animation: _digitBounceAnim,
                 builder: (context, child) {
-                  return Transform.translate(offset: Offset(0, -_digitBounceAnim.value), child: child);
+                  return Transform.translate(
+                    offset: Offset(0, -_digitBounceAnim.value),
+                    child: child,
+                  );
                 },
                 child: ScaleTransition(
                   scale: _digitPulseAnim,
@@ -347,11 +393,19 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
-                        BoxShadow(color: state.displayColor.color.withValues(alpha: 0.4), blurRadius: 30, offset: const Offset(0, 15)),
+                        BoxShadow(
+                          color: state.displayColor.color.withValues(alpha: 0.4),
+                          blurRadius: 30,
+                          offset: const Offset(0, 15),
+                        ),
                       ],
                     ),
                     child: Center(
-                      child: DigitWidget(digit: state.currentDigit.value, color: state.displayColor.color, size: 160),
+                      child: DigitWidget(
+                        digit: state.currentDigit.value,
+                        color: state.displayColor.color,
+                        size: 160,
+                      ),
                     ),
                   ),
                 ),
@@ -367,12 +421,23 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                     colors: [
                       state.displayColor.color,
                       HSLColor.fromColor(state.displayColor.color)
-                          .withLightness((HSLColor.fromColor(state.displayColor.color).lightness + 0.1).clamp(0.0, 1.0))
+                          .withLightness(
+                            (HSLColor.fromColor(state.displayColor.color).lightness + 0.1).clamp(
+                              0.0,
+                              1.0,
+                            ),
+                          )
                           .toColor(),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(30),
-                  boxShadow: [BoxShadow(color: state.displayColor.color.withValues(alpha: 0.4), blurRadius: 20, offset: const Offset(0, 8))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: state.displayColor.color.withValues(alpha: 0.4),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -386,7 +451,9 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
                         letterSpacing: 3,
-                        shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)],
+                        shadows: [
+                          Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4),
+                        ],
                       ),
                     ),
                   ],
@@ -417,20 +484,41 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(24),
-                boxShadow: [BoxShadow(color: Colors.orange.withValues(alpha: 0.1), blurRadius: 20, offset: const Offset(0, 8))],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.orange.withValues(alpha: 0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Find ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.grey.shade700)),
+                      Text(
+                        'Find ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey.shade700,
+                        ),
+                      ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(color: const Color(0xFFFF9F1C), borderRadius: BorderRadius.circular(12)),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFF9F1C),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         child: Text(
                           state.currentDigit.name.toUpperCase(),
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 1),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            letterSpacing: 1,
+                          ),
                         ),
                       ),
                     ],
@@ -452,7 +540,11 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                     index: index,
                     onTap: () {
                       if (state.phase == DigitGamePhase.testing) {
+                        final isCorrect = index == state.correctIndex;
                         notifier.checkAnswer(index);
+                        if (!isCorrect) {
+                          _speakFindDigit(state.currentDigit.name);
+                        }
                       }
                     },
                   ),
@@ -481,7 +573,13 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                 colors: [Color(0xFFFF9F1C), Color(0xFFFF6B6B), Color(0xFFE63946)],
               ),
               borderRadius: BorderRadius.circular(32),
-              boxShadow: [BoxShadow(color: Colors.orange.withValues(alpha: 0.5), blurRadius: 40, offset: const Offset(0, 20))],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.orange.withValues(alpha: 0.5),
+                  blurRadius: 40,
+                  offset: const Offset(0, 20),
+                ),
+              ],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -490,8 +588,15 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                 const SizedBox(height: 20),
                 Container(
                   padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(24)),
-                  child: DigitWidget(digit: state.currentDigit.value, color: state.displayColor.color, size: 100),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: DigitWidget(
+                    digit: state.currentDigit.value,
+                    color: state.displayColor.color,
+                    size: 100,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 const Text(
@@ -506,13 +611,19 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
                 const SizedBox(height: 8),
                 Text(
                   'You found ${state.currentDigit.name}!',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.9)),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 _buildAnimatedButton(
                   onPressed: () => notifier.nextRound(),
                   gradientColors: const [Color(0xFF8AC926), Color(0xFF06D6A0)],
-                  icon: state.currentRound >= state.totalRounds ? Icons.refresh_rounded : Icons.arrow_forward_rounded,
+                  icon: state.currentRound >= state.totalRounds
+                      ? Icons.refresh_rounded
+                      : Icons.arrow_forward_rounded,
                   text: state.currentRound >= state.totalRounds ? 'Play Again!' : 'Next Number!',
                 ),
               ],
@@ -523,65 +634,78 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
     );
   }
 
-  Widget _buildFailureOverlay(DigitMasterState state, DigitMasterNotifier notifier) {
-    return Container(
-      color: Colors.black.withValues(alpha: 0.5),
-      child: Center(
-        child: ScaleTransition(
-          scale: _overlayScaleAnim,
-          child: _ShakingWidget(
-            child: Container(
-              margin: const EdgeInsets.all(24),
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF9B5DE5), Color(0xFF6A4C93), Color(0xFF5A3D82)],
-                ),
-                borderRadius: BorderRadius.circular(32),
-                boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.5), blurRadius: 40, offset: const Offset(0, 20))],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(24)),
-                    child: const Text('🤔', style: TextStyle(fontSize: 70)),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    state.motivationalMessage,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      height: 1.3,
-                      shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Look for ${state.currentDigit.name}',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.8)),
-                  ),
-                  const SizedBox(height: 24),
-                  _buildAnimatedButton(
-                    onPressed: () => notifier.retryQuestion(),
-                    gradientColors: const [Color(0xFFFF6B6B), Color(0xFFFF9671)],
-                    icon: Icons.refresh_rounded,
-                    text: 'Try Again!',
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildFailureOverlay(DigitMasterState state, DigitMasterNotifier notifier) {
+  //   return Container(
+  //     color: Colors.black.withValues(alpha: 0.5),
+  //     child: Center(
+  //       child: ScaleTransition(
+  //         scale: _overlayScaleAnim,
+  //         child: _ShakingWidget(
+  //           child: Container(
+  //             margin: const EdgeInsets.all(24),
+  //             padding: const EdgeInsets.all(32),
+  //             decoration: BoxDecoration(
+  //               gradient: const LinearGradient(
+  //                 begin: Alignment.topLeft,
+  //                 end: Alignment.bottomRight,
+  //                 colors: [Color(0xFF9B5DE5), Color(0xFF6A4C93), Color(0xFF5A3D82)],
+  //               ),
+  //               borderRadius: BorderRadius.circular(32),
+  //               boxShadow: [
+  //                 BoxShadow(
+  //                   color: Colors.purple.withValues(alpha: 0.5),
+  //                   blurRadius: 40,
+  //                   offset: const Offset(0, 20),
+  //                 ),
+  //               ],
+  //             ),
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 Container(
+  //                   padding: const EdgeInsets.all(20),
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.white.withValues(alpha: 0.2),
+  //                     borderRadius: BorderRadius.circular(24),
+  //                   ),
+  //                   child: const Text('🤔', style: TextStyle(fontSize: 70)),
+  //                 ),
+  //                 const SizedBox(height: 20),
+  //                 Text(
+  //                   state.motivationalMessage,
+  //                   textAlign: TextAlign.center,
+  //                   style: const TextStyle(
+  //                     fontSize: 28,
+  //                     fontWeight: FontWeight.w800,
+  //                     color: Colors.white,
+  //                     height: 1.3,
+  //                     shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)],
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 12),
+  //                 Text(
+  //                   'Look for ${state.currentDigit.name}',
+  //                   style: TextStyle(
+  //                     fontSize: 16,
+  //                     fontWeight: FontWeight.w500,
+  //                     color: Colors.white.withValues(alpha: 0.8),
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 24),
+  //                 _buildAnimatedButton(
+  //                   onPressed: () => notifier.retryQuestion(),
+  //                   gradientColors: const [Color(0xFFFF6B6B), Color(0xFFFF9671)],
+  //                   icon: Icons.refresh_rounded,
+  //                   text: 'Try Again!',
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildAnimatedButton({
     required VoidCallback onPressed,
@@ -603,14 +727,28 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: gradientColors),
             borderRadius: BorderRadius.circular(30),
-            boxShadow: [BoxShadow(color: gradientColors[0].withValues(alpha: 0.4), blurRadius: 20, offset: const Offset(0, 8))],
+            boxShadow: [
+              BoxShadow(
+                color: gradientColors[0].withValues(alpha: 0.4),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, color: Colors.white, size: 26),
               const SizedBox(width: 12),
-              Text(text, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 0.5)),
+              Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 0.5,
+                ),
+              ),
             ],
           ),
         ),
@@ -625,7 +763,12 @@ class _DigitOptionCard extends StatefulWidget {
   final int index;
   final VoidCallback onTap;
 
-  const _DigitOptionCard({required this.digit, required this.color, required this.index, required this.onTap});
+  const _DigitOptionCard({
+    required this.digit,
+    required this.color,
+    required this.index,
+    required this.onTap,
+  });
 
   @override
   State<_DigitOptionCard> createState() => _DigitOptionCardState();
@@ -639,7 +782,10 @@ class _DigitOptionCardState extends State<_DigitOptionCard> with SingleTickerPro
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 150));
-    _scaleAnim = Tween<double>(begin: 1.0, end: 0.95).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _scaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -665,7 +811,13 @@ class _DigitOptionCardState extends State<_DigitOptionCard> with SingleTickerPro
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: widget.color.withValues(alpha: 0.3), width: 3),
-            boxShadow: [BoxShadow(color: widget.color.withValues(alpha: 0.2), blurRadius: 12, offset: const Offset(0, 5))],
+            boxShadow: [
+              BoxShadow(
+                color: widget.color.withValues(alpha: 0.2),
+                blurRadius: 12,
+                offset: const Offset(0, 5),
+              ),
+            ],
           ),
           child: DigitWidget(digit: widget.digit.value, color: widget.color, size: 100),
         ),
@@ -690,7 +842,10 @@ class _ShakingWidgetState extends State<_ShakingWidget> with SingleTickerProvide
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
-    _animation = Tween<double>(begin: -5, end: 5).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticIn));
+    _animation = Tween<double>(
+      begin: -5,
+      end: 5,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticIn));
     _controller.repeat(reverse: true);
   }
 
@@ -704,7 +859,8 @@ class _ShakingWidgetState extends State<_ShakingWidget> with SingleTickerProvide
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (context, child) => Transform.translate(offset: Offset(_animation.value, 0), child: widget.child),
+      builder: (context, child) =>
+          Transform.translate(offset: Offset(_animation.value, 0), child: widget.child),
     );
   }
 }
@@ -716,13 +872,15 @@ class _CelebrationWidget extends StatefulWidget {
   State<_CelebrationWidget> createState() => _CelebrationWidgetState();
 }
 
-class _CelebrationWidgetState extends State<_CelebrationWidget> with SingleTickerProviderStateMixin {
+class _CelebrationWidgetState extends State<_CelebrationWidget>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))..repeat();
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))
+      ..repeat();
   }
 
   @override
@@ -741,14 +899,20 @@ class _CelebrationWidgetState extends State<_CelebrationWidget> with SingleTicke
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Transform.rotate(angle: _controller.value * 2 * math.pi, child: const Text('⭐', style: TextStyle(fontSize: 28))),
+              Transform.rotate(
+                angle: _controller.value * 2 * math.pi,
+                child: const Text('⭐', style: TextStyle(fontSize: 28)),
+              ),
               const SizedBox(width: 12),
               Transform.translate(
                 offset: Offset(0, math.sin(_controller.value * 4 * math.pi) * 8),
                 child: const Text('🎊', style: TextStyle(fontSize: 36)),
               ),
               const SizedBox(width: 12),
-              Transform.rotate(angle: -_controller.value * 2 * math.pi, child: const Text('⭐', style: TextStyle(fontSize: 28))),
+              Transform.rotate(
+                angle: -_controller.value * 2 * math.pi,
+                child: const Text('⭐', style: TextStyle(fontSize: 28)),
+              ),
             ],
           );
         },

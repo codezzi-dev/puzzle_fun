@@ -149,9 +149,9 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
         _overlayController.forward(from: 0);
         _speakSuccess();
       } else if (gameState.phase == ShapeGamePhase.failure) {
-        _overlayController.forward(from: 0);
-        // _speakFailure();
-        _speakFindShape(gameState.currentShape.name);
+        // Failure overlay disabled - this shouldn't trigger anymore
+        // _overlayController.forward(from: 0);
+        // _speakFindShape(gameState.currentShape.name);
       }
     }
 
@@ -187,9 +187,9 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
               if (gameState.phase == ShapeGamePhase.success)
                 _buildSuccessOverlay(gameState, gameNotifier),
 
-              // Failure Overlay
-              if (gameState.phase == ShapeGamePhase.failure)
-                _buildFailureOverlay(gameState, gameNotifier),
+              // Failure Overlay (commented out)
+              // if (gameState.phase == ShapeGamePhase.failure)
+              //   _buildFailureOverlay(gameState, gameNotifier),
             ],
           ),
         ),
@@ -592,7 +592,12 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
                     index: index,
                     onTap: () {
                       if (state.phase == ShapeGamePhase.testing) {
+                        final isCorrect = index == state.correctIndex;
                         notifier.checkAnswer(index);
+                        if (!isCorrect) {
+                          // Speak "Find [shape]!" again on wrong answer
+                          _speakFindShape(state.currentShape.name);
+                        }
                       }
                     },
                   ),
@@ -692,85 +697,85 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
     );
   }
 
-  Widget _buildFailureOverlay(ShapeMasterState state, ShapeMasterNotifier notifier) {
-    return Container(
-      color: Colors.black.withValues(alpha: 0.5),
-      child: Center(
-        child: ScaleTransition(
-          scale: _overlayScaleAnim,
-          child: _ShakingWidget(
-            child: Container(
-              margin: const EdgeInsets.all(24),
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF9B5DE5), Color(0xFF6A4C93), Color(0xFF5A3D82)],
-                ),
-                borderRadius: BorderRadius.circular(32),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.purple.withValues(alpha: 0.5),
-                    blurRadius: 40,
-                    offset: const Offset(0, 20),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Thinking character
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: const Text('🤔', style: TextStyle(fontSize: 70)),
-                  ),
+  // Widget _buildFailureOverlay(ShapeMasterState state, ShapeMasterNotifier notifier) {
+  //   return Container(
+  //     color: Colors.black.withValues(alpha: 0.5),
+  //     child: Center(
+  //       child: ScaleTransition(
+  //         scale: _overlayScaleAnim,
+  //         child: _ShakingWidget(
+  //           child: Container(
+  //             margin: const EdgeInsets.all(24),
+  //             padding: const EdgeInsets.all(32),
+  //             decoration: BoxDecoration(
+  //               gradient: const LinearGradient(
+  //                 begin: Alignment.topLeft,
+  //                 end: Alignment.bottomRight,
+  //                 colors: [Color(0xFF9B5DE5), Color(0xFF6A4C93), Color(0xFF5A3D82)],
+  //               ),
+  //               borderRadius: BorderRadius.circular(32),
+  //               boxShadow: [
+  //                 BoxShadow(
+  //                   color: Colors.purple.withValues(alpha: 0.5),
+  //                   blurRadius: 40,
+  //                   offset: const Offset(0, 20),
+  //                 ),
+  //               ],
+  //             ),
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 // Thinking character
+  //                 Container(
+  //                   padding: const EdgeInsets.all(20),
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.white.withValues(alpha: 0.2),
+  //                     borderRadius: BorderRadius.circular(24),
+  //                   ),
+  //                   child: const Text('🤔', style: TextStyle(fontSize: 70)),
+  //                 ),
 
-                  const SizedBox(height: 20),
+  //                 const SizedBox(height: 20),
 
-                  Text(
-                    state.motivationalMessage,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      height: 1.3,
-                      shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)],
-                    ),
-                  ),
+  //                 Text(
+  //                   state.motivationalMessage,
+  //                   textAlign: TextAlign.center,
+  //                   style: const TextStyle(
+  //                     fontSize: 28,
+  //                     fontWeight: FontWeight.w800,
+  //                     color: Colors.white,
+  //                     height: 1.3,
+  //                     shadows: [Shadow(color: Colors.black26, offset: Offset(2, 2), blurRadius: 4)],
+  //                   ),
+  //                 ),
 
-                  const SizedBox(height: 12),
+  //                 const SizedBox(height: 12),
 
-                  Text(
-                    'Look for the ${state.currentShape.name}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white.withValues(alpha: 0.8),
-                    ),
-                  ),
+  //                 Text(
+  //                   'Look for the ${state.currentShape.name}',
+  //                   style: TextStyle(
+  //                     fontSize: 16,
+  //                     fontWeight: FontWeight.w500,
+  //                     color: Colors.white.withValues(alpha: 0.8),
+  //                   ),
+  //                 ),
 
-                  const SizedBox(height: 24),
+  //                 const SizedBox(height: 24),
 
-                  _buildAnimatedButton(
-                    onPressed: () => notifier.retryQuestion(),
-                    gradientColors: const [Color(0xFFFF6B6B), Color(0xFFFF9671)],
-                    icon: Icons.refresh_rounded,
-                    text: 'Try Again!',
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  //                 _buildAnimatedButton(
+  //                   onPressed: () => notifier.retryQuestion(),
+  //                   gradientColors: const [Color(0xFFFF6B6B), Color(0xFFFF9671)],
+  //                   icon: Icons.refresh_rounded,
+  //                   text: 'Try Again!',
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildAnimatedButton({
     required VoidCallback onPressed,

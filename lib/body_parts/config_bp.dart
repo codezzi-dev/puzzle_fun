@@ -121,7 +121,8 @@ class _OptionsResult {
 }
 
 _OptionsResult _generateOptions(BodyPartItem correctPart, Random random) {
-  final wrongParts = bodyPartsPalette.where((p) => p.name != correctPart.name).toList()..shuffle(random);
+  final wrongParts = bodyPartsPalette.where((p) => p.name != correctPart.name).toList()
+    ..shuffle(random);
   final options = [correctPart, wrongParts[0], wrongParts[1]]..shuffle(random);
   final correctIndex = options.indexWhere((p) => p.name == correctPart.name);
 
@@ -157,8 +158,9 @@ class BodyPartsNotifier extends Notifier<BodyPartsState> {
     if (selectedIndex == state.correctIndex) {
       state = state.copyWith(phase: BodyPartsGamePhase.success, score: state.score + 1);
     } else {
+      // Wrong answer - stay in testing phase (failure overlay is disabled)
       final message = motivationalMessages[_random.nextInt(motivationalMessages.length)];
-      state = state.copyWith(phase: BodyPartsGamePhase.failure, motivationalMessage: message);
+      state = state.copyWith(motivationalMessage: message);
     }
   }
 

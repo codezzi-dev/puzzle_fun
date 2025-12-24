@@ -173,9 +173,9 @@ class ShapeMasterNotifier extends Notifier<ShapeMasterState> {
       // Correct answer!
       state = state.copyWith(phase: ShapeGamePhase.success, score: state.score + 1);
     } else {
-      // Wrong answer
+      // Wrong answer - stay in testing phase (failure overlay is disabled)
       final message = motivationalMessages[_random.nextInt(motivationalMessages.length)];
-      state = state.copyWith(phase: ShapeGamePhase.failure, motivationalMessage: message);
+      state = state.copyWith(motivationalMessage: message);
     }
   }
 
