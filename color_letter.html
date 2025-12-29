@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Color Letters</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f2f6fb;
+    }
+
+    h2 {
+        margin-top: 15px;
+    }
+
+    /* Letter palette */
+    .letter-palette {
+        margin: 15px 0;
+        max-width: 650px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .letter-btn {
+        width: 45px;
+        height: 45px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 5px;
+        font-size: 22px;
+        font-weight: bold;
+        border: 3px solid #333;
+        border-radius: 8px;
+        cursor: pointer;
+        background: white;
+        user-select: none;
+    }
+
+    .letter-btn:hover {
+        background: #e0e0e0;
+    }
+
+    /* Color palette */
+    .palette {
+        margin: 15px 0;
+    }
+
+    .color {
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+        margin: 5px;
+        border-radius: 50%;
+        border: 3px solid #555;
+        cursor: pointer;
+    }
+
+    .selected {
+        outline: 4px solid black;
+    }
+
+    /* Coloring canvas */
+    svg {
+        width: 600px;
+        height: 300px;
+        margin-top: 20px;
+        border: 2px dashed #aaa;
+        background: white;
+    }
+
+    text {
+        font-family: Arial Black, Arial, sans-serif;
+        font-size: 120px;
+        fill: white;
+        stroke: black;
+        stroke-width: 4;
+        cursor: pointer;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+
+<h2>Color the Letters</h2>
+<p>1️⃣ Click a letter → 2️⃣ Select color → 3️⃣ Click letter to color</p>
+
+<!-- Letter Palette -->
+<div class="letter-palette">
+    <script>
+        for (let i = 65; i <= 90; i++) {
+            document.write(
+                `<div class="letter-btn" onclick="addLetter('${String.fromCharCode(i)}')">
+                    ${String.fromCharCode(i)}
+                 </div>`
+            );
+        }
+    </script>
+</div>
+
+<!-- Color Palette -->
+<div class="palette">
+    <div class="color selected" style="background:red" onclick="setColor('red', this)"></div>
+    <div class="color" style="background:blue" onclick="setColor('blue', this)"></div>
+    <div class="color" style="background:green" onclick="setColor('green', this)"></div>
+    <div class="color" style="background:yellow" onclick="setColor('yellow', this)"></div>
+    <div class="color" style="background:orange" onclick="setColor('orange', this)"></div>
+    <div class="color" style="background:purple" onclick="setColor('purple', this)"></div>
+</div>
+
+<!-- Coloring Pad -->
+<svg id="canvas" viewBox="0 0 600 300"></svg>
+
+<script>
+    let currentColor = "red";
+    let xPos = 40;
+    let yPos = 140;
+    const stepX = 110;
+
+    function setColor(color, el) {
+        currentColor = color;
+        document.querySelectorAll('.color').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function paint(el) {
+        el.style.fill = currentColor;
+    }
+
+    function addLetter(letter) {
+        const svg = document.getElementById("canvas");
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", xPos);
+        text.setAttribute("y", yPos);
+        text.textContent = letter;
+        text.onclick = function () { paint(this); };
+
+        svg.appendChild(text);
+
+        // Auto layout
+        xPos += stepX;
+        if (xPos > 520) {
+            xPos = 40;
+            yPos += 130;
+        }
+    }
+</script>
+
+</body>
+</html>

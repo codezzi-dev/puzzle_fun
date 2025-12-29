@@ -8,6 +8,7 @@ import 'color_memorize/color_memorize_game.dart';
 import 'digit_master/digit_master_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
 import 'robot_builder/robot_builder_game.dart';
+import 'robot_coloring/robot_coloring_game.dart';
 import 'shape_master/shape_master_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
@@ -72,6 +73,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Build with shapes!',
       gradientColors: [const Color(0xFF7B68EE), const Color(0xFF9B59B6)],
       page: const RobotBuilderGame(),
+    ),
+    _GameInfo(
+      title: 'Robot Painter',
+      emoji: '🎨🤖',
+      description: 'Color the robots!',
+      gradientColors: [const Color(0xFF00BFA5), const Color(0xFF64FFDA)],
+      page: const RobotColoringGame(),
     ),
   ];
 

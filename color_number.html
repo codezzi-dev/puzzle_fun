@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Color Numbers</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f2f6fb;
+    }
+
+    h2 {
+        margin-top: 15px;
+    }
+
+    /* Number palette */
+    .number-palette {
+        margin: 15px 0;
+    }
+
+    .num-btn {
+        width: 45px;
+        height: 45px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 5px;
+        font-size: 22px;
+        font-weight: bold;
+        border: 3px solid #333;
+        border-radius: 8px;
+        cursor: pointer;
+        background: white;
+        user-select: none;
+    }
+
+    .num-btn:hover {
+        background: #e0e0e0;
+    }
+
+    /* Color palette */
+    .palette {
+        margin: 15px 0;
+    }
+
+    .color {
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+        margin: 5px;
+        border-radius: 50%;
+        border: 3px solid #555;
+        cursor: pointer;
+    }
+
+    .selected {
+        outline: 4px solid black;
+    }
+
+    /* Drawing area */
+    svg {
+        width: 600px;
+        height: 300px;
+        margin-top: 20px;
+        border: 2px dashed #aaa;
+        background: white;
+    }
+
+    text {
+        font-family: Arial Black, Arial, sans-serif;
+        font-size: 120px;
+        fill: white;
+        stroke: black;
+        stroke-width: 4;
+        cursor: pointer;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+
+<h2>Color the Numbers</h2>
+<p>1️⃣ Click a number → 2️⃣ Select color → 3️⃣ Click number to color</p>
+
+<!-- Number Palette -->
+<div class="number-palette">
+    <div class="num-btn" onclick="addNumber(1)">1</div>
+    <div class="num-btn" onclick="addNumber(2)">2</div>
+    <div class="num-btn" onclick="addNumber(3)">3</div>
+    <div class="num-btn" onclick="addNumber(4)">4</div>
+    <div class="num-btn" onclick="addNumber(5)">5</div>
+    <div class="num-btn" onclick="addNumber(6)">6</div>
+    <div class="num-btn" onclick="addNumber(7)">7</div>
+    <div class="num-btn" onclick="addNumber(8)">8</div>
+    <div class="num-btn" onclick="addNumber(9)">9</div>
+</div>
+
+<!-- Color Palette -->
+<div class="palette">
+    <div class="color selected" style="background:red" onclick="setColor('red', this)"></div>
+    <div class="color" style="background:blue" onclick="setColor('blue', this)"></div>
+    <div class="color" style="background:green" onclick="setColor('green', this)"></div>
+    <div class="color" style="background:yellow" onclick="setColor('yellow', this)"></div>
+    <div class="color" style="background:orange" onclick="setColor('orange', this)"></div>
+    <div class="color" style="background:purple" onclick="setColor('purple', this)"></div>
+</div>
+
+<!-- Coloring Pad -->
+<svg id="canvas" viewBox="0 0 600 300"></svg>
+
+<script>
+    let currentColor = "red";
+    let xPos = 40;
+    let yPos = 140;
+    const stepX = 110;
+
+    function setColor(color, el) {
+        currentColor = color;
+        document.querySelectorAll('.color').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function paint(el) {
+        el.style.fill = currentColor;
+    }
+
+    function addNumber(num) {
+        const svg = document.getElementById("canvas");
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", xPos);
+        text.setAttribute("y", yPos);
+        text.textContent = num;
+        text.onclick = function () { paint(this); };
+
+        svg.appendChild(text);
+
+        // Auto layout
+        xPos += stepX;
+        if (xPos > 520) {
+            xPos = 40;
+            yPos += 130;
+        }
+    }
+</script>
+
+</body>
+</html>
