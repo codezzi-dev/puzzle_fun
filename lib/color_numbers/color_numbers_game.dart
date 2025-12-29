@@ -180,13 +180,12 @@ class _ColorNumbersGameState extends ConsumerState<ColorNumbersGame> {
                   width: 50,
                   height: 50,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.orange.shade300, Colors.orange.shade500],
-                    ),
+                    color: Colors.grey.shade50,
                     borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.orange.shade300, width: 2),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.orange.withValues(alpha: 0.3),
+                        color: Colors.grey.withValues(alpha: 0.2),
                         blurRadius: 6,
                         offset: const Offset(0, 3),
                       ),
@@ -195,10 +194,10 @@ class _ColorNumbersGameState extends ConsumerState<ColorNumbersGame> {
                   child: Center(
                     child: Text(
                       '$index',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.orange.shade600,
                       ),
                     ),
                   ),

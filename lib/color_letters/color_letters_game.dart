@@ -186,13 +186,12 @@ class _ColorLettersGameState extends ConsumerState<ColorLettersGame> {
                       width: 38,
                       height: 38,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.green.shade300, Colors.green.shade500],
-                        ),
+                        color: Colors.grey.shade50,
                         borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.green.shade300, width: 2),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.green.withValues(alpha: 0.3),
+                            color: Colors.grey.withValues(alpha: 0.2),
                             blurRadius: 4,
                             offset: const Offset(0, 2),
                           ),
@@ -201,10 +200,10 @@ class _ColorLettersGameState extends ConsumerState<ColorLettersGame> {
                       child: Center(
                         child: Text(
                           letter,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.green.shade600,
                           ),
                         ),
                       ),
