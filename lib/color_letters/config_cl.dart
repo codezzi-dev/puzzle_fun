@@ -82,7 +82,7 @@ class ColorLettersState {
 /// State notifier for Color Letters game
 class ColorLettersNotifier extends Notifier<ColorLettersState> {
   // Grid layout settings
-  static const int maxItems = 10; // Maximum items on canvas
+  static const int maxItems = 12; // Maximum items on canvas
   static const int maxPerRow = 4;
   static const double startX = 20;
   static const double startY = 20;
@@ -125,11 +125,17 @@ class ColorLettersNotifier extends Notifier<ColorLettersState> {
   }
 
   /// Color a letter on the canvas
+  /// Toggle behavior: if already colored, reset to white; if white, apply selected color
   bool colorLetter(String letterId) {
     if (state.selectedColor == null) return false;
 
     final newList = state.canvasLetters.map((l) {
       if (l.id == letterId) {
+        // If already has a color (not white), reset to white
+        if (l.color != Colors.white) {
+          return l.copyWith(color: Colors.white);
+        }
+        // If white, apply the selected color
         return l.copyWith(color: state.selectedColor);
       }
       return l;

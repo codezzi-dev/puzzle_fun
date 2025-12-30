@@ -82,7 +82,7 @@ class ColorNumbersState {
 /// State notifier for Color Numbers game
 class ColorNumbersNotifier extends Notifier<ColorNumbersState> {
   // Grid layout settings
-  static const int maxItems = 10; // Maximum items on canvas
+  static const int maxItems = 12; // Maximum items on canvas
   static const int maxPerRow = 4;
   static const double startX = 20;
   static const double startY = 20;
@@ -125,11 +125,17 @@ class ColorNumbersNotifier extends Notifier<ColorNumbersState> {
   }
 
   /// Color a number on the canvas
+  /// Toggle behavior: if already colored, reset to white; if white, apply selected color
   bool colorNumber(String numberId) {
     if (state.selectedColor == null) return false;
 
     final newList = state.canvasNumbers.map((n) {
       if (n.id == numberId) {
+        // If already has a color (not white), reset to white
+        if (n.color != Colors.white) {
+          return n.copyWith(color: Colors.white);
+        }
+        // If white, apply the selected color
         return n.copyWith(color: state.selectedColor);
       }
       return n;

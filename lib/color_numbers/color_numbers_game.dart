@@ -166,12 +166,13 @@ class _ColorNumbersGameState extends ConsumerState<ColorNumbersGame> {
             spacing: 8,
             runSpacing: 8,
             alignment: WrapAlignment.center,
-            children: List.generate(10, (index) {
+            // Numbers 1-9 first, then 0 at the end
+            children: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((number) {
               return GestureDetector(
                 onTap: () {
-                  final added = notifier.addNumber(index);
+                  final added = notifier.addNumber(number);
                   if (added) {
-                    _tts.speak("$index");
+                    _tts.speak("$number");
                   } else {
                     _tts.speak("Canvas is full! Clear to add more.");
                   }
@@ -193,7 +194,7 @@ class _ColorNumbersGameState extends ConsumerState<ColorNumbersGame> {
                   ),
                   child: Center(
                     child: Text(
-                      '$index',
+                      '$number',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -203,7 +204,7 @@ class _ColorNumbersGameState extends ConsumerState<ColorNumbersGame> {
                   ),
                 ),
               );
-            }),
+            }).toList(),
           ),
         ],
       ),
