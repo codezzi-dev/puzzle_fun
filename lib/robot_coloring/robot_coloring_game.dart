@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import '../shared/victory_audio_service.dart';
 import 'config_rc.dart';
 import 'widgets/color_palette.dart';
 import 'widgets/colorable_robot.dart';
@@ -88,6 +89,7 @@ class _RobotColoringGameState extends ConsumerState<RobotColoringGame>
 
   Future<void> _speakSuccess() async {
     await _tts.speak("Wonderful! You colored the robot perfectly!");
+    victoryAudio.playVictorySound();
   }
 
   @override
@@ -641,6 +643,7 @@ class _RobotColoringGameState extends ConsumerState<RobotColoringGame>
               // Next robot button
               _buildAnimatedButton(
                 onPressed: () {
+                  victoryAudio.stop();
                   notifier.nextRobot();
                   _currentColors = null; // Reset colors for next robot
                   _speakLearning();

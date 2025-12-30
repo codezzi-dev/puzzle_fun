@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import '../shared/victory_audio_service.dart';
 import 'config_clm.dart';
 import 'widgets/color_swatch.dart';
 import 'widgets/colored_shape.dart';
@@ -64,6 +65,7 @@ class _ColorMatchGameState extends ConsumerState<ColorMatchGame> with TickerProv
 
   void _speakSuccess() {
     _tts.speak('Perfect! You matched all the colors!');
+    victoryAudio.playVictorySound();
   }
 
   void _speakCorrect(String colorName) {
@@ -462,6 +464,7 @@ class _ColorMatchGameState extends ConsumerState<ColorMatchGame> with TickerProv
                 const SizedBox(height: 24),
                 GestureDetector(
                   onTap: () {
+                    victoryAudio.stop();
                     notifier.nextRound();
                     _speakIntro();
                   },

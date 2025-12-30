@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import '../shared/victory_audio_service.dart';
 import 'config_rb.dart';
 import 'widgets/draggable_shape.dart';
 import 'widgets/robot_display.dart';
@@ -95,6 +96,7 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
   Future<void> _speakSuccess() async {
     final messages = ['Amazing job!', 'You built the robot!', 'Wonderful!', 'Perfect!'];
     await _flutterTts.speak(messages[math.Random().nextInt(messages.length)]);
+    victoryAudio.playVictorySound();
   }
 
   @override
@@ -743,7 +745,10 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
                 ),
                 const SizedBox(height: 24),
                 _buildAnimatedButton(
-                  onPressed: () => notifier.nextRobot(),
+                  onPressed: () {
+                    victoryAudio.stop();
+                    notifier.nextRobot();
+                  },
                   gradientColors: const [Color(0xFF06D6A0), Color(0xFF8AC926)],
                   icon: Icons.arrow_forward_rounded,
                   text: 'Next Robot! 🤖',

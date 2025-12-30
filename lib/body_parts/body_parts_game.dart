@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import '../shared/victory_audio_service.dart';
 import 'config_bp.dart';
 import 'widgets/body_parts_widget.dart';
 
@@ -96,6 +97,7 @@ class _BodyPartsGameState extends ConsumerState<BodyPartsGame> with TickerProvid
   Future<void> _speakSuccess() async {
     final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
     await _flutterTts.speak(messages[math.Random().nextInt(messages.length)]);
+    victoryAudio.playVictorySound();
   }
 
   @override
@@ -573,7 +575,10 @@ class _BodyPartsGameState extends ConsumerState<BodyPartsGame> with TickerProvid
                 ),
                 const SizedBox(height: 24),
                 _buildAnimatedButton(
-                  onPressed: () => notifier.nextRound(),
+                  onPressed: () {
+                    victoryAudio.stop();
+                    notifier.nextRound();
+                  },
                   gradientColors: const [Color(0xFF8AC926), Color(0xFF06D6A0)],
                   icon: state.currentRound >= state.totalRounds
                       ? Icons.refresh_rounded
