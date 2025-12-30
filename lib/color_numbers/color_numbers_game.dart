@@ -63,73 +63,125 @@ class _ColorNumbersGameState extends ConsumerState<ColorNumbersGame> {
   Widget _buildAppBar(BuildContext context, ColorNumbersNotifier notifier) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
+      child: Column(
         children: [
-          GestureDetector(
-            onTap: () {
-              notifier.clearCanvas();
-              Navigator.of(context).pop();
-            },
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+          // First row: Back button and title
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  notifier.clearCanvas();
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                ],
+                  child: Icon(Icons.arrow_back_rounded, color: Colors.orange.shade600, size: 24),
+                ),
               ),
-              child: Icon(Icons.arrow_back_rounded, color: Colors.orange.shade600, size: 24),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: ShaderMask(
-              shaderCallback: (bounds) => const LinearGradient(
-                colors: [Color(0xFFFF6F00), Color(0xFFFF8F00)],
-              ).createShader(bounds),
-              child: const Text(
-                '🔢 Color Numbers',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-            ),
-          ),
-          // Clear button
-          GestureDetector(
-            onTap: () => notifier.clearCanvas(),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [Colors.red.shade400, Colors.red.shade600]),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.red.withValues(alpha: 0.4),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.delete_outline, color: Colors.white, size: 18),
-                  SizedBox(width: 4),
-                  Text(
-                    'Clear',
+              const SizedBox(width: 16),
+              Expanded(
+                child: ShaderMask(
+                  shaderCallback: (bounds) => const LinearGradient(
+                    colors: [Color(0xFFFF6F00), Color(0xFFFF8F00)],
+                  ).createShader(bounds),
+                  child: const Text(
+                    '🔢 Color Numbers',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Second row: Undo and Clear buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Undo button
+              GestureDetector(
+                onTap: () => notifier.removeLastNumber(),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.orange.shade400, Colors.orange.shade600],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.orange.withValues(alpha: 0.4),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.undo_rounded, color: Colors.white, size: 18),
+                      SizedBox(width: 4),
+                      Text(
+                        'Undo',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Clear button
+              GestureDetector(
+                onTap: () => notifier.clearCanvas(),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [Colors.red.shade400, Colors.red.shade600]),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.red.withValues(alpha: 0.4),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.delete_outline, color: Colors.white, size: 18),
+                      SizedBox(width: 4),
+                      Text(
+                        'Clear',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -262,6 +314,10 @@ class _ColorNumbersGameState extends ConsumerState<ColorNumbersGame> {
                     } else {
                       _tts.speak("Pick a color first!");
                     }
+                  },
+                  onLongPress: () {
+                    notifier.removeNumber(canvasNum.id);
+                    _tts.speak("Removed!");
                   },
                   child: Container(
                     width: 60,

@@ -14,8 +14,8 @@ class ShapeItem {
 const List<ShapeItem> shapePalette = [
   ShapeItem(name: 'Square', emoji: '🟧'),
   ShapeItem(name: 'Circle', emoji: '🔵'),
-  ShapeItem(name: 'Oval', emoji: '🥚'),
-  ShapeItem(name: 'Rectangle', emoji: '🟩'),
+  ShapeItem(name: 'Oval', emoji: ''),
+  ShapeItem(name: 'Rectangle', emoji: ''),
   ShapeItem(name: 'Triangle', emoji: '🔺'),
   ShapeItem(name: 'Pentagon', emoji: '⬠'),
   ShapeItem(name: 'Hexagon', emoji: '⬡'),

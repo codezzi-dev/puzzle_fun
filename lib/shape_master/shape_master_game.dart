@@ -489,8 +489,8 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(state.currentShape.emoji, style: const TextStyle(fontSize: 28)),
-                    const SizedBox(width: 16),
+                    // Text(state.currentShape.emoji, style: const TextStyle(fontSize: 28)),
+                    // const SizedBox(width: 16),
                     Text(
                       state.currentShape.name.toUpperCase(),
                       style: const TextStyle(
@@ -574,8 +574,8 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(state.currentShape.emoji, style: const TextStyle(fontSize: 40)),
+                  // const SizedBox(height: 8),
+                  // Text(state.currentShape.emoji, style: const TextStyle(fontSize: 40)),
                 ],
               ),
             ),

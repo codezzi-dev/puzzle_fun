@@ -15,8 +15,13 @@ class CanvasNumber {
     this.color = Colors.white,
   });
 
-  CanvasNumber copyWith({Color? color}) {
-    return CanvasNumber(id: id, number: number, position: position, color: color ?? this.color);
+  CanvasNumber copyWith({Color? color, Offset? position}) {
+    return CanvasNumber(
+      id: id,
+      number: number,
+      position: position ?? this.position,
+      color: color ?? this.color,
+    );
   }
 }
 
@@ -143,6 +148,30 @@ class ColorNumbersNotifier extends Notifier<ColorNumbersState> {
 
     state = state.copyWith(canvasNumbers: newList);
     return true;
+  }
+
+  /// Remove a number from the canvas and recalculate positions
+  void removeNumber(String numberId) {
+    // Remove the item and recalculate positions for remaining items
+    final filteredList = state.canvasNumbers.where((n) => n.id != numberId).toList();
+
+    // Recalculate positions for all remaining items
+    final newList = filteredList.asMap().entries.map((entry) {
+      final index = entry.key;
+      final item = entry.value;
+      final row = index ~/ maxPerRow;
+      final col = index % maxPerRow;
+      return item.copyWith(position: Offset(startX + col * stepX, startY + row * stepY));
+    }).toList();
+
+    state = state.copyWith(canvasNumbers: newList);
+  }
+
+  /// Remove the last number from the canvas
+  void removeLastNumber() {
+    if (state.canvasNumbers.isEmpty) return;
+    final newList = state.canvasNumbers.sublist(0, state.canvasNumbers.length - 1);
+    state = state.copyWith(canvasNumbers: newList);
   }
 
   /// Clear the canvas

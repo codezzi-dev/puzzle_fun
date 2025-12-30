@@ -15,8 +15,13 @@ class CanvasLetter {
     this.color = Colors.white,
   });
 
-  CanvasLetter copyWith({Color? color}) {
-    return CanvasLetter(id: id, letter: letter, position: position, color: color ?? this.color);
+  CanvasLetter copyWith({Color? color, Offset? position}) {
+    return CanvasLetter(
+      id: id,
+      letter: letter,
+      position: position ?? this.position,
+      color: color ?? this.color,
+    );
   }
 }
 
@@ -143,6 +148,30 @@ class ColorLettersNotifier extends Notifier<ColorLettersState> {
 
     state = state.copyWith(canvasLetters: newList);
     return true;
+  }
+
+  /// Remove a letter from the canvas and recalculate positions
+  void removeLetter(String letterId) {
+    // Remove the item and recalculate positions for remaining items
+    final filteredList = state.canvasLetters.where((l) => l.id != letterId).toList();
+
+    // Recalculate positions for all remaining items
+    final newList = filteredList.asMap().entries.map((entry) {
+      final index = entry.key;
+      final item = entry.value;
+      final row = index ~/ maxPerRow;
+      final col = index % maxPerRow;
+      return item.copyWith(position: Offset(startX + col * stepX, startY + row * stepY));
+    }).toList();
+
+    state = state.copyWith(canvasLetters: newList);
+  }
+
+  /// Remove the last letter from the canvas
+  void removeLastLetter() {
+    if (state.canvasLetters.isEmpty) return;
+    final newList = state.canvasLetters.sublist(0, state.canvasLetters.length - 1);
+    state = state.copyWith(canvasLetters: newList);
   }
 
   /// Clear the canvas
