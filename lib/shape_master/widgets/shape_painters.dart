@@ -787,15 +787,24 @@ class CrescentPainter extends CustomPainter {
 class ShapeWidget extends StatelessWidget {
   final String shapeType;
   final Color color;
-  final double size;
+  final double? width;
+  final double? height;
+  final double? size;
 
-  const ShapeWidget({super.key, required this.shapeType, required this.color, this.size = 80});
+  const ShapeWidget({
+    super.key,
+    required this.shapeType,
+    required this.color,
+    this.width,
+    this.height,
+    this.size = 80,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: size,
-      height: size,
+      width: width ?? size,
+      height: height ?? size,
       child: CustomPaint(painter: _getPainter()),
     );
   }

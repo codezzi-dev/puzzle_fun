@@ -37,7 +37,8 @@ class ColorableObject extends StatelessWidget {
               child: ShapeWidget(
                 shapeType: part.shapeType,
                 color: part.color,
-                size: part.size.width,
+                width: part.size.width,
+                height: part.size.height,
               ),
             );
           } else {
@@ -126,7 +127,8 @@ class _ColorablePartState extends State<_ColorablePart> with SingleTickerProvide
           ShapeWidget(
             shapeType: widget.part.shapeType,
             color: widget.appliedColor!,
-            size: widget.part.size.width,
+            width: widget.part.size.width,
+            height: widget.part.size.height,
           ),
           if (widget.isCorrect)
             Positioned(
