@@ -431,7 +431,9 @@ class ObjectPainterState {
   });
 
   factory ObjectPainterState.initial() {
-    final object = objectTemplates[0];
+    final random = Random();
+    final index = random.nextInt(objectTemplates.length);
+    final object = objectTemplates[index];
     return ObjectPainterState(
       currentObject: object,
       phase: ObjectPainterPhase.learning,
@@ -441,7 +443,7 @@ class ObjectPainterState {
       selectedColorName: null,
       score: 0,
       totalObjects: objectTemplates.length,
-      currentObjectIndex: 0,
+      currentObjectIndex: index,
     );
   }
 
@@ -589,27 +591,28 @@ class ObjectPainterNotifier extends Notifier<ObjectPainterState> {
     state = state.copyWith(coloredParts: newColoredParts, colorHistory: []);
   }
 
-  /// Move to next object
+  /// Move to next object (picks a random object different from current)
   void nextObject() {
-    final nextIndex = (state.currentObjectIndex + 1) % objectTemplates.length;
+    final random = Random();
+    int nextIndex;
+    // Pick a random index that is different from the current one
+    do {
+      nextIndex = random.nextInt(objectTemplates.length);
+    } while (nextIndex == state.currentObjectIndex && objectTemplates.length > 1);
+
     final nextObject = objectTemplates[nextIndex];
 
-    if (nextIndex == 0) {
-      // Completed all objects - restart the game
-      state = ObjectPainterState.initial();
-    } else {
-      state = ObjectPainterState(
-        currentObject: nextObject,
-        phase: ObjectPainterPhase.learning,
-        coloredParts: {for (var part in nextObject.parts) part.id: null},
-        colorHistory: [],
-        selectedColor: null,
-        selectedColorName: null,
-        score: state.score,
-        totalObjects: state.totalObjects,
-        currentObjectIndex: nextIndex,
-      );
-    }
+    state = ObjectPainterState(
+      currentObject: nextObject,
+      phase: ObjectPainterPhase.learning,
+      coloredParts: {for (var part in nextObject.parts) part.id: null},
+      colorHistory: [],
+      selectedColor: null,
+      selectedColorName: null,
+      score: state.score,
+      totalObjects: state.totalObjects,
+      currentObjectIndex: nextIndex,
+    );
   }
 
   /// Find the matching color option for an object part
