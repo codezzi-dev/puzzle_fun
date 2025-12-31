@@ -589,6 +589,199 @@ Color _darken(Color color, double amount) {
 }
 
 // ============================================================
+// TRAPEZOID SHAPE
+// ============================================================
+class TrapezoidPainter extends CustomPainter {
+  final Color color;
+  TrapezoidPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    final path = Path()
+      ..moveTo(size.width * 0.25, size.height * 0.2)
+      ..lineTo(size.width * 0.75, size.height * 0.2)
+      ..lineTo(size.width * 0.95, size.height * 0.8)
+      ..lineTo(size.width * 0.05, size.height * 0.8)
+      ..close();
+
+    // Shadow
+    final shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.2)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+    canvas.drawPath(path.shift(const Offset(2, 3)), shadowPaint);
+
+    // Main with gradient
+    final gradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [_lighten(color, 0.15), color, _darken(color, 0.15)],
+    );
+    paint.shader = gradient.createShader(path.getBounds());
+    canvas.drawPath(path, paint);
+
+    // Highlight
+    paint.shader = null;
+    paint.color = Colors.white.withValues(alpha: 0.3);
+    final highlightPath = Path()
+      ..moveTo(size.width * 0.3, size.height * 0.25)
+      ..lineTo(size.width * 0.7, size.height * 0.25)
+      ..lineTo(size.width * 0.75, size.height * 0.35)
+      ..lineTo(size.width * 0.25, size.height * 0.35)
+      ..close();
+    canvas.drawPath(highlightPath, paint);
+  }
+
+  @override
+  bool shouldRepaint(TrapezoidPainter oldDelegate) => color != oldDelegate.color;
+}
+
+// ============================================================
+// SEMICIRCLE SHAPE
+// ============================================================
+class SemicirclePainter extends CustomPainter {
+  final Color color;
+  SemicirclePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    final rect = Rect.fromLTWH(
+      size.width * 0.1,
+      size.height * 0.1,
+      size.width * 0.8,
+      size.height * 0.8,
+    );
+
+    // Shadow
+    final shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.2)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+    canvas.drawArc(rect.translate(2, 3), math.pi, math.pi, true, shadowPaint);
+
+    // Main with gradient
+    final gradient = RadialGradient(
+      center: const Alignment(0, -0.4),
+      radius: 0.8,
+      colors: [_lighten(color, 0.2), color, _darken(color, 0.15)],
+    );
+    paint.shader = gradient.createShader(rect);
+    canvas.drawArc(rect, math.pi, math.pi, true, paint);
+
+    // Highlight
+    paint.shader = null;
+    paint.color = Colors.white.withValues(alpha: 0.35);
+    canvas.drawArc(
+      Rect.fromLTWH(size.width * 0.3, size.height * 0.2, size.width * 0.4, size.height * 0.2),
+      math.pi,
+      math.pi,
+      true,
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(SemicirclePainter oldDelegate) => color != oldDelegate.color;
+}
+
+// ============================================================
+// PARALLELOGRAM SHAPE
+// ============================================================
+class ParallelogramPainter extends CustomPainter {
+  final Color color;
+  ParallelogramPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    final path = Path()
+      ..moveTo(size.width * 0.3, size.height * 0.2)
+      ..lineTo(size.width * 0.9, size.height * 0.2)
+      ..lineTo(size.width * 0.7, size.height * 0.8)
+      ..lineTo(size.width * 0.1, size.height * 0.8)
+      ..close();
+
+    // Shadow
+    final shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.2)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+    canvas.drawPath(path.shift(const Offset(2, 3)), shadowPaint);
+
+    // Main with gradient
+    final gradient = LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [_lighten(color, 0.15), color, _darken(color, 0.15)],
+    );
+    paint.shader = gradient.createShader(path.getBounds());
+    canvas.drawPath(path, paint);
+
+    // Highlight
+    paint.shader = null;
+    paint.color = Colors.white.withValues(alpha: 0.3);
+    canvas.drawPath(
+      Path()
+        ..moveTo(size.width * 0.35, size.height * 0.25)
+        ..lineTo(size.width * 0.6, size.height * 0.25)
+        ..lineTo(size.width * 0.55, size.height * 0.4)
+        ..lineTo(size.width * 0.3, size.height * 0.4)
+        ..close(),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(ParallelogramPainter oldDelegate) => color != oldDelegate.color;
+}
+
+// ============================================================
+// CRESCENT SHAPE
+// ============================================================
+class CrescentPainter extends CustomPainter {
+  final Color color;
+  CrescentPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    final path = Path()
+      ..addOval(
+        Rect.fromLTWH(size.width * 0.1, size.height * 0.1, size.width * 0.8, size.height * 0.8),
+      );
+
+    final cutPath = Path()
+      ..addOval(
+        Rect.fromLTWH(size.width * 0.3, size.height * 0.05, size.width * 0.8, size.height * 0.8),
+      );
+
+    final finalPath = Path.combine(PathOperation.difference, path, cutPath);
+
+    // Shadow
+    final shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.2)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+    canvas.drawPath(finalPath.shift(const Offset(2, 3)), shadowPaint);
+
+    // Main with gradient
+    final gradient = RadialGradient(
+      center: const Alignment(-0.5, -0.5),
+      radius: 1.0,
+      colors: [_lighten(color, 0.2), color, _darken(color, 0.15)],
+    );
+    paint.shader = gradient.createShader(finalPath.getBounds());
+    canvas.drawPath(finalPath, paint);
+
+    // Highlight
+    paint.shader = null;
+    paint.color = Colors.white.withValues(alpha: 0.3);
+    canvas.drawCircle(Offset(size.width * 0.25, size.height * 0.35), size.width * 0.08, paint);
+  }
+
+  @override
+  bool shouldRepaint(CrescentPainter oldDelegate) => color != oldDelegate.color;
+}
+
+// ============================================================
 // SHAPE WIDGET - Wraps the painters
 // ============================================================
 class ShapeWidget extends StatelessWidget {
@@ -629,6 +822,14 @@ class ShapeWidget extends StatelessWidget {
         return HeartPainter(color: color);
       case 'star':
         return ShapeStarPainter(color: color);
+      case 'trapezoid':
+        return TrapezoidPainter(color: color);
+      case 'semicircle':
+        return SemicirclePainter(color: color);
+      case 'parallelogram':
+        return ParallelogramPainter(color: color);
+      case 'crescent':
+        return CrescentPainter(color: color);
       default:
         return CirclePainter(color: color);
     }

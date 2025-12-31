@@ -34,23 +34,31 @@ class ObjectTemplate {
 
 /// Object templates using Shape Master shapes
 final List<ObjectTemplate> objectTemplates = [
-  // Object 1: House 🏠
+  // Object 1: House 🏠 - More detailed with chimney and handle
   ObjectTemplate(
     name: 'House',
     emoji: '🏠',
     parts: [
       ObjectPart(
         id: 'roof',
-        shapeType: 'Triangle',
-        shapeName: 'triangle',
-        position: const Offset(30, 0),
-        size: const Size(160, 80),
+        shapeType: 'Trapezoid',
+        shapeName: 'roof',
+        position: const Offset(30, -5),
+        size: const Size(160, 90),
         color: Colors.red,
+      ),
+      ObjectPart(
+        id: 'chimney',
+        shapeType: 'Rectangle',
+        shapeName: 'chimney',
+        position: const Offset(135, 15),
+        size: const Size(25, 45),
+        color: Colors.brown,
       ),
       ObjectPart(
         id: 'body',
         shapeType: 'Square',
-        shapeName: 'square',
+        shapeName: 'house walls',
         position: const Offset(40, 75),
         size: const Size(140, 130),
         color: Colors.amber,
@@ -58,15 +66,23 @@ final List<ObjectTemplate> objectTemplates = [
       ObjectPart(
         id: 'door',
         shapeType: 'Rectangle',
-        shapeName: 'rectangle',
+        shapeName: 'door',
         position: const Offset(90, 135),
         size: const Size(40, 70),
         color: Colors.brown,
       ),
       ObjectPart(
+        id: 'handle',
+        shapeType: 'Circle',
+        shapeName: 'door handle',
+        position: const Offset(120, 172),
+        size: const Size(8, 8),
+        color: Colors.yellow,
+      ),
+      ObjectPart(
         id: 'window_left',
         shapeType: 'Square',
-        shapeName: 'square',
+        shapeName: 'window',
         position: const Offset(55, 95),
         size: const Size(35, 35),
         color: Colors.blue,
@@ -74,7 +90,7 @@ final List<ObjectTemplate> objectTemplates = [
       ObjectPart(
         id: 'window_right',
         shapeType: 'Square',
-        shapeName: 'square',
+        shapeName: 'window',
         position: const Offset(130, 95),
         size: const Size(35, 35),
         color: Colors.blue,
@@ -82,7 +98,7 @@ final List<ObjectTemplate> objectTemplates = [
     ],
   ),
 
-  // Object 2: Car 🚗
+  // Object 2: Car 🚗 - Uses trapezoid roof for realism
   ObjectTemplate(
     name: 'Car',
     emoji: '🚗',
@@ -90,127 +106,87 @@ final List<ObjectTemplate> objectTemplates = [
       ObjectPart(
         id: 'body',
         shapeType: 'Rectangle',
-        shapeName: 'rectangle',
-        position: const Offset(15, 60),
-        size: const Size(190, 70),
+        shapeName: 'car body',
+        position: const Offset(10, 80),
+        size: const Size(200, 60),
         color: Colors.red,
       ),
       ObjectPart(
         id: 'roof',
-        shapeType: 'Rectangle',
-        shapeName: 'rectangle',
-        position: const Offset(55, 20),
-        size: const Size(100, 50),
+        shapeType: 'Trapezoid',
+        shapeName: 'car roof',
+        position: const Offset(45, 35),
+        size: const Size(130, 55),
         color: Colors.red,
       ),
       ObjectPart(
-        id: 'window',
-        shapeType: 'Square',
-        shapeName: 'square',
-        position: const Offset(75, 30),
-        size: const Size(60, 35),
+        id: 'window_glass',
+        shapeType: 'Trapezoid',
+        shapeName: 'window',
+        position: const Offset(55, 42),
+        size: const Size(110, 40),
         color: Colors.cyan,
       ),
       ObjectPart(
-        id: 'wheel_left',
+        id: 'wheel_front',
         shapeType: 'Circle',
-        shapeName: 'circle',
-        position: const Offset(40, 110),
-        size: const Size(50, 50),
-        color: Colors.grey,
+        shapeName: 'front wheel',
+        position: const Offset(35, 115),
+        size: const Size(45, 45),
+        color: Colors.purple,
       ),
       ObjectPart(
-        id: 'wheel_right',
+        id: 'wheel_back',
         shapeType: 'Circle',
-        shapeName: 'circle',
-        position: const Offset(130, 110),
-        size: const Size(50, 50),
-        color: Colors.grey,
+        shapeName: 'back wheel',
+        position: const Offset(140, 115),
+        size: const Size(45, 45),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'headlight',
+        shapeType: 'Oval',
+        shapeName: 'headlight',
+        position: const Offset(10, 95),
+        size: const Size(20, 15),
+        color: Colors.yellow,
       ),
     ],
   ),
 
-  // Object 3: Tree 🌳
+  // Object 3: Tree 🌳 - fuller foliage using overlapping semicircles
   ObjectTemplate(
     name: 'Tree',
     emoji: '🌳',
     parts: [
       ObjectPart(
-        id: 'foliage',
-        shapeType: 'Circle',
-        shapeName: 'circle',
-        position: const Offset(50, 0),
-        size: const Size(120, 120),
-        color: Colors.green,
-      ),
-      ObjectPart(
         id: 'trunk',
         shapeType: 'Rectangle',
-        shapeName: 'rectangle',
-        position: const Offset(90, 105),
-        size: const Size(40, 100),
+        shapeName: 'tree trunk',
+        position: const Offset(95, 110),
+        size: const Size(30, 90),
         color: Colors.brown,
       ),
-    ],
-  ),
-
-  // Object 4: Flower 🌸
-  ObjectTemplate(
-    name: 'Flower',
-    emoji: '🌸',
-    parts: [
       ObjectPart(
-        id: 'petal_top',
-        shapeType: 'Oval',
-        shapeName: 'oval',
-        position: const Offset(85, 0),
-        size: const Size(50, 45),
-        color: Colors.pink,
-      ),
-      ObjectPart(
-        id: 'petal_left',
-        shapeType: 'Oval',
-        shapeName: 'oval',
-        position: const Offset(45, 35),
-        size: const Size(50, 45),
-        color: Colors.pink,
-      ),
-      ObjectPart(
-        id: 'petal_right',
-        shapeType: 'Oval',
-        shapeName: 'oval',
-        position: const Offset(125, 35),
-        size: const Size(50, 45),
-        color: Colors.pink,
-      ),
-      ObjectPart(
-        id: 'petal_bottom',
-        shapeType: 'Oval',
-        shapeName: 'oval',
-        position: const Offset(85, 70),
-        size: const Size(50, 45),
-        color: Colors.pink,
-      ),
-      ObjectPart(
-        id: 'center',
+        id: 'foliage_main',
         shapeType: 'Circle',
-        shapeName: 'circle',
-        position: const Offset(80, 35),
-        size: const Size(60, 60),
-        color: Colors.yellow,
+        shapeName: 'leaves',
+        position: const Offset(55, 10),
+        size: const Size(110, 110),
+        color: Colors.green,
       ),
       ObjectPart(
-        id: 'stem',
-        shapeType: 'Rectangle',
-        shapeName: 'rectangle',
-        position: const Offset(100, 110),
-        size: const Size(20, 90),
+        id: 'foliage_top',
+        shapeType: 'Semicircle',
+        shapeName: 'leaves top',
+        position: const Offset(65, -5),
+        size: const Size(90, 80),
         color: Colors.green,
       ),
     ],
   ),
 
-  // Object 5: Rocket 🚀
+  // Object 4: Rocket 🚀 - Detailing with trapezoid base
   ObjectTemplate(
     name: 'Rocket',
     emoji: '🚀',
@@ -218,47 +194,55 @@ final List<ObjectTemplate> objectTemplates = [
       ObjectPart(
         id: 'nose',
         shapeType: 'Triangle',
-        shapeName: 'triangle',
-        position: const Offset(70, 0),
-        size: const Size(80, 50),
+        shapeName: 'rocket nose',
+        position: const Offset(70, -10),
+        size: const Size(80, 70),
         color: Colors.red,
       ),
       ObjectPart(
         id: 'body',
         shapeType: 'Rectangle',
-        shapeName: 'rectangle',
-        position: const Offset(70, 45),
-        size: const Size(80, 110),
-        color: Colors.blue,
+        shapeName: 'rocket body',
+        position: const Offset(70, 50),
+        size: const Size(80, 100),
+        color: Colors.cyan,
       ),
       ObjectPart(
         id: 'window',
         shapeType: 'Circle',
-        shapeName: 'circle',
-        position: const Offset(85, 65),
-        size: const Size(50, 50),
-        color: Colors.cyan,
+        shapeName: 'port hole',
+        position: const Offset(87, 65),
+        size: const Size(45, 45),
+        color: Colors.blue,
+      ),
+      ObjectPart(
+        id: 'base',
+        shapeType: 'Trapezoid',
+        shapeName: 'engine base',
+        position: const Offset(65, 140),
+        size: const Size(90, 40),
+        color: Colors.teal,
       ),
       ObjectPart(
         id: 'fin_left',
         shapeType: 'Triangle',
-        shapeName: 'triangle',
-        position: const Offset(35, 120),
-        size: const Size(45, 55),
-        color: Colors.orange,
+        shapeName: 'left fin',
+        position: const Offset(35, 110),
+        size: const Size(40, 60),
+        color: Colors.red,
       ),
       ObjectPart(
         id: 'fin_right',
         shapeType: 'Triangle',
-        shapeName: 'triangle',
-        position: const Offset(140, 120),
-        size: const Size(45, 55),
-        color: Colors.orange,
+        shapeName: 'right fin',
+        position: const Offset(145, 110),
+        size: const Size(40, 60),
+        color: Colors.red,
       ),
     ],
   ),
 
-  // Object 6: Fish 🐟
+  // Object 5: Fish 🐟 - with gills and extra fin
   ObjectTemplate(
     name: 'Fish',
     emoji: '🐟',
@@ -266,15 +250,23 @@ final List<ObjectTemplate> objectTemplates = [
       ObjectPart(
         id: 'body',
         shapeType: 'Oval',
-        shapeName: 'oval',
+        shapeName: 'fish body',
         position: const Offset(20, 50),
         size: const Size(140, 90),
-        color: Colors.blue,
+        color: Colors.orange,
+      ),
+      ObjectPart(
+        id: 'gill',
+        shapeType: 'Crescent',
+        shapeName: 'gill',
+        position: const Offset(60, 65),
+        size: const Size(30, 60),
+        color: Colors.amber,
       ),
       ObjectPart(
         id: 'tail',
         shapeType: 'Triangle',
-        shapeName: 'triangle',
+        shapeName: 'tail fin',
         position: const Offset(150, 60),
         size: const Size(55, 70),
         color: Colors.orange,
@@ -282,90 +274,458 @@ final List<ObjectTemplate> objectTemplates = [
       ObjectPart(
         id: 'eye',
         shapeType: 'Circle',
-        shapeName: 'circle',
+        shapeName: 'fish eye',
         position: const Offset(45, 75),
-        size: const Size(30, 30),
-        color: Colors.white,
-      ),
-    ],
-  ),
-
-  // Object 7: Butterfly 🦋
-  ObjectTemplate(
-    name: 'Butterfly',
-    emoji: '🦋',
-    parts: [
-      ObjectPart(
-        id: 'wing_top_left',
-        shapeType: 'Oval',
-        shapeName: 'oval',
-        position: const Offset(20, 15),
-        size: const Size(80, 70),
-        color: Colors.pink,
+        size: const Size(25, 25),
+        color: Colors.yellow,
       ),
       ObjectPart(
-        id: 'wing_top_right',
-        shapeType: 'Oval',
-        shapeName: 'oval',
-        position: const Offset(120, 15),
-        size: const Size(80, 70),
-        color: Colors.pink,
-      ),
-      ObjectPart(
-        id: 'wing_bottom_left',
-        shapeType: 'Oval',
-        shapeName: 'oval',
-        position: const Offset(25, 95),
-        size: const Size(70, 60),
-        color: Colors.purple,
-      ),
-      ObjectPart(
-        id: 'wing_bottom_right',
-        shapeType: 'Oval',
-        shapeName: 'oval',
-        position: const Offset(125, 95),
-        size: const Size(70, 60),
-        color: Colors.purple,
-      ),
-      ObjectPart(
-        id: 'body',
-        shapeType: 'Oval',
-        shapeName: 'oval',
-        position: const Offset(95, 30),
-        size: const Size(30, 120),
+        id: 'pupil',
+        shapeType: 'Circle',
+        shapeName: 'pupil',
+        position: const Offset(52, 82),
+        size: const Size(10, 10),
         color: Colors.brown,
       ),
     ],
   ),
 
-  // Object 8: Boat ⛵
+  // Object 6: Boat ⛵ - with Trapezoid hull
   ObjectTemplate(
     name: 'Boat',
     emoji: '⛵',
     parts: [
       ObjectPart(
-        id: 'sail',
-        shapeType: 'Triangle',
-        shapeName: 'triangle',
-        position: const Offset(85, 0),
-        size: const Size(90, 110),
-        color: Colors.white,
-      ),
-      ObjectPart(
         id: 'mast',
         shapeType: 'Rectangle',
-        shapeName: 'rectangle',
+        shapeName: 'mast',
         position: const Offset(105, 10),
-        size: const Size(10, 120),
+        size: const Size(8, 110),
         color: Colors.brown,
       ),
       ObjectPart(
+        id: 'sail',
+        shapeType: 'Triangle',
+        shapeName: 'sail',
+        position: const Offset(70, 10),
+        size: const Size(100, 100),
+        color: Colors.cyan,
+      ),
+      ObjectPart(
         id: 'hull',
-        shapeType: 'Pentagon',
-        shapeName: 'pentagon',
-        position: const Offset(30, 120),
-        size: const Size(160, 70),
+        shapeType: 'Trapezoid',
+        shapeName: 'boat hull',
+        position: const Offset(30, 110),
+        size: const Size(160, 60),
         color: Colors.red,
+      ),
+      ObjectPart(
+        id: 'window_hull',
+        shapeType: 'Circle',
+        shapeName: 'porthole',
+        position: const Offset(70, 125),
+        size: const Size(25, 25),
+        color: Colors.yellow,
+      ),
+    ],
+  ),
+
+  // Object 7: Airplane ✈️ - [NEW] Parallelogram wings
+  ObjectTemplate(
+    name: 'Airplane',
+    emoji: '✈️',
+    parts: [
+      ObjectPart(
+        id: 'body',
+        shapeType: 'Oval',
+        shapeName: 'fuselage',
+        position: const Offset(20, 80),
+        size: const Size(180, 45),
+        color: Colors.blue,
+      ),
+      ObjectPart(
+        id: 'wing_top',
+        shapeType: 'Parallelogram',
+        shapeName: 'top wing',
+        position: const Offset(60, 30),
+        size: const Size(70, 70),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'wing_bottom',
+        shapeType: 'Parallelogram',
+        shapeName: 'bottom wing',
+        position: const Offset(60, 95),
+        size: const Size(70, 70),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'tail',
+        shapeType: 'Triangle',
+        shapeName: 'tail',
+        position: const Offset(160, 60),
+        size: const Size(40, 50),
+        color: Colors.red,
+      ),
+      ObjectPart(
+        id: 'nose',
+        shapeType: 'Semicircle',
+        shapeName: 'nose cone',
+        position: const Offset(10, 70),
+        size: const Size(30, 65),
+        color: Colors.orange,
+      ),
+    ],
+  ),
+
+  // Object 8: Castle 🏰 - [NEW] Complex building
+  ObjectTemplate(
+    name: 'Castle',
+    emoji: '🏰',
+    parts: [
+      ObjectPart(
+        id: 'base',
+        shapeType: 'Rectangle',
+        shapeName: 'main wall',
+        position: const Offset(40, 90),
+        size: const Size(140, 90),
+        color: Colors.amber,
+      ),
+      ObjectPart(
+        id: 'tower_left',
+        shapeType: 'Rectangle',
+        shapeName: 'left tower',
+        position: const Offset(30, 40),
+        size: const Size(35, 140),
+        color: Colors.amber,
+      ),
+      ObjectPart(
+        id: 'tower_right',
+        shapeType: 'Rectangle',
+        shapeName: 'right tower',
+        position: const Offset(155, 40),
+        size: const Size(35, 140),
+        color: Colors.amber,
+      ),
+      ObjectPart(
+        id: 'gate',
+        shapeType: 'Semicircle',
+        shapeName: 'castle gate',
+        position: const Offset(85, 130),
+        size: const Size(50, 50),
+        color: Colors.brown,
+      ),
+      ObjectPart(
+        id: 'roof_left',
+        shapeType: 'Triangle',
+        shapeName: 'left roof',
+        position: const Offset(22, 5),
+        size: const Size(50, 45),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'roof_right',
+        shapeType: 'Triangle',
+        shapeName: 'right roof',
+        position: const Offset(147, 5),
+        size: const Size(50, 45),
+        color: Colors.purple,
+      ),
+    ],
+  ),
+
+  // Object 9: Robot 🤖 - [NEW] Square and Rectangle based
+  ObjectTemplate(
+    name: 'Robot',
+    emoji: '🤖',
+    parts: [
+      ObjectPart(
+        id: 'body',
+        shapeType: 'Square',
+        shapeName: 'robot body',
+        position: const Offset(65, 70),
+        size: const Size(90, 80),
+        color: Colors.blue,
+      ),
+      ObjectPart(
+        id: 'head',
+        shapeType: 'Circle',
+        shapeName: 'robot head',
+        position: const Offset(80, 15),
+        size: const Size(60, 60),
+        color: Colors.cyan,
+      ),
+      ObjectPart(
+        id: 'neck',
+        shapeType: 'Rectangle',
+        shapeName: 'neck',
+        position: const Offset(102, 65),
+        size: const Size(16, 12),
+        color: Colors.teal,
+      ),
+      ObjectPart(
+        id: 'antenna',
+        shapeType: 'Rectangle',
+        shapeName: 'antenna',
+        position: const Offset(107, -5),
+        size: const Size(6, 25),
+        color: Colors.red,
+      ),
+      ObjectPart(
+        id: 'button',
+        shapeType: 'Circle',
+        shapeName: 'power button',
+        position: const Offset(95, 100),
+        size: const Size(30, 30),
+        color: Colors.yellow,
+      ),
+    ],
+  ),
+
+  // Object 10: Train 🚂 - [NEW] Engine
+  ObjectTemplate(
+    name: 'Train',
+    emoji: '🚂',
+    parts: [
+      ObjectPart(
+        id: 'cabin',
+        shapeType: 'Square',
+        shapeName: 'engine cabin',
+        position: const Offset(30, 60),
+        size: const Size(80, 80),
+        color: Colors.red,
+      ),
+      ObjectPart(
+        id: 'boiler',
+        shapeType: 'Rectangle',
+        shapeName: 'boiler',
+        position: const Offset(105, 90),
+        size: const Size(90, 50),
+        color: Colors.blue,
+      ),
+      ObjectPart(
+        id: 'smokestack',
+        shapeType: 'Trapezoid',
+        shapeName: 'smoke stack',
+        position: const Offset(155, 55),
+        size: const Size(30, 45),
+        color: Colors.brown,
+      ),
+      ObjectPart(
+        id: 'wheel_big',
+        shapeType: 'Circle',
+        shapeName: 'big wheel',
+        position: const Offset(35, 130),
+        size: const Size(60, 60),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'wheel_small',
+        shapeType: 'Circle',
+        shapeName: 'small wheel',
+        position: const Offset(130, 140),
+        size: const Size(45, 45),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'window',
+        shapeType: 'Square',
+        shapeName: 'cabin window',
+        position: const Offset(45, 75),
+        size: const Size(40, 40),
+        color: Colors.cyan,
+      ),
+    ],
+  ),
+
+  // Object 11: Flower 🌸 - realistic petals and leaves
+  ObjectTemplate(
+    name: 'Flower',
+    emoji: '🌸',
+    parts: [
+      ObjectPart(
+        id: 'stem',
+        shapeType: 'Rectangle',
+        shapeName: 'stem',
+        position: const Offset(105, 100),
+        size: const Size(12, 100),
+        color: Colors.green,
+      ),
+      ObjectPart(
+        id: 'leaf_left',
+        shapeType: 'Crescent',
+        shapeName: 'leaf',
+        position: const Offset(75, 120),
+        size: const Size(35, 35),
+        color: Colors.green,
+      ),
+      ObjectPart(
+        id: 'petal_1',
+        shapeType: 'Circle',
+        shapeName: 'petal',
+        position: const Offset(85, 20),
+        size: const Size(50, 50),
+        color: Colors.pink,
+      ),
+      ObjectPart(
+        id: 'petal_2',
+        shapeType: 'Circle',
+        shapeName: 'petal',
+        position: const Offset(115, 45),
+        size: const Size(50, 50),
+        color: Colors.pink,
+      ),
+      ObjectPart(
+        id: 'petal_3',
+        shapeType: 'Circle',
+        shapeName: 'petal',
+        position: const Offset(100, 85),
+        size: const Size(50, 50),
+        color: Colors.pink,
+      ),
+      ObjectPart(
+        id: 'petal_4',
+        shapeType: 'Circle',
+        shapeName: 'petal',
+        position: const Offset(60, 80),
+        size: const Size(50, 50),
+        color: Colors.pink,
+      ),
+      ObjectPart(
+        id: 'petal_5',
+        shapeType: 'Circle',
+        shapeName: 'petal',
+        position: const Offset(50, 40),
+        size: const Size(50, 50),
+        color: Colors.pink,
+      ),
+      ObjectPart(
+        id: 'center',
+        shapeType: 'Circle',
+        shapeName: 'flower center',
+        position: const Offset(80, 50),
+        size: const Size(60, 60),
+        color: Colors.yellow,
+      ),
+    ],
+  ),
+
+  // Object 12: Butterfly 🦋 - better wing structure
+  ObjectTemplate(
+    name: 'Butterfly',
+    emoji: '🦋',
+    parts: [
+      ObjectPart(
+        id: 'wing_tl',
+        shapeType: 'Semicircle',
+        shapeName: 'top wing',
+        position: const Offset(20, 15),
+        size: const Size(90, 80),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'wing_tr',
+        shapeType: 'Semicircle',
+        shapeName: 'top wing',
+        position: const Offset(110, 15),
+        size: const Size(90, 80),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'wing_bl',
+        shapeType: 'Circle',
+        shapeName: 'bottom wing',
+        position: const Offset(35, 90),
+        size: const Size(70, 70),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'wing_br',
+        shapeType: 'Circle',
+        shapeName: 'bottom wing',
+        position: const Offset(115, 90),
+        size: const Size(70, 70),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'body',
+        shapeType: 'Oval',
+        shapeName: 'butterfly body',
+        position: const Offset(95, 30),
+        size: const Size(30, 130),
+        color: Colors.brown,
+      ),
+      ObjectPart(
+        id: 'spot_left',
+        shapeType: 'Circle',
+        shapeName: 'wing spot',
+        position: const Offset(50, 40),
+        size: const Size(20, 20),
+        color: Colors.yellow,
+      ),
+      ObjectPart(
+        id: 'spot_right',
+        shapeType: 'Circle',
+        shapeName: 'wing spot',
+        position: const Offset(150, 40),
+        size: const Size(20, 20),
+        color: Colors.yellow,
+      ),
+    ],
+  ),
+
+  // Object 13: Truck 🚚 - realistic delivery truck
+  ObjectTemplate(
+    name: 'Truck',
+    emoji: '🚚',
+    parts: [
+      ObjectPart(
+        id: 'cargo',
+        shapeType: 'Rectangle',
+        shapeName: 'cargo box',
+        position: const Offset(10, 40),
+        size: const Size(140, 90),
+        color: Colors.orange,
+      ),
+      ObjectPart(
+        id: 'cabin',
+        shapeType: 'Trapezoid',
+        shapeName: 'truck cabin',
+        position: const Offset(145, 60),
+        size: const Size(65, 70),
+        color: Colors.blue,
+      ),
+      ObjectPart(
+        id: 'window',
+        shapeType: 'Square',
+        shapeName: 'cabin window',
+        position: const Offset(165, 75),
+        size: const Size(30, 30),
+        color: Colors.cyan,
+      ),
+      ObjectPart(
+        id: 'wheel_1',
+        shapeType: 'Circle',
+        shapeName: 'wheel',
+        position: const Offset(30, 120),
+        size: const Size(40, 40),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'wheel_2',
+        shapeType: 'Circle',
+        shapeName: 'wheel',
+        position: const Offset(100, 120),
+        size: const Size(40, 40),
+        color: Colors.purple,
+      ),
+      ObjectPart(
+        id: 'wheel_3',
+        shapeType: 'Circle',
+        shapeName: 'wheel',
+        position: const Offset(160, 120),
+        size: const Size(40, 40),
+        color: Colors.purple,
       ),
     ],
   ),
@@ -384,8 +744,6 @@ final List<ColorOption> colorPalette = [
   ColorOption(id: 'blue', name: 'Blue', color: Colors.blue, emoji: '💙'),
   ColorOption(id: 'purple', name: 'Purple', color: Colors.purple, emoji: '💜'),
   ColorOption(id: 'brown', name: 'Brown', color: Colors.brown, emoji: '🟤'),
-  ColorOption(id: 'grey', name: 'Grey', color: Colors.grey, emoji: '🩶'),
-  ColorOption(id: 'white', name: 'White', color: Colors.white, emoji: '🤍'),
 ];
 
 /// A color option in the palette
@@ -630,6 +988,7 @@ class ObjectPainterNotifier extends Notifier<ObjectPainterState> {
     final Set<String> colorIds = {};
     final List<ColorOption> colors = [];
 
+    // Only add colors that are actually used in the object to avoid "extra plates"
     for (var part in state.currentObject.parts) {
       final option = findMatchingColor(part);
       if (option != null && !colorIds.contains(option.id)) {
@@ -638,15 +997,8 @@ class ObjectPainterNotifier extends Notifier<ObjectPainterState> {
       }
     }
 
-    // Add a few extra distractor colors for challenge
-    final random = Random();
-    final distractors = colorPalette.where((c) => !colorIds.contains(c.id)).toList()
-      ..shuffle(random);
-    final extraCount = (colors.length < 4) ? 2 : 1; // Add more if few colors needed
-    colors.addAll(distractors.take(extraCount));
-
-    // Shuffle the final list
-    colors.shuffle(random);
+    // Shuffle the final list so they are not always in the same order
+    colors.shuffle(Random());
     return colors;
   }
 }
