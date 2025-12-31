@@ -8,9 +8,9 @@ import 'color_match/color_match_game.dart';
 import 'color_memorize/color_memorize_game.dart';
 import 'color_numbers/color_numbers_game.dart';
 import 'digit_master/digit_master_game.dart';
+import 'object_painter/object_painter_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
 import 'robot_builder/robot_builder_game.dart';
-import 'robot_coloring/robot_coloring_game.dart';
 import 'shape_master/shape_master_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
@@ -77,11 +77,11 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       page: const RobotBuilderGame(),
     ),
     _GameInfo(
-      title: 'Robot Painter',
-      emoji: '🎨🤖',
-      description: 'Color the robots!',
-      gradientColors: [const Color(0xFF00BFA5), const Color(0xFF64FFDA)],
-      page: const RobotColoringGame(),
+      title: 'Object Painter',
+      emoji: '🎨🖌️',
+      description: 'Color the objects!',
+      gradientColors: [const Color(0xFFFF6B6B), const Color(0xFFFFBE0B)],
+      page: const ObjectPainterGame(),
     ),
     _GameInfo(
       title: 'Color Numbers',
