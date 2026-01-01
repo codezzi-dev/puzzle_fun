@@ -1,17 +1,17 @@
 import 'dart:math';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum MemoryPhase { learning, testing, success, failure }
+enum GamePhase { learning, testing, success, failure }
 
 class MissingMysteryState {
   final List<String> sequence; // 5 characters
   final int hiddenIndex; // Index of character to hide (0-4)
   final List<String> options; // Correct answer + 3 distractors
-  final MemoryPhase phase;
+  final GamePhase phase;
   final int score;
   final int currentRound;
   final int totalRounds;
+  final String motivationalMessage;
 
   const MissingMysteryState({
     required this.sequence,
@@ -20,7 +20,8 @@ class MissingMysteryState {
     required this.phase,
     required this.score,
     required this.currentRound,
-    this.totalRounds = 10,
+    required this.motivationalMessage,
+    this.totalRounds = 5,
   });
 
   factory MissingMysteryState.initial() {
@@ -31,9 +32,10 @@ class MissingMysteryState {
     List<String>? sequence,
     int? hiddenIndex,
     List<String>? options,
-    MemoryPhase? phase,
+    GamePhase? phase,
     int? score,
     int? currentRound,
+    String? motivationalMessage,
   }) {
     return MissingMysteryState(
       sequence: sequence ?? this.sequence,
@@ -42,6 +44,7 @@ class MissingMysteryState {
       phase: phase ?? this.phase,
       score: score ?? this.score,
       currentRound: currentRound ?? this.currentRound,
+      motivationalMessage: motivationalMessage ?? this.motivationalMessage,
       totalRounds: totalRounds,
     );
   }
@@ -78,35 +81,44 @@ class MissingMysteryState {
       sequence: sequence,
       hiddenIndex: hiddenIndex,
       options: options,
-      phase: MemoryPhase.learning,
+      phase: GamePhase.learning,
       score: currentScore,
       currentRound: currentRound,
+      motivationalMessage: '',
     );
   }
 }
 
+const List<String> motivationalMessages = [
+  "Almost there! Try again!",
+  "You can do it!",
+  "Keep trying, superstar!",
+  "So close! One more try!",
+  "You're doing great!",
+  "Don't give up!",
+];
+
 class MissingMysteryNotifier extends Notifier<MissingMysteryState> {
+  final Random _random = Random();
+
   @override
   MissingMysteryState build() => MissingMysteryState.initial();
 
-  void startTesting() {
-    if (state.phase == MemoryPhase.learning) {
-      state = state.copyWith(phase: MemoryPhase.testing);
+  void goToTest() {
+    if (state.phase == GamePhase.learning) {
+      state = state.copyWith(phase: GamePhase.testing);
     }
   }
 
-  void goToTest() {
-    startTesting();
-  }
-
   void checkAnswer(String choice) {
-    if (state.phase != MemoryPhase.testing) return;
+    if (state.phase != GamePhase.testing) return;
 
     final correctAnswer = state.sequence[state.hiddenIndex];
     if (choice == correctAnswer) {
-      state = state.copyWith(phase: MemoryPhase.success, score: state.score + 1);
+      state = state.copyWith(phase: GamePhase.success, score: state.score + 1);
     } else {
-      state = state.copyWith(phase: MemoryPhase.failure);
+      final message = motivationalMessages[_random.nextInt(motivationalMessages.length)];
+      state = state.copyWith(motivationalMessage: message);
     }
   }
 
@@ -119,7 +131,7 @@ class MissingMysteryNotifier extends Notifier<MissingMysteryState> {
   }
 
   void retry() {
-    state = state.copyWith(phase: MemoryPhase.learning);
+    state = state.copyWith(phase: GamePhase.testing, motivationalMessage: '');
   }
 
   void resetGame() {
