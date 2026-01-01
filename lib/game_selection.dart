@@ -3,10 +3,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'body_parts/body_parts_game.dart';
-import 'color_letters/color_letters_game.dart';
 import 'color_match/color_match_game.dart';
 import 'color_memorize/color_memorize_game.dart';
-import 'color_numbers/color_numbers_game.dart';
+import 'creative_pad/creative_pad_game.dart';
 import 'digit_master/digit_master_game.dart';
 import 'memory_flip/memory_flip_game.dart';
 import 'object_painter/object_painter_game.dart';
@@ -86,18 +85,11 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       page: const ObjectPainterGame(),
     ),
     _GameInfo(
-      title: 'Color Numbers',
-      emoji: '🔢🎨',
-      description: 'Color the numbers!',
-      gradientColors: [const Color(0xFFFF6F00), const Color(0xFFFF8F00)],
-      page: const ColorNumbersGame(),
-    ),
-    _GameInfo(
-      title: 'Color Letters',
-      emoji: '🔤🎨',
-      description: 'Color the letters!',
-      gradientColors: [const Color(0xFF43A047), const Color(0xFF66BB6A)],
-      page: const ColorLettersGame(),
+      title: 'Creative Pad',
+      emoji: '🎨🔤🔢',
+      description: 'Design with letters and numbers!',
+      gradientColors: [const Color(0xFF2E7D32), const Color(0xFF4CAF50)],
+      page: const CreativePadGame(),
     ),
     _GameInfo(
       title: 'Memory Flip',
