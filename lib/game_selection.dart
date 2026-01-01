@@ -13,6 +13,7 @@ import 'object_painter/object_painter_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
 import 'robot_builder/robot_builder_game.dart';
 import 'shape_master/shape_master_game.dart';
+import 'trace_path/trace_path_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -104,6 +105,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Match the pairs!',
       gradientColors: [const Color(0xFF6A4C93), const Color(0xFF9B5DE5)],
       page: const MemoryFlipGame(),
+    ),
+    _GameInfo(
+      title: 'Trace Path',
+      emoji: '🐝',
+      description: 'Trace the path!',
+      gradientColors: [const Color(0xFFFFBE0B), const Color(0xFFFB5607)],
+      page: const TracePathGame(),
     ),
   ];
 
