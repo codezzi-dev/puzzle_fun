@@ -14,6 +14,7 @@ import 'puzzle_fun/puzzle_fun.dart';
 import 'robot_builder/robot_builder_game.dart';
 import 'shape_master/shape_master_game.dart';
 import 'trace_path/trace_path_game.dart';
+import 'shadow_match/shadow_match_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -112,6 +113,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Trace the path!',
       gradientColors: [const Color(0xFFFFBE0B), const Color(0xFFFB5607)],
       page: const TracePathGame(),
+    ),
+    _GameInfo(
+      title: 'Shadow Match',
+      emoji: '👥',
+      description: 'Match the shadows!',
+      gradientColors: [const Color(0xFF4361EE), const Color(0xFF4CC9F0)],
+      page: const ShadowMatchGame(),
     ),
   ];
 
