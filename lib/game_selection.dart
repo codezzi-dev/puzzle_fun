@@ -8,6 +8,7 @@ import 'color_memorize/color_memorize_game.dart';
 import 'creative_pad/creative_pad_game.dart';
 import 'digit_master/digit_master_game.dart';
 import 'memory_flip/memory_flip_game.dart';
+import 'missing_mystery/missing_mystery_game.dart';
 import 'object_painter/object_painter_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
 import 'robot_builder/robot_builder_game.dart';
@@ -97,6 +98,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Match the pairs!',
       gradientColors: [const Color(0xFF6A4C93), const Color(0xFF9B5DE5)],
       page: const MemoryFlipGame(),
+    ),
+    _GameInfo(
+      title: 'Missing Mystery',
+      emoji: '🕵️‍♂️',
+      description: 'Which one is missing?',
+      gradientColors: [const Color(0xFF009688), const Color(0xFF4DB6AC)],
+      page: const MissingMysteryGame(),
     ),
     _GameInfo(
       title: 'Trace Path',
