@@ -398,7 +398,7 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
               child: Column(
                 children: [
                   Text(
-                    '🎨 Look at this ${state.currentCharacter.name}!',
+                    '🎨 Look at this color!',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 24,
