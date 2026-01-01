@@ -334,27 +334,35 @@ class _CreativePadGameState extends ConsumerState<CreativePadGame> {
                   ],
                 ),
               ),
-            ...state.items.map((item) {
-              return Positioned(
-                left: item.position.dx,
-                top: item.position.dy,
-                child: CreativeItemWidget(
-                  item: item,
-                  onTap: () {
-                    if (state.selectedColor != null) {
-                      notifier.colorItem(item.id);
-                      _tts.speak("Colored!");
-                    } else {
-                      _tts.speak("Pick a color first!");
-                    }
-                  },
-                  onLongPress: () {
-                    notifier.removeItem(item.id);
-                    _tts.speak("Removed!");
-                  },
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    alignment: WrapAlignment.center,
+                    children: state.items.map((item) {
+                      return CreativeItemWidget(
+                        item: item,
+                        onTap: () {
+                          if (state.selectedColor != null) {
+                            notifier.colorItem(item.id);
+                            _tts.speak("Colored!");
+                          } else {
+                            _tts.speak("Pick a color first!");
+                          }
+                        },
+                        onLongPress: () {
+                          notifier.removeItem(item.id);
+                          _tts.speak("Removed!");
+                        },
+                      );
+                    }).toList(),
+                  ),
                 ),
-              );
-            }),
+              ),
+            ),
           ],
         ),
       ),

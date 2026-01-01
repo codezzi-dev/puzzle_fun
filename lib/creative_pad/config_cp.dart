@@ -97,7 +97,7 @@ class CreativePadState {
 /// State notifier for Creative Pad game
 class CreativePadNotifier extends Notifier<CreativePadState> {
   // Grid layout settings
-  static const int maxItems = 12; // Maximum items on canvas
+  static const int maxItems = 18; // Maximum items on canvas
   static const int maxPerRow = 4;
   static const double startX = 20;
   static const double startY = 20;
@@ -121,15 +121,11 @@ class CreativePadNotifier extends Notifier<CreativePadState> {
   bool addItem(String content) {
     if (!canAddMore) return false;
 
-    final currentCount = state.items.length;
-    final row = currentCount ~/ maxPerRow;
-    final col = currentCount % maxPerRow;
-
     final newItem = CreativeItem(
       id: 'item_${state.nextId}',
       content: content,
       type: state.mode,
-      position: Offset(startX + col * stepX, startY + row * stepY),
+      position: Offset.zero, // Position no longer used for layout
     );
 
     state = state.copyWith(items: [...state.items, newItem], nextId: state.nextId + 1);
@@ -159,18 +155,9 @@ class CreativePadNotifier extends Notifier<CreativePadState> {
     return true;
   }
 
-  /// Remove an item and recalculate positions
+  /// Remove an item
   void removeItem(String itemId) {
-    final filteredList = state.items.where((item) => item.id != itemId).toList();
-
-    final newList = filteredList.asMap().entries.map((entry) {
-      final index = entry.key;
-      final item = entry.value;
-      final row = index ~/ maxPerRow;
-      final col = index % maxPerRow;
-      return item.copyWith(position: Offset(startX + col * stepX, startY + row * stepY));
-    }).toList();
-
+    final newList = state.items.where((item) => item.id != itemId).toList();
     state = state.copyWith(items: newList);
   }
 
