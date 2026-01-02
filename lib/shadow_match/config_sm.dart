@@ -98,16 +98,12 @@ class ShadowMatchNotifier extends Notifier<ShadowMatchState> {
     final selected = shuffled.take(4).toList();
 
     return ShadowMatchState(
-      phase: GamePhase.learning,
+      phase: GamePhase.playing,
       currentItems: selected,
       matchedIds: {},
       score: 0,
       currentRound: 1,
     );
-  }
-
-  void startPlaying() {
-    state = state.copyWith(phase: GamePhase.playing);
   }
 
   void matchItem(String id) {
@@ -131,7 +127,7 @@ class ShadowMatchNotifier extends Notifier<ShadowMatchState> {
       final selected = shuffled.take(4).toList();
 
       state = state.copyWith(
-        phase: GamePhase.learning,
+        phase: GamePhase.playing,
         currentItems: selected,
         matchedIds: {},
         currentRound: state.currentRound + 1,

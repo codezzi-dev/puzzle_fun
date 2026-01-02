@@ -27,6 +27,7 @@ class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerPr
   late Animation<double> _buttonScaleAnim;
 
   GamePhase? _lastSpokenPhase;
+  int? _lastRound;
   List<ShadowItem>? _shuffledDraggables;
 
   @override
@@ -106,17 +107,22 @@ class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerPr
     final notifier = ref.read(shadowMatchProvider.notifier);
 
     // Phase Change logic
-    if (state.phase != _lastSpokenPhase) {
+    if (state.phase != _lastSpokenPhase || state.currentRound != _lastRound) {
       _lastSpokenPhase = state.phase;
-      if (state.phase == GamePhase.learning) {
-        _speak("Look at these colorful items. Remember their shapes!");
+      _lastRound = state.currentRound;
+
+      if (state.phase == GamePhase.playing) {
+        _speak("Drag each item to its shadow!");
         _shuffledDraggables = List.from(state.currentItems)..shuffle();
-      } else if (state.phase == GamePhase.playing) {
-        _speak("Now drag each item to its shadow!");
       } else if (state.phase == GamePhase.success) {
         _overlayController.forward(from: 0);
         _speakSuccess();
       }
+    }
+
+    // Safety check for initialization
+    if (_shuffledDraggables == null && state.phase == GamePhase.playing) {
+      _shuffledDraggables = List.from(state.currentItems)..shuffle();
     }
 
     return Scaffold(
@@ -277,60 +283,7 @@ class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerPr
   }
 
   Widget _buildGameContent(ShadowMatchState state, ShadowMatchNotifier notifier) {
-    if (state.phase == GamePhase.learning) {
-      return _buildLearningPage(state, notifier);
-    }
     return _buildPlayingPage(state, notifier);
-  }
-
-  Widget _buildLearningPage(ShadowMatchState state, ShadowMatchNotifier notifier) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          margin: const EdgeInsets.symmetric(horizontal: 30),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.9),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [BoxShadow(color: Colors.purple.withValues(alpha: 0.1), blurRadius: 20)],
-          ),
-          child: const Column(
-            children: [
-              Text(
-                "Meet your friends!",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w900,
-                  color: Color(0xFF6A4C93),
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                "Remember how they look!",
-                style: TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 40),
-        Wrap(
-          spacing: 20,
-          runSpacing: 20,
-          alignment: WrapAlignment.center,
-          children: state.currentItems.map((item) {
-            return _buildItemCard(item, false);
-          }).toList(),
-        ),
-        const SizedBox(height: 60),
-        _buildPremiumButton(
-          onTap: () => notifier.startPlaying(),
-          text: "I'm Ready!",
-          icon: Icons.play_arrow_rounded,
-          colors: [const Color(0xFF8AC926), const Color(0xFF06D6A0)],
-        ),
-      ],
-    );
   }
 
   Widget _buildPlayingPage(ShadowMatchState state, ShadowMatchNotifier notifier) {
