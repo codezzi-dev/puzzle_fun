@@ -12,9 +12,10 @@ import 'missing_mystery/missing_mystery_game.dart';
 import 'object_painter/object_painter_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
 import 'robot_builder/robot_builder_game.dart';
-import 'shape_master/shape_master_game.dart';
-import 'trace_path/trace_path_game.dart';
 import 'shadow_match/shadow_match_game.dart';
+import 'shape_master/shape_master_game.dart';
+import 'size_sorter/size_sorter_game.dart';
+import 'trace_path/trace_path_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -120,6 +121,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Match the shadows!',
       gradientColors: [const Color(0xFF4361EE), const Color(0xFF4CC9F0)],
       page: const ShadowMatchGame(),
+    ),
+    _GameInfo(
+      title: 'Size Sorter',
+      emoji: '🍎',
+      description: 'Order by size!',
+      gradientColors: [const Color(0xFF689F38), const Color(0xFF8BC34A)],
+      page: const SizeSorterGame(),
     ),
   ];
 
