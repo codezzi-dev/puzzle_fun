@@ -10,6 +10,7 @@ import 'digit_master/digit_master_game.dart';
 import 'memory_flip/memory_flip_game.dart';
 import 'missing_mystery/missing_mystery_game.dart';
 import 'object_painter/object_painter_game.dart';
+import 'pattern_maker/pattern_maker_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
 import 'robot_builder/robot_builder_game.dart';
 import 'shadow_match/shadow_match_game.dart';
@@ -128,6 +129,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Order by size!',
       gradientColors: [const Color(0xFF689F38), const Color(0xFF8BC34A)],
       page: const SizeSorterGame(),
+    ),
+    _GameInfo(
+      title: 'Pattern Maker',
+      emoji: '🧺',
+      description: 'Complete the pattern!',
+      gradientColors: [const Color(0xFFBA68C8), const Color(0xFF8E24AA)],
+      page: const PatternMakerGame(),
     ),
   ];
 

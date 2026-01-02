@@ -143,4 +143,4 @@ class ShadowMatchNotifier extends Notifier<ShadowMatchState> {
 
 final shadowMatchProvider = NotifierProvider<ShadowMatchNotifier, ShadowMatchState>(() {
   return ShadowMatchNotifier();
-});
+}, isAutoDispose: true);
