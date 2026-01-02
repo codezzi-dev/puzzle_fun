@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 enum GamePhase { learning, testing, success, failure }
 
 class MissingMysteryState {
-  final List<String> sequence; // 5 characters
-  final int hiddenIndex; // Index of character to hide (0-4)
+  final List<String> sequence; // 4 characters
+  final int hiddenIndex; // Index of character to hide (0-3)
   final List<String> options; // Correct answer + 3 distractors
   final GamePhase phase;
   final int score;
@@ -55,16 +55,16 @@ class MissingMysteryState {
     final numbers = List.generate(10, (i) => i.toString());
     final allPool = [...letters, ...numbers];
 
-    // Pick 5 unique random items
+    // Pick 4 unique random items
     final sequence = <String>[];
-    while (sequence.length < 5) {
+    while (sequence.length < 4) {
       final item = allPool[random.nextInt(allPool.length)];
       if (!sequence.contains(item)) {
         sequence.add(item);
       }
     }
 
-    final hiddenIndex = random.nextInt(5);
+    final hiddenIndex = random.nextInt(4);
     final correctAnswer = sequence[hiddenIndex];
 
     // Generate 4 options (correct one + 3 others not in the sequence)

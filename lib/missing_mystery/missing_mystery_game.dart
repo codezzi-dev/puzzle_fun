@@ -114,7 +114,7 @@ class _MissingMysteryGameState extends ConsumerState<MissingMysteryGame>
     if (state.phase != _lastSpokenPhase) {
       _lastSpokenPhase = state.phase;
       if (state.phase == GamePhase.learning) {
-        _speak("Remember these five characters!");
+        _speak("Remember these four characters!");
       } else if (state.phase == GamePhase.testing) {
         _speak("Which one is missing?");
       } else if (state.phase == GamePhase.success) {
