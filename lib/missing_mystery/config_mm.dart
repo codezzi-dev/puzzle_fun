@@ -53,12 +53,15 @@ class MissingMysteryState {
     final random = Random();
     final letters = List.generate(26, (i) => String.fromCharCode(65 + i));
     final numbers = List.generate(10, (i) => i.toString());
-    final allPool = [...letters, ...numbers];
 
-    // Pick 4 unique random items
+    // Randomly decide which pool to use for this round
+    final isLetterRound = random.nextBool();
+    final pool = isLetterRound ? letters : numbers;
+
+    // Pick 4 unique random items from the chosen pool
     final sequence = <String>[];
     while (sequence.length < 4) {
-      final item = allPool[random.nextInt(allPool.length)];
+      final item = pool[random.nextInt(pool.length)];
       if (!sequence.contains(item)) {
         sequence.add(item);
       }
@@ -67,10 +70,10 @@ class MissingMysteryState {
     final hiddenIndex = random.nextInt(4);
     final correctAnswer = sequence[hiddenIndex];
 
-    // Generate 4 options (correct one + 3 others not in the sequence)
+    // Generate 4 options from the same pool (correct one + 3 distractors not in the sequence)
     final options = <String>[correctAnswer];
     while (options.length < 4) {
-      final item = allPool[random.nextInt(allPool.length)];
+      final item = pool[random.nextInt(pool.length)];
       if (!sequence.contains(item) && !options.contains(item)) {
         options.add(item);
       }
