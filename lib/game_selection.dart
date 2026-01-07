@@ -7,6 +7,7 @@ import 'color_match/color_match_game.dart';
 import 'color_memorize/color_memorize_game.dart';
 import 'creative_pad/creative_pad_game.dart';
 import 'digit_master/digit_master_game.dart';
+import 'maze_finder/maze_finder_game.dart';
 import 'memory_flip/memory_flip_game.dart';
 import 'missing_mystery/missing_mystery_game.dart';
 import 'object_painter/object_painter_game.dart';
@@ -136,6 +137,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Complete the pattern!',
       gradientColors: [const Color(0xFFBA68C8), const Color(0xFF8E24AA)],
       page: const PatternMakerGame(),
+    ),
+    _GameInfo(
+      title: 'Maze Finder',
+      emoji: '🐁',
+      description: 'Find the way out!',
+      gradientColors: [const Color(0xFFF9A825), const Color(0xFFFF8F00)],
+      page: const MazeFinderGame(),
     ),
   ];
 

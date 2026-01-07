@@ -161,6 +161,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: "3e0141505477fd8ad55d6eb4e7776d3fe8430be8e497ccb1521370c3f21a3e2b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.8"
   fake_async:
     dependency: transitive
     description:
@@ -210,10 +218,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_riverpod
-      sha256: "9e2d6907f12cc7d23a846847615941bddee8709bf2bfd274acdf5e80bcf22fde"
+      sha256: "38ec6c303e2c83ee84512f5fc2a82ae311531021938e63d7137eccc107bf3c02"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.3"
+    version: "3.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -223,10 +231,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_tts
-      sha256: bdf2fc4483e74450dc9fc6fe6a9b6a5663e108d4d0dad3324a22c8e26bf48af4
+      sha256: ce5eb209b40e95f2f4a1397116c87ab2fcdff32257d04ed7a764e75894c03775
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.3"
+    version: "4.2.5"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -252,10 +260,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
+      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.0"
+    version: "0.13.6"
   http_multi_server:
     dependency: transitive
     description:
@@ -344,6 +352,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.1"
+  maze:
+    dependency: "direct main"
+    description:
+      name: maze
+      sha256: "7081d1722d8530b76bc3004859503f17918d9893a2996ef57cac06743a787531"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   meta:
     dependency: transitive
     description:
@@ -468,10 +484,10 @@ packages:
     dependency: transitive
     description:
       name: riverpod
-      sha256: c406de02bff19d920b832bddfb8283548bfa05ce41c59afba57ce643e116aa59
+      sha256: "16ff608d21e8ea64364f2b7c049c94a02ab81668f78845862b6e88b71dd4935a"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.3"
+    version: "3.1.0"
   shelf:
     dependency: transitive
     description:
@@ -613,6 +629,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  universal_io:
+    dependency: transitive
+    description:
+      name: universal_io
+      sha256: f63cbc48103236abf48e345e07a03ce5757ea86285ed313a6a032596ed9301e2
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1"
   uuid:
     dependency: transitive
     description:
