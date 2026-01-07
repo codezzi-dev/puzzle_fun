@@ -50,6 +50,36 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       instruction: 'Help the Bee find the flower!',
       themeColor: Colors.amber,
     ),
+    _MazeLevelData(
+      rows: 10,
+      cols: 10,
+      playerAsset: 'assets/images/maze_mouse.png',
+      targetAsset: 'assets/images/maze_cheese.png',
+      animalEmoji: '🐁',
+      targetEmoji: '🧀',
+      instruction: 'Wait! The mouse is lost again!',
+      themeColor: Colors.orange,
+    ),
+    _MazeLevelData(
+      rows: 12,
+      cols: 12,
+      playerAsset: 'assets/images/maze_rabbit.png',
+      targetAsset: 'assets/images/maze_carrot.png',
+      animalEmoji: '🐇',
+      targetEmoji: '🥕',
+      instruction: 'The rabbit needs even more carrots!',
+      themeColor: Colors.green,
+    ),
+    _MazeLevelData(
+      rows: 14,
+      cols: 14,
+      playerAsset: 'assets/images/maze_bee.png',
+      targetAsset: 'assets/images/maze_flower.png',
+      animalEmoji: '🐝',
+      targetEmoji: '🌸',
+      instruction: 'One last flower for the busy bee!',
+      themeColor: Colors.amber,
+    ),
   ];
 
   @override
