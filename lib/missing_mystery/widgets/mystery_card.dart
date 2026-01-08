@@ -24,12 +24,12 @@ class MysteryCard extends StatelessWidget {
         color: isHidden ? Colors.white : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isHidden ? Colors.grey.shade300 : color.withOpacity(0.5),
+          color: isHidden ? Colors.grey.shade300 : color.withValues(alpha: 0.5),
           width: 4,
         ),
         boxShadow: [
           BoxShadow(
-            color: isHidden ? Colors.black.withOpacity(0.05) : color.withOpacity(0.2),
+            color: isHidden ? Colors.black.withValues(alpha: 0.05) : color.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

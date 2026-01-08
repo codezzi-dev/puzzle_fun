@@ -109,7 +109,7 @@ class _RobotColoringGameState extends ConsumerState<RobotColoringGame>
     _currentColors ??= notifier.getColorsForRobot();
 
     // Regenerate colors when robot changes
-    ref.listen(robotColoringProvider.select((s) => s.currentRobotIndex), (_, __) {
+    ref.listen(robotColoringProvider.select((s) => s.currentRobotIndex), (_, _) {
       _currentColors = notifier.getColorsForRobot();
     });
 
