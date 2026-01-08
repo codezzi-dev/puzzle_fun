@@ -30,9 +30,11 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
   MazePainter({
     required this.playerImage,
     this.checkpointsImages = const [],
+    this.dangersImages = const [],
     this.columns = 7,
     this.finishImage,
     this.onCheckpoint,
+    this.onDanger,
     this.onFinish,
     this.rows = 10,
     this.wallColor = Colors.black,
@@ -51,13 +53,71 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
         .map((i) => ItemPosition(col: _randomizer.nextInt(columns), row: _randomizer.nextInt(rows)))
         .toList();
 
+    // Initialize walls and generate perfect maze
+    _cells = List.generate(columns, (c) => List.generate(rows, (r) => Cell(c, r)));
+    _player = _cells.first.first;
+    _exit = _cells.last.last;
     _createMaze();
+
+    // Create multiple paths by removing extra random walls
+    // Remove approx 7% additional walls to create 2-3 alternative paths
+    int extraWallsToRemove = ((columns * rows) * 0.07).toInt();
+    for (int i = 0; i < extraWallsToRemove; i++) {
+      int c = _randomizer.nextInt(columns);
+      int r = _randomizer.nextInt(rows);
+      Cell cell = _cells[c][r];
+
+      List<int> walls = [];
+      if (c > 0 && cell.leftWall) walls.add(0);
+      if (c < columns - 1 && cell.rightWall) walls.add(1);
+      if (r > 0 && cell.topWall) walls.add(2);
+      if (r < rows - 1 && cell.bottomWall) walls.add(3);
+
+      if (walls.isNotEmpty) {
+        int wall = walls[_randomizer.nextInt(walls.length)];
+        if (wall == 0)
+          _removeWall(cell, _cells[c - 1][r]);
+        else if (wall == 1)
+          _removeWall(cell, _cells[c + 1][r]);
+        else if (wall == 2)
+          _removeWall(cell, _cells[c][r - 1]);
+        else if (wall == 3)
+          _removeWall(cell, _cells[c][r + 1]);
+      }
+    }
+
+    // Identify a safe path for the goal
+    List<Cell> safePath = _findPath();
+
+    // Initialize danger zones - avoid cells in safePath and start/finish
+    _dangers = List.from(dangersImages);
+    _dangersPositions = [];
+    for (int i = 0; i < _dangers.length; i++) {
+      ItemPosition pos;
+      do {
+        pos = ItemPosition(col: _randomizer.nextInt(columns), row: _randomizer.nextInt(rows));
+      } while (
+      // Avoid start position
+      (pos.col == 0 && pos.row == 0) ||
+          // Avoid finish position
+          (pos.col == columns - 1 && pos.row == rows - 1) ||
+          // Avoid cells in safe path
+          safePath.any((c) => c.col == pos.col && c.row == pos.row) ||
+          // Avoid duplicate positions
+          _dangersPositions.any((p) => p.col == pos.col && p.row == pos.row) ||
+          // Avoid checkpoint positions
+          _checkpointsPositions.any((p) => p.col == pos.col && p.row == pos.row));
+      _dangersPositions.add(pos);
+    }
   }
 
   ///Images for checkpoints
   final List<ui.Image> checkpointsImages;
 
-  ///Number of collums
+  ///Images for danger zones
+  final List<ui.Image> dangersImages;
+
+  ///Number of columns
   final int columns;
 
   ///Image for player
@@ -65,6 +125,9 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
 
   ///Callback when the player reach a checkpoint
   final Function(int)? onCheckpoint;
+
+  ///Callback when the player hits a danger zone
+  final Function()? onDanger;
 
   ///Callback when the player reach the finish
   final Function? onFinish;
@@ -84,8 +147,10 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
   ///Private attributes
   late Cell _player, _exit;
   late List<ItemPosition> _checkpointsPositions;
+  late List<ItemPosition> _dangersPositions;
   late List<List<Cell>> _cells;
   late List<ui.Image> _checkpoints;
+  late List<ui.Image> _dangers;
   late double _cellSize, _hMargin, _vMargin;
 
   ///Paints for `exit`, `player` and `walls`
@@ -168,6 +233,14 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
       _checkpointsPositions.removeAt(checkpointIndex);
       if (onCheckpoint != null) {
         onCheckpoint!(checkpointsImages.indexOf(image));
+      }
+    }
+
+    // Check if player hit a danger zone
+    final dangerResult = _getDangerPosition(_player.col, _player.row);
+    if (dangerResult != null) {
+      if (onDanger != null) {
+        onDanger!();
       }
     }
 
@@ -298,6 +371,20 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
       );
     }
 
+    // Draw danger zones
+    for (var i = 0; i < _dangers.length; i++) {
+      canvas.drawImageRect(
+        _dangers[i],
+        Offset.zero & Size(_dangers[i].width.toDouble(), _dangers[i].height.toDouble()),
+        Offset(
+              _dangersPositions[i].col * _cellSize + squareMargin,
+              _dangersPositions[i].row * _cellSize + squareMargin,
+            ) &
+            Size(_cellSize - squareMargin, _cellSize - squareMargin),
+        Paint(),
+      );
+    }
+
     canvas.drawImageRect(
       playerImage,
       Offset.zero & Size(playerImage.width.toDouble(), playerImage.height.toDouble()),
@@ -391,5 +478,59 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
     } catch (e) {
       return null;
     }
+  }
+
+  ItemPosition? _getDangerPosition(int col, int row) {
+    try {
+      return _dangersPositions.singleWhere(
+        (element) => element == ItemPosition(col: col, row: row),
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Finds a path from start to finish using BFS
+  List<Cell> _findPath() {
+    Map<Cell, Cell?> parents = {};
+    List<Cell> queue = [_cells[0][0]];
+    Set<Cell> visited = {_cells[0][0]};
+    parents[_cells[0][0]] = null;
+
+    while (queue.isNotEmpty) {
+      Cell current = queue.removeAt(0);
+      if (current.col == columns - 1 && current.row == rows - 1) {
+        // Found path, backtrack
+        List<Cell> path = [];
+        Cell? step = current;
+        while (step != null) {
+          path.add(step);
+          step = parents[step];
+        }
+        return path;
+      }
+
+      // Check neighbors
+      List<Cell> neighbors = [];
+      // Top
+      if (!current.topWall && current.row > 0) neighbors.add(_cells[current.col][current.row - 1]);
+      // Bottom
+      if (!current.bottomWall && current.row < rows - 1)
+        neighbors.add(_cells[current.col][current.row + 1]);
+      // Left
+      if (!current.leftWall && current.col > 0) neighbors.add(_cells[current.col - 1][current.row]);
+      // Right
+      if (!current.rightWall && current.col < columns - 1)
+        neighbors.add(_cells[current.col + 1][current.row]);
+
+      for (var neighbor in neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          parents[neighbor] = current;
+          queue.add(neighbor);
+        }
+      }
+    }
+    return [];
   }
 }

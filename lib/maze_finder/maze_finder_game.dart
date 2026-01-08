@@ -19,6 +19,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
 
   int _currentLevelIndex = 0;
   bool _isComplete = false;
+  bool _isFailed = false;
 
   final List<_MazeLevelData> _levels = [
     _MazeLevelData(
@@ -30,6 +31,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       targetEmoji: '🧀',
       instruction: 'Help the Mouse find the cheese!',
       themeColor: Colors.orange,
+      dangerCount: 2,
     ),
     _MazeLevelData(
       rows: 8,
@@ -40,6 +42,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       targetEmoji: '🥕',
       instruction: 'Help the Rabbit find the carrot!',
       themeColor: Colors.green,
+      dangerCount: 3,
     ),
     _MazeLevelData(
       rows: 10,
@@ -50,6 +53,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       targetEmoji: '🌸',
       instruction: 'Help the Bee find the flower!',
       themeColor: Colors.amber,
+      dangerCount: 4,
     ),
     _MazeLevelData(
       rows: 12,
@@ -60,6 +64,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       targetEmoji: '🧀',
       instruction: 'Wait! The mouse is lost again!',
       themeColor: Colors.orange,
+      dangerCount: 5,
     ),
     _MazeLevelData(
       rows: 14,
@@ -70,6 +75,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       targetEmoji: '🥕',
       instruction: 'The rabbit needs even more carrots!',
       themeColor: Colors.green,
+      dangerCount: 6,
     ),
     _MazeLevelData(
       rows: 16,
@@ -80,6 +86,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       targetEmoji: '🌸',
       instruction: 'One last flower for the busy bee!',
       themeColor: Colors.amber,
+      dangerCount: 7,
     ),
   ];
 
@@ -119,7 +126,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
   }
 
   void _onFinish() {
-    if (_isComplete) return;
+    if (_isComplete || _isFailed) return;
     setState(() {
       _isComplete = true;
     });
@@ -127,10 +134,19 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
     victoryAudio.playVictorySound();
   }
 
+  void _onDanger() {
+    if (_isComplete || _isFailed) return;
+    setState(() {
+      _isFailed = true;
+    });
+    _flutterTts.speak('Oh no! You hit the fire!');
+  }
+
   void _nextLevel() {
     setState(() {
       _currentLevelIndex = (_currentLevelIndex + 1) % _levels.length;
       _isComplete = false;
+      _isFailed = false;
     });
     _successController.reset();
     _speakInstruction(_levels[_currentLevelIndex].instruction);
@@ -139,6 +155,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
   void _resetLevel() {
     setState(() {
       _isComplete = false;
+      _isFailed = false;
     });
     _successController.reset();
   }
@@ -174,11 +191,16 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
                           : Maze(
                               player: MazeItem(level.playerAsset, ImageType.asset),
                               finish: MazeItem(level.targetAsset, ImageType.asset),
+                              dangers: List.generate(
+                                level.dangerCount,
+                                (_) => MazeItem('assets/images/maze_fire.png', ImageType.asset),
+                              ),
                               columns: level.cols,
                               rows: level.rows,
                               wallColor: level.themeColor,
                               wallThickness: 4.0,
                               onFinish: _onFinish,
+                              onDanger: _onDanger,
                             ),
                     ),
                   ),
@@ -196,6 +218,70 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
                 ],
               ),
               if (_isComplete) _buildSuccessOverlay(level),
+              if (_isFailed) _buildFailureOverlay(level),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFailureOverlay(_MazeLevelData level) {
+    return Container(
+      color: Colors.black.withValues(alpha: 0.5),
+      child: Center(
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 32),
+          padding: const EdgeInsets.all(32),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(32),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.red.withValues(alpha: 0.4),
+                blurRadius: 30,
+                offset: const Offset(0, 15),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('🔥 ⚠️ 🔥', style: TextStyle(fontSize: 60)),
+              const SizedBox(height: 24),
+              const Text(
+                'OH NO! FIRE!',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFF333333),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Be careful! Don\'t touch the fire!',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+              const SizedBox(height: 32),
+              GestureDetector(
+                onTap: _resetLevel,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(colors: [Colors.red, Colors.orange]),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Text(
+                    'Try Again!',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -323,6 +409,7 @@ class _MazeLevelData {
   final String targetEmoji;
   final String instruction;
   final Color themeColor;
+  final int dangerCount;
 
   _MazeLevelData({
     required this.rows,
@@ -333,5 +420,6 @@ class _MazeLevelData {
     required this.targetEmoji,
     required this.instruction,
     required this.themeColor,
+    required this.dangerCount,
   });
 }

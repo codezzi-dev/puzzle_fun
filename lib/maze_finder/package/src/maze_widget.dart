@@ -22,11 +22,13 @@ class Maze extends StatefulWidget {
     super.key,
     required this.player,
     this.checkpoints = const [],
+    this.dangers = const [],
     this.columns = 10,
     this.finish,
     this.height,
     this.loadingWidget,
     this.onCheckpoint,
+    this.onDanger,
     this.onFinish,
     this.rows = 7,
     this.wallColor = Colors.black,
@@ -36,6 +38,9 @@ class Maze extends StatefulWidget {
 
   ///List of checkpoints
   final List<MazeItem> checkpoints;
+
+  ///List of danger zones
+  final List<MazeItem> dangers;
 
   ///Columns of the maze
   final int columns;
@@ -51,6 +56,9 @@ class Maze extends StatefulWidget {
 
   ///Callback when the player pass through a checkpoint
   final Function(int)? onCheckpoint;
+
+  ///Callback when the player hits a danger zone
+  final Function()? onDanger;
 
   ///Callback when the player reach finish
   final Function()? onFinish;
@@ -91,13 +99,16 @@ class _MazeState extends State<Maze> {
     final checkpoints = await Future.wait(
       widget.checkpoints.map((c) async => await _itemToImage(c)),
     );
+    final dangers = await Future.wait(widget.dangers.map((d) async => await _itemToImage(d)));
     final finishImage = widget.finish != null ? await _itemToImage(widget.finish!) : null;
 
     _mazePainter = MazePainter(
       checkpointsImages: checkpoints,
+      dangersImages: dangers,
       columns: widget.columns,
       finishImage: finishImage,
       onCheckpoint: widget.onCheckpoint,
+      onDanger: widget.onDanger,
       onFinish: widget.onFinish,
       playerImage: playerImage,
       rows: widget.rows,
