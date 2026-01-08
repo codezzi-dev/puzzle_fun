@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:maze/maze.dart';
 
 import '../shared/victory_audio_service.dart';
+import 'package/src/maze_widget.dart';
+import 'package/src/models/item.dart';
 
 class MazeFinderGame extends StatefulWidget {
   const MazeFinderGame({super.key});
