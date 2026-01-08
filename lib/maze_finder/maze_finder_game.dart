@@ -21,7 +21,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
 
   final List<_MazeLevelData> _levels = [
     _MazeLevelData(
-      rows: 5,
+      rows: 6,
       cols: 5,
       playerAsset: 'assets/images/maze_mouse.png',
       targetAsset: 'assets/images/maze_cheese.png',
@@ -31,7 +31,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       themeColor: Colors.orange,
     ),
     _MazeLevelData(
-      rows: 6,
+      rows: 8,
       cols: 6,
       playerAsset: 'assets/images/maze_rabbit.png',
       targetAsset: 'assets/images/maze_carrot.png',
@@ -41,7 +41,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       themeColor: Colors.green,
     ),
     _MazeLevelData(
-      rows: 8,
+      rows: 10,
       cols: 8,
       playerAsset: 'assets/images/maze_bee.png',
       targetAsset: 'assets/images/maze_flower.png',
@@ -51,7 +51,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       themeColor: Colors.amber,
     ),
     _MazeLevelData(
-      rows: 10,
+      rows: 12,
       cols: 10,
       playerAsset: 'assets/images/maze_mouse.png',
       targetAsset: 'assets/images/maze_cheese.png',
@@ -61,7 +61,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       themeColor: Colors.orange,
     ),
     _MazeLevelData(
-      rows: 12,
+      rows: 14,
       cols: 12,
       playerAsset: 'assets/images/maze_rabbit.png',
       targetAsset: 'assets/images/maze_carrot.png',
@@ -71,7 +71,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       themeColor: Colors.green,
     ),
     _MazeLevelData(
-      rows: 14,
+      rows: 16,
       cols: 14,
       playerAsset: 'assets/images/maze_bee.png',
       targetAsset: 'assets/images/maze_flower.png',
@@ -167,7 +167,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
                   _buildAppBar(context, level),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(24.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
                       child: _isComplete
                           ? const SizedBox.shrink() // Don't show maze when complete to avoid duplicate wins/interaction
                           : Maze(
