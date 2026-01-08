@@ -61,3 +61,75 @@ Based on the existing tech stack (Canvas, Drag & Drop, TTS), here are the sugges
 - **Goal**: Tap different musical instruments to hear their sounds and see them "dance".
 - **Educational Value**: Musical awareness and cause-and-effect.
 - **UX**: Bouncing animations and high-quality instrument samples.
+
+---
+
+# Additional Game Suggestions (January 2026)
+
+## 13. 🔤 Letter Master (ABC Learning)
+- **Goal**: Learn the alphabet with TTS pronunciation.
+- **Simple Mode**: Tap letters to hear their names and sounds.
+- **Learning Mode**: Match uppercase to lowercase letters (e.g., "A" → "a").
+- **Educational Value**: Alphabet recognition, letter-sound association, pre-reading skills.
+- **Tech**: Similar pattern to **Digit Master** and **Shape Master**.
+
+## 14. 🔊 Sound Match (Auditory Recognition)
+- **Goal**: Play animal/vehicle/instrument sounds and match to images.
+- **Simple Mode**: Tap an image to hear its sound.
+- **Learning Mode**: "What makes this sound?" — pick from 3-4 options.
+- **Educational Value**: Auditory processing, memory, and vocabulary building.
+- **Tech**: Uses `audioplayers` package + TTS for instructions.
+
+## 15. 🧮 Counting Challenge (Quantity Learning)
+- **Goal**: Show N objects (apples, stars, balls) and tap the correct number.
+- **Simple Mode**: Count objects with TTS assistance ("1, 2, 3...").
+- **Learning Mode**: "How many apples?" — select from number options.
+- **Educational Value**: Number-quantity association, early math skills.
+- **Tech**: Builds on **Digit Master** to teach quantity concepts.
+
+## 16. 🔀 Sequence Builder (Logical Ordering)
+- **Goal**: Drag items into the correct order (first, second, third).
+- **Themes**: Daily routines (wake up → brush teeth → eat breakfast), story sequences, growth cycles.
+- **Educational Value**: Sequential thinking, time concepts, cause-and-effect.
+- **Tech**: Similar to **Size Sorter** but with logical/temporal sequences.
+
+## 17. 🐾 Animal Sounds (Nature Learning)
+- **Goal**: Learn animal names + sounds with TTS.
+- **Simple Mode**: Tap animals to hear their names and sounds.
+- **Learning Mode**: "Find the animal that says 'Moo'!" — tap the correct one.
+- **Educational Value**: Animal recognition, auditory discrimination, vocabulary.
+- **Tech**: Uses the same learning/testing pattern as **Body Parts**.
+
+## 18. 🚗 Vehicle Match (Environment Association)
+- **Goal**: Match vehicles to their environments (car→road, boat→water, plane→sky).
+- **Simple Mode**: Learn vehicle names and where they travel.
+- **Learning Mode**: Drag vehicles to the correct environment.
+- **Educational Value**: Categorization, environmental awareness, vehicle recognition.
+- **Tech**: Drag-and-drop like **Color Match**.
+
+## 19. 🧊 Shape Builder (Creative Construction)
+- **Goal**: Combine basic shapes to create objects (2 triangles = house roof).
+- **Simple Mode**: Free-form building with shapes.
+- **Learning Mode**: "Build a house using these shapes" — guided construction.
+- **Educational Value**: Spatial reasoning, geometry, creativity, problem-solving.
+- **Tech**: Extension of **Robot Builder** concept with shape combination.
+
+## 20. 🌈 Rainbow Painter (Creative Expression)
+- **Goal**: Free-form finger painting with color palette.
+- **Features**: Brush sizes, eraser, save drawings as images.
+- **Educational Value**: Fine motor skills, color exploration, self-expression.
+- **Tech**: Canvas-based painting like **Creative Pad**.
+
+## 21. ⏰ Clock Learning (Time Concepts)
+- **Goal**: Interactive clock to learn hours.
+- **Simple Mode**: Tap clock to hear time read aloud.
+- **Learning Mode**: "Move the hands to show 3 o'clock".
+- **Educational Value**: Telling time, number recognition on a clock face.
+- **Tech**: Draggable clock hands with TTS feedback.
+
+## 22. 🧩 Jigsaw Pieces (Spatial Reasoning)
+- **Goal**: Simple 4-6 piece jigsaw puzzles with cute images.
+- **Simple Mode**: Drag pieces to snap into place with visual guides.
+- **Learning Mode**: No guides, pieces must be correctly oriented.
+- **Educational Value**: Spatial awareness, problem-solving, visual discrimination.
+- **Tech**: Split images into movable tiles with snap-to-grid logic.

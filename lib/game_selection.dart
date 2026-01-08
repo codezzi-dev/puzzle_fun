@@ -14,6 +14,7 @@ import 'object_painter/object_painter_game.dart';
 import 'pattern_maker/pattern_maker_game.dart';
 import 'puzzle_fun/puzzle_fun.dart';
 import 'robot_builder/robot_builder_game.dart';
+import 'sequence_builder/sequence_builder_game.dart';
 import 'shadow_match/shadow_match_game.dart';
 import 'shape_master/shape_master_game.dart';
 import 'size_sorter/size_sorter_game.dart';
@@ -144,6 +145,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Find the way out!',
       gradientColors: [const Color(0xFFF9A825), const Color(0xFFFF8F00)],
       page: const MazeFinderGame(),
+    ),
+    _GameInfo(
+      title: 'Sequence Builder',
+      emoji: '🔀',
+      description: 'Order the sequence!',
+      gradientColors: [const Color(0xFF7B1FA2), const Color(0xFFAB47BC)],
+      page: const SequenceBuilderGame(),
     ),
   ];
 
