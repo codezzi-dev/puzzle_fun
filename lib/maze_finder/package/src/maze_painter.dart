@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -75,9 +77,9 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
 
       if (walls.isNotEmpty) {
         int wall = walls[_randomizer.nextInt(walls.length)];
-        if (wall == 0)
+        if (wall == 0) {
           _removeWall(cell, _cells[c - 1][r]);
-        else if (wall == 1)
+        } else if (wall == 1)
           _removeWall(cell, _cells[c + 1][r]);
         else if (wall == 2)
           _removeWall(cell, _cells[c][r - 1]);
@@ -515,13 +517,15 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
       // Top
       if (!current.topWall && current.row > 0) neighbors.add(_cells[current.col][current.row - 1]);
       // Bottom
-      if (!current.bottomWall && current.row < rows - 1)
+      if (!current.bottomWall && current.row < rows - 1) {
         neighbors.add(_cells[current.col][current.row + 1]);
+      }
       // Left
       if (!current.leftWall && current.col > 0) neighbors.add(_cells[current.col - 1][current.row]);
       // Right
-      if (!current.rightWall && current.col < columns - 1)
+      if (!current.rightWall && current.col < columns - 1) {
         neighbors.add(_cells[current.col + 1][current.row]);
+      }
 
       for (var neighbor in neighbors) {
         if (!visited.contains(neighbor)) {

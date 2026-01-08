@@ -19,6 +19,7 @@ import 'shadow_match/shadow_match_game.dart';
 import 'shape_master/shape_master_game.dart';
 import 'size_sorter/size_sorter_game.dart';
 import 'trace_path/trace_path_game.dart';
+import 'counting_challenge/counting_challenge_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -152,6 +153,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Order the sequence!',
       gradientColors: [const Color(0xFF7B1FA2), const Color(0xFFAB47BC)],
       page: const SequenceBuilderGame(),
+    ),
+    _GameInfo(
+      title: 'Counting Challenge',
+      emoji: '🧮',
+      description: 'Learn to count!',
+      gradientColors: [const Color(0xFF2E7D32), const Color(0xFF81C784)],
+      page: const CountingChallenge(),
     ),
   ];
 

@@ -81,7 +81,7 @@ class Maze extends StatefulWidget {
   final double? width;
 
   @override
-  _MazeState createState() => _MazeState();
+  State<Maze> createState() => _MazeState();
 }
 
 class _MazeState extends State<Maze> {
@@ -120,26 +120,24 @@ class _MazeState extends State<Maze> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Builder(
-        builder: (context) {
-          if (_loaded) {
-            return GestureDetector(
-              onVerticalDragUpdate: (info) => _mazePainter.updatePosition(info.localPosition),
-              child: CustomPaint(
-                painter: _mazePainter,
-                size: Size(widget.width ?? context.width, widget.height ?? context.height),
-              ),
-            );
+    return Builder(
+      builder: (context) {
+        if (_loaded) {
+          return GestureDetector(
+            onVerticalDragUpdate: (info) => _mazePainter.updatePosition(info.localPosition),
+            child: CustomPaint(
+              painter: _mazePainter,
+              size: Size(widget.width ?? context.width, widget.height ?? context.height),
+            ),
+          );
+        } else {
+          if (widget.loadingWidget != null) {
+            return widget.loadingWidget!;
           } else {
-            if (widget.loadingWidget != null) {
-              return widget.loadingWidget!;
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
+            return const Center(child: CircularProgressIndicator());
           }
-        },
-      ),
+        }
+      },
     );
   }
 
