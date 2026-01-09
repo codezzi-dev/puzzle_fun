@@ -20,6 +20,7 @@ import 'shape_master/shape_master_game.dart';
 import 'size_sorter/size_sorter_game.dart';
 import 'trace_path/trace_path_game.dart';
 import 'counting_challenge/counting_challenge_game.dart';
+import 'clock_learning/clock_learning_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -160,6 +161,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Learn to count!',
       gradientColors: [const Color(0xFF2E7D32), const Color(0xFF81C784)],
       page: const CountingChallenge(),
+    ),
+    _GameInfo(
+      title: 'Clock Learning',
+      emoji: '⏰',
+      description: 'Learn to tell time!',
+      gradientColors: [const Color(0xFF5C6BC0), const Color(0xFF7986CB)],
+      page: const ClockLearningGame(),
     ),
   ];
 
