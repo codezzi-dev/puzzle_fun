@@ -21,6 +21,7 @@ import 'size_sorter/size_sorter_game.dart';
 import 'trace_path/trace_path_game.dart';
 import 'counting_challenge/counting_challenge_game.dart';
 import 'clock_learning/clock_learning_game.dart';
+import 'pattern_safari/pattern_safari_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -168,6 +169,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Learn to tell time!',
       gradientColors: [const Color(0xFF5C6BC0), const Color(0xFF7986CB)],
       page: const ClockLearningGame(),
+    ),
+    _GameInfo(
+      title: 'Pattern Safari',
+      emoji: '🦒',
+      description: 'Repeat the pattern!',
+      gradientColors: [const Color(0xFFF9A825), const Color(0xFFE65100)],
+      page: const PatternSafariGame(),
     ),
   ];
 

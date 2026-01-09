@@ -133,3 +133,33 @@ Based on the existing tech stack (Canvas, Drag & Drop, TTS), here are the sugges
 - **Learning Mode**: No guides, pieces must be correctly oriented.
 - **Educational Value**: Spatial awareness, problem-solving, visual discrimination.
 - **Tech**: Split images into movable tiles with snap-to-grid logic.
+
+## 23. 🍎 Healthy vs. Junk (Categorization)
+- **Goal**: Sort food items into "Healthy" and "Treats" baskets.
+- **Educational Value**: Nutritional awareness and healthy habits.
+- **UX**: Drag-and-drop mechanics with TTS feedback ("Apples make you strong!").
+
+## 24. 🌤️ Weather Wear (Environmental Association)
+- **Goal**: Dress a character according to the weather (Sun, Rain, Snow).
+- **Educational Value**: Real-world association, seasonal knowledge, and daily life skills.
+- **UX**: Change background atmosphere (rain/snow effects) based on selected weather.
+
+## 25. 👂 Emotion Explorer (Social/Emotional)
+- **Goal**: Match emoji faces to emotions or situations.
+- **Educational Value**: Emotional literacy, empathy, and social skills.
+- **Tech**: Uses high-quality vector faces with animated expressions.
+
+## 26. 🚀 Letter Rocket (Alphabet/Tracing)
+- **Goal**: Trace a letter to fuel a rocket for blast-off.
+- **Educational Value**: Letter formation, fine motor skills, and alphabet reinforcement.
+- **UX**: Dramatic sound effects and "blast off" animation once tracing is complete.
+
+## 27. 🦒 Pattern Safari (Logic/Memory)
+- **Goal**: Watch animal patterns and tap them in the correct sequence.
+- **Educational Value**: Working memory, logic, and sequence prediction.
+- **Tech**: Uses `AnimatedSwitcher` for showing/hiding sequences.
+
+## 28. 🏠 Room Matcher (Categorization)
+- **Goal**: Place objects in the correct room of a house (Table -> Dining Room).
+- **Educational Value**: Taxonomy, situational awareness, and vocabulary.
+- **UX**: A house map layout where children can "explore" and place items.
