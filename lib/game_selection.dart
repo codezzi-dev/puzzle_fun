@@ -22,6 +22,7 @@ import 'trace_path/trace_path_game.dart';
 import 'counting_challenge/counting_challenge_game.dart';
 import 'clock_learning/clock_learning_game.dart';
 import 'pattern_safari/pattern_safari_game.dart';
+import 'room_matcher/room_matcher_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -176,6 +177,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Repeat the pattern!',
       gradientColors: [const Color(0xFFF9A825), const Color(0xFFE65100)],
       page: const PatternSafariGame(),
+    ),
+    _GameInfo(
+      title: 'Room Matcher',
+      emoji: '🏠',
+      description: 'Put items in rooms!',
+      gradientColors: [const Color(0xFF8D6E63), const Color(0xFFA1887F)],
+      page: const RoomMatcherGame(),
     ),
   ];
 
