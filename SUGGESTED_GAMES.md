@@ -163,3 +163,41 @@ Based on the existing tech stack (Canvas, Drag & Drop, TTS), here are the sugges
 - **Goal**: Place objects in the correct room of a house (Table -> Dining Room).
 - **Educational Value**: Taxonomy, situational awareness, and vocabulary.
 - **UX**: A house map layout where children can "explore" and place items.
+
+---
+
+# Addition Learning Games (Ages 3-5)
+
+Games designed to introduce basic addition concepts through visual and interactive methods.
+
+## 29. 🍎 Apple Addition (Visual Counting)
+- **Goal**: Show 2 baskets with fruits (e.g., 2 apples + 1 apple) and tap the correct total.
+- **Learning Mode**: TTS counts each side: "2 apples plus 1 apple equals..."
+- **Testing Mode**: Pick the correct answer from 3 number options.
+- **Educational Value**: First exposure to addition through concrete visual counting.
+- **Tech**: Builds on `Counting Challenge` pattern with two object groups.
+
+## 30. 🎲 Number Bubble Pop (Simple Sums)
+- **Goal**: Pop the bubble showing the correct sum of two numbers.
+- **How it works**: Show "1 + 2 = ?" with floating bubble options (2, 3, 4).
+- **Educational Value**: Number recognition combined with simple addition facts.
+- **UX**: Wrong bubbles shake, correct bubble bursts with confetti celebration.
+- **Progressive**: Starts with +1 facts, moves to +2, +3 as child progresses.
+
+## 31. 🧮 Ten Frame Fun (Structured Counting)
+- **Goal**: Fill a 10-frame grid to learn number bonds (how numbers combine to make 10).
+- **How it works**: Show a 2x5 grid, ask "Fill 3 more to make 5" → drag dots into frame.
+- **Educational Value**: Number bonds foundation, visual math representation.
+- **Tech**: Drag-and-drop dots into grid cells, snap-to-position animations.
+
+## 32. 🚂 Train Addition (Story-Based)
+- **Goal**: Add passengers to train cars using a fun narrative story.
+- **How it works**: "The train has 2 passengers. 3 more got on. How many now?"
+- **Educational Value**: Word problem introduction, real-world math context.
+- **UX**: Drag character emojis onto animated train cars, count total with TTS.
+
+## 33. 🎯 Domino Match (Pattern Recognition)
+- **Goal**: Match domino halves where dots add to a target number.
+- **How it works**: Show domino pieces with dots, "Find two that add to 5".
+- **Educational Value**: Visual addition through dot patterns, number combinations.
+- **Tech**: Drag-and-drop domino matching, similar to `Shadow Match` pattern.
