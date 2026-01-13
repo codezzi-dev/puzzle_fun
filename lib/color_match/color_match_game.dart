@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_clm.dart';
 import 'widgets/color_swatch.dart';
 import 'widgets/colored_shape.dart';
@@ -16,8 +16,6 @@ class ColorMatchGame extends ConsumerStatefulWidget {
 }
 
 class _ColorMatchGameState extends ConsumerState<ColorMatchGame> with TickerProviderStateMixin {
-  final FlutterTts _tts = FlutterTts();
-
   // Keys for getting positions
   final Map<String, GlobalKey> _colorKeys = {};
   final Map<String, GlobalKey> _shapeKeys = {};
@@ -33,19 +31,13 @@ class _ColorMatchGameState extends ConsumerState<ColorMatchGame> with TickerProv
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
     _initAnimations();
 
     // Speak intro after build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _speakIntro();
     });
-  }
-
-  void _initTts() async {
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.4);
-    await _tts.setPitch(1.2);
   }
 
   void _initAnimations() {
@@ -60,21 +52,21 @@ class _ColorMatchGameState extends ConsumerState<ColorMatchGame> with TickerProv
   }
 
   void _speakIntro() {
-    _tts.speak('Match the colors! Draw a line from each color to the matching shape.');
+    tts.speak('Match the colors! Draw a line from each color to the matching shape.');
   }
 
   void _speakSuccess() {
-    _tts.speak('Perfect! You matched all the colors!');
+    tts.speak('Perfect! You matched all the colors!');
     victoryAudio.playVictorySound();
   }
 
   void _speakCorrect(String colorName) {
-    _tts.speak('Yes! $colorName is correct!');
+    tts.speak('Yes! $colorName is correct!');
   }
 
   @override
   void dispose() {
-    _tts.stop();
+    tts.stop();
     _successController.dispose();
     super.dispose();
   }
@@ -336,7 +328,7 @@ class _ColorMatchGameState extends ConsumerState<ColorMatchGame> with TickerProv
             itemKey: _colorKeys[color.id]!,
             onDragStart: (id, pos) {
               notifier.startDrag(id, pos);
-              _tts.speak(color.name);
+              tts.speak(color.name);
             },
             onDragUpdate: (pos) => notifier.updateDrag(pos),
             onDragEnd: () {
@@ -418,7 +410,7 @@ class _ColorMatchGameState extends ConsumerState<ColorMatchGame> with TickerProv
       notifier.makeConnection(colorId, shapeId);
     } else {
       // Wrong match
-      _tts.speak('Try again!');
+      tts.speak('Try again!');
       notifier.endDrag();
     }
   }

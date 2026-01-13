@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_dm.dart';
 import 'widgets/digit_painters.dart';
 
@@ -16,8 +16,6 @@ class DigitMaster extends ConsumerStatefulWidget {
 }
 
 class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderStateMixin {
-  final FlutterTts _flutterTts = FlutterTts();
-
   late AnimationController _digitBounceController;
   late Animation<double> _digitBounceAnim;
   late AnimationController _digitPulseController;
@@ -34,7 +32,7 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _digitBounceController = AnimationController(
       vsync: this,
@@ -79,31 +77,24 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
-  Future<void> _initTts() async {
-    await _flutterTts.setLanguage('en-US');
-    await _flutterTts.setSpeechRate(0.4);
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.2);
+  void _speakDigit(String digitName) {
+    tts.speak(digitName);
   }
 
-  Future<void> _speakDigit(String digitName) async {
-    await _flutterTts.speak(digitName);
+  void _speakFindDigit(String digitName) {
+    tts.speak('Find $digitName!');
   }
 
-  Future<void> _speakFindDigit(String digitName) async {
-    await _flutterTts.speak('Find $digitName!');
-  }
-
-  Future<void> _speakSuccess() async {
+  void _speakSuccess() {
     final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
     final message = messages[math.Random().nextInt(messages.length)];
-    await _flutterTts.speak(message);
+    tts.speak(message);
     victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
-    _flutterTts.stop();
+    tts.stop();
     _digitBounceController.dispose();
     _digitPulseController.dispose();
     _sparkleController.dispose();

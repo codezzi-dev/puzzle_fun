@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_sb.dart';
 
 class SequenceBuilderGame extends ConsumerStatefulWidget {
@@ -16,7 +16,6 @@ class SequenceBuilderGame extends ConsumerStatefulWidget {
 
 class _SequenceBuilderGameState extends ConsumerState<SequenceBuilderGame>
     with TickerProviderStateMixin {
-  final FlutterTts _flutterTts = FlutterTts();
   late AnimationController _successController;
   late Animation<double> _successScale;
   late AnimationController _pulseController;
@@ -25,7 +24,7 @@ class _SequenceBuilderGameState extends ConsumerState<SequenceBuilderGame>
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _successController = AnimationController(
       vsync: this,
@@ -46,29 +45,22 @@ class _SequenceBuilderGameState extends ConsumerState<SequenceBuilderGame>
     ).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut));
   }
 
-  Future<void> _initTts() async {
-    await _flutterTts.setLanguage('en-US');
-    await _flutterTts.setSpeechRate(0.4);
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.2);
+  void _speak(String text) {
+    tts.speak(text);
   }
 
-  Future<void> _speak(String text) async {
-    await _flutterTts.speak(text);
-  }
-
-  Future<void> _speakSuccess() async {
+  void _speakSuccess() {
     final messages = [
       "Amazing! You got it right!",
       "Wonderful! Perfect order!",
       "Great job! You're a sequencing star!",
     ];
-    await _flutterTts.speak(messages[math.Random().nextInt(messages.length)]);
+    tts.speak(messages[math.Random().nextInt(messages.length)]);
   }
 
   @override
   void dispose() {
-    _flutterTts.stop();
+    tts.stop();
     _successController.dispose();
     _pulseController.dispose();
     super.dispose();

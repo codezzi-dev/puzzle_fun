@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_tp.dart';
 import 'widgets/path_painter.dart';
 
@@ -14,7 +14,6 @@ class TracePathGame extends ConsumerStatefulWidget {
 }
 
 class _TracePathGameState extends ConsumerState<TracePathGame> with SingleTickerProviderStateMixin {
-  final FlutterTts _flutterTts = FlutterTts();
   late AnimationController _successController;
   late Animation<double> _successScale;
 
@@ -23,7 +22,7 @@ class _TracePathGameState extends ConsumerState<TracePathGame> with SingleTicker
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _successController = AnimationController(
       vsync: this,
@@ -35,20 +34,9 @@ class _TracePathGameState extends ConsumerState<TracePathGame> with SingleTicker
     ).animate(CurvedAnimation(parent: _successController, curve: Curves.elasticOut));
   }
 
-  Future<void> _initTts() async {
-    await _flutterTts.setLanguage('en-US');
-    await _flutterTts.setSpeechRate(0.4);
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.2);
-  }
-
-  Future<void> _speakInstruction(String text) async {
-    await _flutterTts.speak(text);
-  }
-
   @override
   void dispose() {
-    _flutterTts.stop();
+    tts.stop();
     _successController.dispose();
     super.dispose();
   }
@@ -61,7 +49,7 @@ class _TracePathGameState extends ConsumerState<TracePathGame> with SingleTicker
     // Speak instruction on level change
     if (_lastLevelIndex != state.currentLevelIndex) {
       _lastLevelIndex = state.currentLevelIndex;
-      _speakInstruction(state.currentLevel.instruction);
+      tts.speak(state.currentLevel.instruction);
     }
 
     if (state.isComplete && !_successController.isAnimating && _successController.value == 0) {

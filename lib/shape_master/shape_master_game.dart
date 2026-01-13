@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_sm.dart';
 import 'widgets/shape_painters.dart';
 
@@ -16,9 +16,6 @@ class ShapeMaster extends ConsumerStatefulWidget {
 }
 
 class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderStateMixin {
-  // Text-to-Speech
-  final FlutterTts _flutterTts = FlutterTts();
-
   // Learning page animations
   late AnimationController _shapeBounceController;
   late Animation<double> _shapeBounceAnim;
@@ -43,7 +40,7 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
     super.initState();
 
     // Initialize TTS
-    _initTts();
+    tts.init();
 
     // Shape bounce animation
     _shapeBounceController = AnimationController(
@@ -93,37 +90,24 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
-  Future<void> _initTts() async {
-    await _flutterTts.setLanguage('en-US');
-    await _flutterTts.setSpeechRate(0.4); // Slow for kids
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.2); // Slightly higher pitch for friendly voice
+  void _speakShape(String shapeName) {
+    tts.speak(shapeName);
   }
 
-  Future<void> _speakShape(String shapeName) async {
-    await _flutterTts.speak(shapeName);
+  void _speakFindShape(String shapeName) {
+    tts.speak('Find $shapeName!');
   }
 
-  Future<void> _speakFindShape(String shapeName) async {
-    await _flutterTts.speak('Find $shapeName!');
-  }
-
-  Future<void> _speakSuccess() async {
+  void _speakSuccess() {
     final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
     final message = messages[math.Random().nextInt(messages.length)];
-    await _flutterTts.speak(message);
+    tts.speak(message);
     victoryAudio.playVictorySound();
   }
 
-  // Future<void> _speakFailure() async {
-  //   final messages = ['Oops! Try again', 'Not this one', 'Let\'s try one more time'];
-  //   final message = messages[math.Random().nextInt(messages.length)];
-  //   await _flutterTts.speak(message);
-  // }
-
   @override
   void dispose() {
-    _flutterTts.stop();
+    tts.stop();
     _shapeBounceController.dispose();
     _shapePulseController.dispose();
     _sparkleController.dispose();

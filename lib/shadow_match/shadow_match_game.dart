@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_sm.dart';
 
 class ShadowMatchGame extends ConsumerStatefulWidget {
@@ -15,8 +15,6 @@ class ShadowMatchGame extends ConsumerStatefulWidget {
 }
 
 class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerProviderStateMixin {
-  final FlutterTts _tts = FlutterTts();
-
   late AnimationController _bounceController;
   late Animation<double> _bounceAnim;
   late AnimationController _sparkleController;
@@ -33,7 +31,7 @@ class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerPr
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _bounceController = AnimationController(
       vsync: this,
@@ -69,17 +67,11 @@ class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerPr
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
-  Future<void> _initTts() async {
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.4);
-    await _tts.setPitch(1.2);
+  void _speak(String text) {
+    tts.speak(text);
   }
 
-  Future<void> _speak(String text) async {
-    await _tts.speak(text);
-  }
-
-  Future<void> _speakSuccess() async {
+  void _speakSuccess() {
     final messages = [
       'Great job!',
       'You matched them all!',
@@ -87,13 +79,13 @@ class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerPr
       'Awesome matching!',
     ];
     final message = messages[math.Random().nextInt(messages.length)];
-    await _tts.speak(message);
+    tts.speak(message);
     victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
-    _tts.stop();
+    tts.stop();
     _bounceController.dispose();
     _sparkleController.dispose();
     _overlayController.dispose();
@@ -189,7 +181,7 @@ class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerPr
             icon: Icons.arrow_back_rounded,
             onTap: () {
               victoryAudio.stop();
-              _tts.stop();
+              tts.stop();
               Navigator.pop(context);
             },
             color: const Color(0xFF6A4C93),
@@ -472,7 +464,7 @@ class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerPr
                 _buildPremiumButton(
                   onTap: () {
                     victoryAudio.stop();
-                    _tts.stop();
+                    tts.stop();
                     notifier.nextRound();
                   },
                   text: state.currentRound >= state.totalRounds ? "PLAY AGAIN" : "NEXT ROUND",

@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_op.dart';
 import 'widgets/color_palette.dart';
 import 'widgets/colorable_object.dart';
@@ -23,7 +23,6 @@ class _ObjectPainterGameState extends ConsumerState<ObjectPainterGame>
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
-  final FlutterTts _tts = FlutterTts();
   String? _shakingPartId;
   List<ColorOption>? _currentColors;
   bool _showReference = false; // For hint overlay
@@ -52,7 +51,7 @@ class _ObjectPainterGameState extends ConsumerState<ObjectPainterGame>
       end: 1.05,
     ).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut));
 
-    _initTts();
+    tts.init();
 
     // Listen for phase changes
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -60,35 +59,29 @@ class _ObjectPainterGameState extends ConsumerState<ObjectPainterGame>
     });
   }
 
-  Future<void> _initTts() async {
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.4);
-    await _tts.setPitch(1.1);
-  }
-
-  Future<void> _speakLearning() async {
+  void _speakLearning() {
     final state = ref.read(objectPainterProvider);
-    await _tts.speak("This is a ${state.currentObject.name}! Look at the pretty colors!");
+    tts.speak("This is a ${state.currentObject.name}! Look at the pretty colors!");
   }
 
-  Future<void> _speakColoring() async {
-    await _tts.speak("Tap a color, then tap a shape to paint it!");
+  void _speakColoring() {
+    tts.speak("Tap a color, then tap a shape to paint it!");
   }
 
-  Future<void> _speakColorSelected(String colorName) async {
-    await _tts.speak("$colorName!");
+  void _speakColorSelected(String colorName) {
+    tts.speak("$colorName!");
   }
 
-  Future<void> _speakCorrect() async {
-    await _tts.speak("Great job!");
+  void _speakCorrect() {
+    tts.speak("Great job!");
   }
 
-  Future<void> _speakWrong() async {
-    await _tts.speak("Try again!");
+  void _speakWrong() {
+    tts.speak("Try again!");
   }
 
-  Future<void> _speakSuccess() async {
-    await _tts.speak(
+  void _speakSuccess() {
+    tts.speak(
       "Wonderful! You painted the ${ref.read(objectPainterProvider).currentObject.name} perfectly!",
     );
     victoryAudio.playVictorySound();
@@ -98,7 +91,7 @@ class _ObjectPainterGameState extends ConsumerState<ObjectPainterGame>
   void dispose() {
     _bounceController.dispose();
     _pulseController.dispose();
-    _tts.stop();
+    tts.stop();
     super.dispose();
   }
 
@@ -225,7 +218,7 @@ class _ObjectPainterGameState extends ConsumerState<ObjectPainterGame>
                 GestureDetector(
                   onTap: () {
                     notifier.undoLastColor();
-                    _tts.speak("Undo");
+                    tts.speak("Undo");
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -264,7 +257,7 @@ class _ObjectPainterGameState extends ConsumerState<ObjectPainterGame>
                 GestureDetector(
                   onTap: () {
                     notifier.clearAllColors();
-                    _tts.speak("Clear all");
+                    tts.speak("Clear all");
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -652,13 +645,13 @@ class _ObjectPainterGameState extends ConsumerState<ObjectPainterGame>
 
   void _handlePartTap(ObjectPart part, ObjectPainterState state, ObjectPainterNotifier notifier) {
     if (state.selectedColor == null) {
-      _tts.speak("Pick a color first!");
+      tts.speak("Pick a color first!");
       return;
     }
 
     if (state.isPartCorrect(part.id)) {
       // Already correctly colored
-      _tts.speak("This ${part.shapeName} is done!");
+      tts.speak("This ${part.shapeName} is done!");
       return;
     }
 

@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_rc.dart';
 import 'widgets/color_palette.dart';
 import 'widgets/colorable_robot.dart';
@@ -23,7 +23,6 @@ class _RobotColoringGameState extends ConsumerState<RobotColoringGame>
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
-  final FlutterTts _tts = FlutterTts();
   String? _shakingPartId;
   List<ColorOption>? _currentColors;
   bool _showReference = false; // For hint overlay
@@ -52,7 +51,7 @@ class _RobotColoringGameState extends ConsumerState<RobotColoringGame>
       end: 1.05,
     ).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut));
 
-    _initTts();
+    tts.init();
 
     // Listen for phase changes
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -60,35 +59,29 @@ class _RobotColoringGameState extends ConsumerState<RobotColoringGame>
     });
   }
 
-  Future<void> _initTts() async {
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.4);
-    await _tts.setPitch(1.1);
-  }
-
-  Future<void> _speakLearning() async {
+  void _speakLearning() {
     final state = ref.read(robotColoringProvider);
-    await _tts.speak("This is ${state.currentRobot.name}! Look at the pretty colors!");
+    tts.speak("This is ${state.currentRobot.name}! Look at the pretty colors!");
   }
 
-  Future<void> _speakColoring() async {
-    await _tts.speak("Tap a color, then tap the robot to paint it!");
+  void _speakColoring() {
+    tts.speak("Tap a color, then tap the robot to paint it!");
   }
 
-  Future<void> _speakColorSelected(String colorName) async {
-    await _tts.speak("$colorName!");
+  void _speakColorSelected(String colorName) {
+    tts.speak("$colorName!");
   }
 
-  Future<void> _speakCorrect() async {
-    await _tts.speak("Great job!");
+  void _speakCorrect() {
+    tts.speak("Great job!");
   }
 
-  Future<void> _speakWrong() async {
-    await _tts.speak("Try again!");
+  void _speakWrong() {
+    tts.speak("Try again!");
   }
 
-  Future<void> _speakSuccess() async {
-    await _tts.speak("Wonderful! You colored the robot perfectly!");
+  void _speakSuccess() {
+    tts.speak("Wonderful! You colored the robot perfectly!");
     victoryAudio.playVictorySound();
   }
 
@@ -96,7 +89,7 @@ class _RobotColoringGameState extends ConsumerState<RobotColoringGame>
   void dispose() {
     _bounceController.dispose();
     _pulseController.dispose();
-    _tts.stop();
+    tts.stop();
     super.dispose();
   }
 
@@ -560,13 +553,13 @@ class _RobotColoringGameState extends ConsumerState<RobotColoringGame>
     RobotColoringNotifier notifier,
   ) {
     if (state.selectedColor == null) {
-      _tts.speak("Pick a color first!");
+      tts.speak("Pick a color first!");
       return;
     }
 
     if (state.isPartCorrect(part.id)) {
       // Already correctly colored
-      _tts.speak("This part is done!");
+      tts.speak("This part is done!");
       return;
     }
 

@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
+import '../shared/tts_service.dart';
 import '../shared/victory_audio_service.dart';
 import 'config_mm.dart';
 import 'widgets/mystery_card.dart';
@@ -17,8 +17,6 @@ class MissingMysteryGame extends ConsumerStatefulWidget {
 
 class _MissingMysteryGameState extends ConsumerState<MissingMysteryGame>
     with TickerProviderStateMixin {
-  final FlutterTts _tts = FlutterTts();
-
   // Learning page animations
   late AnimationController _bounceController;
   late Animation<double> _bounceAnim;
@@ -38,7 +36,7 @@ class _MissingMysteryGameState extends ConsumerState<MissingMysteryGame>
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     // Bounce animation for cards
     _bounceController = AnimationController(
@@ -78,26 +76,20 @@ class _MissingMysteryGameState extends ConsumerState<MissingMysteryGame>
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
-  Future<void> _initTts() async {
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.4);
-    await _tts.setPitch(1.2);
+  void _speak(String text) {
+    tts.speak(text);
   }
 
-  Future<void> _speak(String text) async {
-    await _tts.speak(text);
-  }
-
-  Future<void> _speakSuccess() async {
+  void _speakSuccess() {
     final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
     final message = messages[math.Random().nextInt(messages.length)];
-    await _tts.speak(message);
+    tts.speak(message);
     victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
-    _tts.stop();
+    tts.stop();
     _bounceController.dispose();
     _sparkleController.dispose();
     _overlayController.dispose();
@@ -216,7 +208,7 @@ class _MissingMysteryGameState extends ConsumerState<MissingMysteryGame>
             icon: Icons.arrow_back_rounded,
             onTap: () {
               victoryAudio.stop();
-              _tts.stop();
+              tts.stop();
               Navigator.pop(context);
             },
             color: const Color(0xFF6A4C93),
@@ -531,7 +523,7 @@ class _MissingMysteryGameState extends ConsumerState<MissingMysteryGame>
                 _buildPremiumButton(
                   onTap: () {
                     victoryAudio.stop();
-                    _tts.stop();
+                    tts.stop();
                     notifier.nextRound();
                   },
                   text: state.currentRound >= state.totalRounds ? "PLAY AGAIN" : "NEXT ROUND",

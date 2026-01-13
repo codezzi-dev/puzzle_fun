@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_ss.dart';
 
 class SizeSorterGame extends ConsumerStatefulWidget {
@@ -15,8 +15,6 @@ class SizeSorterGame extends ConsumerStatefulWidget {
 }
 
 class _SizeSorterGameState extends ConsumerState<SizeSorterGame> with TickerProviderStateMixin {
-  final FlutterTts _tts = FlutterTts();
-
   late AnimationController _floatController;
   late Animation<double> _floatAnim;
   late AnimationController _overlayController;
@@ -29,7 +27,7 @@ class _SizeSorterGameState extends ConsumerState<SizeSorterGame> with TickerProv
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _floatController = AnimationController(
       vsync: this,
@@ -59,17 +57,11 @@ class _SizeSorterGameState extends ConsumerState<SizeSorterGame> with TickerProv
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
-  Future<void> _initTts() async {
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.35);
-    await _tts.setPitch(1.2);
+  void _speak(String text) {
+    tts.speak(text);
   }
 
-  Future<void> _speak(String text) async {
-    await _tts.speak(text);
-  }
-
-  Future<void> _speakSuccess() async {
+  void _speakSuccess() {
     final messages = [
       'Fantastic!',
       'You organized them perfectly!',
@@ -77,13 +69,13 @@ class _SizeSorterGameState extends ConsumerState<SizeSorterGame> with TickerProv
       'Well done!',
     ];
     final message = messages[math.Random().nextInt(messages.length)];
-    await _speak(message);
+    _speak(message);
     victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
-    _tts.stop();
+    tts.stop();
     _floatController.dispose();
     _overlayController.dispose();
     _buttonController.dispose();
@@ -459,7 +451,7 @@ class _SizeSorterGameState extends ConsumerState<SizeSorterGame> with TickerProv
                 _buildPremiumButton(
                   onTap: () {
                     victoryAudio.stop();
-                    _tts.stop();
+                    tts.stop();
                     notifier.nextRound();
                   },
                   text: state.currentRound >= state.totalRounds ? "PLAY AGAIN" : "NEXT ROUND",

@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_mf.dart';
 import 'widgets/memory_card_widget.dart';
 
@@ -16,7 +16,6 @@ class MemoryFlipGame extends ConsumerStatefulWidget {
 }
 
 class _MemoryFlipGameState extends ConsumerState<MemoryFlipGame> with TickerProviderStateMixin {
-  final FlutterTts _flutterTts = FlutterTts();
   late AnimationController _overlayController;
   late Animation<double> _overlayScaleAnim;
 
@@ -26,7 +25,8 @@ class _MemoryFlipGameState extends ConsumerState<MemoryFlipGame> with TickerProv
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
+    tts.speak('Find the matching pairs!');
 
     _overlayController = AnimationController(
       vsync: this,
@@ -38,28 +38,20 @@ class _MemoryFlipGameState extends ConsumerState<MemoryFlipGame> with TickerProv
     ).animate(CurvedAnimation(parent: _overlayController, curve: Curves.elasticOut));
   }
 
-  Future<void> _initTts() async {
-    await _flutterTts.setLanguage('en-US');
-    await _flutterTts.setSpeechRate(0.4);
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.2);
-    await _flutterTts.speak('Find the matching pairs!');
-  }
-
-  Future<void> _speakMatch() async {
+  void _speakMatch() {
     final messages = ['Match found!', 'Great job!', 'You found it!', 'Awesome!'];
     final message = messages[math.Random().nextInt(messages.length)];
-    await _flutterTts.speak(message);
+    tts.speak(message);
   }
 
-  Future<void> _speakVictory() async {
-    await _flutterTts.speak('Congratulations! You matched them all!');
+  void _speakVictory() {
+    tts.speak('Congratulations! You matched them all!');
     victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
-    _flutterTts.stop();
+    tts.stop();
     _overlayController.dispose();
     super.dispose();
   }

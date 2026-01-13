@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_bp.dart';
 import 'widgets/body_parts_widget.dart';
 
@@ -16,8 +16,6 @@ class BodyPartsGame extends ConsumerStatefulWidget {
 }
 
 class _BodyPartsGameState extends ConsumerState<BodyPartsGame> with TickerProviderStateMixin {
-  final FlutterTts _flutterTts = FlutterTts();
-
   late AnimationController _bounceController;
   late Animation<double> _bounceAnim;
   late AnimationController _pulseController;
@@ -34,7 +32,7 @@ class _BodyPartsGameState extends ConsumerState<BodyPartsGame> with TickerProvid
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _bounceController = AnimationController(
       vsync: this,
@@ -79,30 +77,23 @@ class _BodyPartsGameState extends ConsumerState<BodyPartsGame> with TickerProvid
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
-  Future<void> _initTts() async {
-    await _flutterTts.setLanguage('en-US');
-    await _flutterTts.setSpeechRate(0.4);
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.2);
+  void _speakBodyPart(String name) {
+    tts.speak(name);
   }
 
-  Future<void> _speakBodyPart(String name) async {
-    await _flutterTts.speak(name);
+  void _speakFindBodyPart(String name) {
+    tts.speak('Find $name!');
   }
 
-  Future<void> _speakFindBodyPart(String name) async {
-    await _flutterTts.speak('Find $name!');
-  }
-
-  Future<void> _speakSuccess() async {
+  void _speakSuccess() {
     final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
-    await _flutterTts.speak(messages[math.Random().nextInt(messages.length)]);
+    tts.speak(messages[math.Random().nextInt(messages.length)]);
     victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
-    _flutterTts.stop();
+    tts.stop();
     _bounceController.dispose();
     _pulseController.dispose();
     _sparkleController.dispose();

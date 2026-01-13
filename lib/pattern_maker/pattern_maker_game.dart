@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_pm.dart';
 
 class PatternMakerGame extends ConsumerStatefulWidget {
@@ -15,8 +15,6 @@ class PatternMakerGame extends ConsumerStatefulWidget {
 }
 
 class _PatternMakerGameState extends ConsumerState<PatternMakerGame> with TickerProviderStateMixin {
-  final FlutterTts _tts = FlutterTts();
-
   late AnimationController _sparkleController;
   late Animation<double> _sparkleAnim;
   late AnimationController _overlayController;
@@ -30,7 +28,7 @@ class _PatternMakerGameState extends ConsumerState<PatternMakerGame> with Ticker
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _sparkleController = AnimationController(
       vsync: this,
@@ -57,17 +55,11 @@ class _PatternMakerGameState extends ConsumerState<PatternMakerGame> with Ticker
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
-  Future<void> _initTts() async {
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.4);
-    await _tts.setPitch(1.2);
+  void _speak(String text) {
+    tts.speak(text);
   }
 
-  Future<void> _speak(String text) async {
-    await _tts.speak(text);
-  }
-
-  Future<void> _speakSuccess() async {
+  void _speakSuccess() {
     final messages = [
       'Perfect pattern!',
       'You are a pattern master!',
@@ -75,13 +67,13 @@ class _PatternMakerGameState extends ConsumerState<PatternMakerGame> with Ticker
       'I love it!',
     ];
     final message = messages[math.Random().nextInt(messages.length)];
-    await _tts.speak(message);
+    tts.speak(message);
     victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
-    _tts.stop();
+    tts.stop();
     _sparkleController.dispose();
     _overlayController.dispose();
     _buttonController.dispose();
@@ -184,7 +176,7 @@ class _PatternMakerGameState extends ConsumerState<PatternMakerGame> with Ticker
             icon: Icons.arrow_back_rounded,
             onTap: () {
               victoryAudio.stop();
-              _tts.stop();
+              tts.stop();
               Navigator.pop(context);
             },
             color: const Color(0xFF6A1B9A),
@@ -414,7 +406,7 @@ class _PatternMakerGameState extends ConsumerState<PatternMakerGame> with Ticker
                 _buildPremiumButton(
                   onTap: () {
                     victoryAudio.stop();
-                    _tts.stop();
+                    tts.stop();
                     if (state.currentRound >= state.totalRounds) {
                       notifier.completeGame();
                     } else {
@@ -525,7 +517,7 @@ class _PatternMakerGameState extends ConsumerState<PatternMakerGame> with Ticker
                   onTapUp: (_) => _buttonController.reverse(),
                   onTap: () {
                     victoryAudio.stop();
-                    _tts.stop();
+                    tts.stop();
                     notifier.reset();
                   },
                   child: ScaleTransition(

@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_rm.dart';
 
 class RoomMatcherGame extends ConsumerStatefulWidget {
@@ -15,8 +15,6 @@ class RoomMatcherGame extends ConsumerStatefulWidget {
 }
 
 class _RoomMatcherGameState extends ConsumerState<RoomMatcherGame> with TickerProviderStateMixin {
-  final FlutterTts _tts = FlutterTts();
-
   late AnimationController _floatController;
   late Animation<double> _floatAnim;
   late AnimationController _overlayController;
@@ -30,7 +28,7 @@ class _RoomMatcherGameState extends ConsumerState<RoomMatcherGame> with TickerPr
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _floatController = AnimationController(
       vsync: this,
@@ -60,17 +58,11 @@ class _RoomMatcherGameState extends ConsumerState<RoomMatcherGame> with TickerPr
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
-  Future<void> _initTts() async {
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.4);
-    await _tts.setPitch(1.2);
+  void _speak(String text) {
+    tts.speak(text);
   }
 
-  Future<void> _speak(String text) async {
-    await _tts.speak(text);
-  }
-
-  Future<void> _speakSuccess() async {
+  void _speakSuccess() {
     final messages = [
       'Amazing job!',
       'You put everything in the right room!',
@@ -78,13 +70,13 @@ class _RoomMatcherGameState extends ConsumerState<RoomMatcherGame> with TickerPr
       'Perfect placement!',
     ];
     final message = messages[math.Random().nextInt(messages.length)];
-    await _tts.speak(message);
+    tts.speak(message);
     victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
-    _tts.stop();
+    tts.stop();
     _floatController.dispose();
     _overlayController.dispose();
     _buttonController.dispose();
@@ -192,7 +184,7 @@ class _RoomMatcherGameState extends ConsumerState<RoomMatcherGame> with TickerPr
             icon: Icons.arrow_back_rounded,
             onTap: () {
               victoryAudio.stop();
-              _tts.stop();
+              tts.stop();
               Navigator.pop(context);
             },
             color: const Color(0xFF8D6E63),
@@ -681,7 +673,7 @@ class _RoomMatcherGameState extends ConsumerState<RoomMatcherGame> with TickerPr
                 _buildPremiumButton(
                   onTap: () {
                     victoryAudio.stop();
-                    _tts.stop();
+                    tts.stop();
                     notifier.nextRound();
                   },
                   text: state.currentRound >= state.totalRounds ? "PLAY AGAIN" : "NEXT ROUND",

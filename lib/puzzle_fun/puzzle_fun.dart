@@ -117,7 +117,7 @@ class _HomePageState extends ConsumerState<PuzzleFun> with TickerProviderStateMi
                       ),
                     ),
                     const SizedBox(height: 16.0),
-                    
+
                     // Animated Title
                     ScaleTransition(
                       scale: _titleScale,

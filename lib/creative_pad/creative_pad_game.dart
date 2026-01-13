@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
+import '../shared/tts_service.dart';
 import 'config_cp.dart';
 import 'widgets/creative_item_widget.dart';
 
@@ -13,23 +13,15 @@ class CreativePadGame extends ConsumerStatefulWidget {
 }
 
 class _CreativePadGameState extends ConsumerState<CreativePadGame> {
-  final FlutterTts _tts = FlutterTts();
-
   @override
   void initState() {
     super.initState();
-    _initTts();
-  }
-
-  Future<void> _initTts() async {
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.4);
-    await _tts.setPitch(1.1);
+    tts.init();
   }
 
   @override
   void dispose() {
-    _tts.stop();
+    tts.stop();
     super.dispose();
   }
 
@@ -204,7 +196,7 @@ class _CreativePadGameState extends ConsumerState<CreativePadGame> {
             text: 'ABC',
             onTap: () {
               notifier.setMode(CreativeMode.letters);
-              _tts.speak("Letters mode");
+              tts.speak("Letters mode");
             },
           ),
           _buildToggleItem(
@@ -212,7 +204,7 @@ class _CreativePadGameState extends ConsumerState<CreativePadGame> {
             text: '123',
             onTap: () {
               notifier.setMode(CreativeMode.numbers);
-              _tts.speak("Numbers mode");
+              tts.speak("Numbers mode");
             },
           ),
         ],
@@ -276,9 +268,9 @@ class _CreativePadGameState extends ConsumerState<CreativePadGame> {
                 onTap: () {
                   final added = notifier.addItem(content);
                   if (added) {
-                    _tts.speak(content.toLowerCase());
+                    tts.speak(content.toLowerCase());
                   } else {
-                    _tts.speak("Canvas is full!");
+                    tts.speak("Canvas is full!");
                   }
                 },
                 child: Container(
@@ -348,14 +340,14 @@ class _CreativePadGameState extends ConsumerState<CreativePadGame> {
                         onTap: () {
                           if (state.selectedColor != null) {
                             notifier.colorItem(item.id);
-                            _tts.speak("Colored!");
+                            tts.speak("Colored!");
                           } else {
-                            _tts.speak("Pick a color first!");
+                            tts.speak("Pick a color first!");
                           }
                         },
                         onLongPress: () {
                           notifier.removeItem(item.id);
-                          _tts.speak("Removed!");
+                          tts.speak("Removed!");
                         },
                       );
                     }).toList(),
@@ -385,7 +377,7 @@ class _CreativePadGameState extends ConsumerState<CreativePadGame> {
           return GestureDetector(
             onTap: () {
               notifier.selectColor(option.color, option.name);
-              _tts.speak(option.name);
+              tts.speak(option.name);
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),

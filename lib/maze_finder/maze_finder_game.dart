@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'package/src/maze_widget.dart';
 import 'package/src/models/item.dart';
 
@@ -13,7 +13,6 @@ class MazeFinderGame extends StatefulWidget {
 }
 
 class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProviderStateMixin {
-  final FlutterTts _flutterTts = FlutterTts();
   late AnimationController _successController;
   late Animation<double> _successScale;
 
@@ -93,7 +92,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _successController = AnimationController(
       vsync: this,
@@ -104,23 +103,12 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       end: 1.0,
     ).animate(CurvedAnimation(parent: _successController, curve: Curves.elasticOut));
 
-    _speakInstruction(_levels[_currentLevelIndex].instruction);
-  }
-
-  Future<void> _initTts() async {
-    await _flutterTts.setLanguage('en-US');
-    await _flutterTts.setSpeechRate(0.4);
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.2);
-  }
-
-  Future<void> _speakInstruction(String text) async {
-    await _flutterTts.speak(text);
+    tts.speak(_levels[_currentLevelIndex].instruction);
   }
 
   @override
   void dispose() {
-    _flutterTts.stop();
+    tts.stop();
     _successController.dispose();
     super.dispose();
   }
@@ -139,7 +127,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
     setState(() {
       _isFailed = true;
     });
-    _flutterTts.speak('Oh no! You hit the fire!');
+    tts.speak('Oh no! You hit the fire!');
   }
 
   void _nextLevel() {
@@ -149,7 +137,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       _isFailed = false;
     });
     _successController.reset();
-    _speakInstruction(_levels[_currentLevelIndex].instruction);
+    tts.speak(_levels[_currentLevelIndex].instruction);
   }
 
   void _resetLevel() {

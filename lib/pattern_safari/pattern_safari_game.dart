@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_ps.dart';
 
 class PatternSafariGame extends ConsumerStatefulWidget {
@@ -14,7 +14,6 @@ class PatternSafariGame extends ConsumerStatefulWidget {
 
 class _PatternSafariGameState extends ConsumerState<PatternSafariGame>
     with TickerProviderStateMixin {
-  final FlutterTts _flutterTts = FlutterTts();
   late AnimationController _overlayController;
   late Animation<double> _overlayScaleAnim;
   late AnimationController _shakeController;
@@ -27,7 +26,7 @@ class _PatternSafariGameState extends ConsumerState<PatternSafariGame>
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _overlayController = AnimationController(
       vsync: this,
@@ -48,20 +47,13 @@ class _PatternSafariGameState extends ConsumerState<PatternSafariGame>
     ).animate(CurvedAnimation(parent: _shakeController, curve: Curves.elasticIn));
   }
 
-  Future<void> _initTts() async {
-    await _flutterTts.setLanguage('en-US');
-    await _flutterTts.setSpeechRate(0.4);
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.2);
-  }
-
-  void _speak(String text) async {
-    await _flutterTts.speak(text);
+  void _speak(String text) {
+    tts.speak(text);
   }
 
   @override
   void dispose() {
-    _flutterTts.stop();
+    tts.stop();
     _overlayController.dispose();
     _shakeController.dispose();
     _sequenceTimer?.cancel();

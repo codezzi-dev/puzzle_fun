@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/victory_audio_service.dart';
+import '../shared/tts_service.dart';
 import 'config_rb.dart';
 import 'widgets/draggable_shape.dart';
 import 'widgets/robot_display.dart';
@@ -17,8 +17,6 @@ class RobotBuilderGame extends ConsumerStatefulWidget {
 }
 
 class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with TickerProviderStateMixin {
-  final FlutterTts _flutterTts = FlutterTts();
-
   late AnimationController _bounceController;
   late Animation<double> _bounceAnim;
   late AnimationController _pulseController;
@@ -35,7 +33,7 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
   @override
   void initState() {
     super.initState();
-    _initTts();
+    tts.init();
 
     _bounceController = AnimationController(
       vsync: this,
@@ -74,34 +72,27 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
     ).animate(CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut));
   }
 
-  Future<void> _initTts() async {
-    await _flutterTts.setLanguage('en-US');
-    await _flutterTts.setSpeechRate(0.4);
-    await _flutterTts.setVolume(1.0);
-    await _flutterTts.setPitch(1.2);
+  void _speakLearning() {
+    tts.speak('Look at the robot! Remember where each shape goes.');
   }
 
-  Future<void> _speakLearning() async {
-    await _flutterTts.speak('Look at the robot! Remember where each shape goes.');
+  void _speakBuilding() {
+    tts.speak('Now drag the shapes to build the robot!');
   }
 
-  Future<void> _speakBuilding() async {
-    await _flutterTts.speak('Now drag the shapes to build the robot!');
+  void _speakPlaced(String shapeName) {
+    tts.speak('Great! $shapeName placed!');
   }
 
-  Future<void> _speakPlaced(String shapeName) async {
-    await _flutterTts.speak('Great! $shapeName placed!');
-  }
-
-  Future<void> _speakSuccess() async {
+  void _speakSuccess() {
     final messages = ['Amazing job!', 'You built the robot!', 'Wonderful!', 'Perfect!'];
-    await _flutterTts.speak(messages[math.Random().nextInt(messages.length)]);
+    tts.speak(messages[math.Random().nextInt(messages.length)]);
     victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
-    _flutterTts.stop();
+    tts.stop();
     _bounceController.dispose();
     _pulseController.dispose();
     _overlayController.dispose();
