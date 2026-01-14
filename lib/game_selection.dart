@@ -24,6 +24,7 @@ import 'clock_learning/clock_learning_game.dart';
 import 'pattern_safari/pattern_safari_game.dart';
 import 'room_matcher/room_matcher_game.dart';
 import 'fruit_addition/fruit_addition_game.dart';
+import 'fruit_subtraction/fruit_subtraction_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -192,6 +193,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Learn to add!',
       gradientColors: [const Color(0xFF43A047), const Color(0xFF66BB6A)],
       page: const FruitAdditionGame(),
+    ),
+    _GameInfo(
+      title: 'Fruit Subtraction',
+      emoji: '🍎➖',
+      description: 'Learn to subtract!',
+      gradientColors: [const Color(0xFFE53935), const Color(0xFFEF5350)],
+      page: const FruitSubtractionGame(),
     ),
   ];
 
