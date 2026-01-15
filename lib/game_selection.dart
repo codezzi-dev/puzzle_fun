@@ -25,6 +25,7 @@ import 'pattern_safari/pattern_safari_game.dart';
 import 'room_matcher/room_matcher_game.dart';
 import 'fruit_addition/fruit_addition_game.dart';
 import 'fruit_subtraction/fruit_subtraction_game.dart';
+import 'fruit_groups/fruit_groups_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -200,6 +201,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Learn to subtract!',
       gradientColors: [const Color(0xFFE53935), const Color(0xFFEF5350)],
       page: const FruitSubtractionGame(),
+    ),
+    _GameInfo(
+      title: 'Fruit Groups',
+      emoji: '🧺🍎',
+      description: 'Find the total sum!',
+      gradientColors: [const Color(0xFF1976D2), const Color(0xFF42A5F5)],
+      page: const FruitGroupsGame(),
     ),
   ];
 
