@@ -26,6 +26,7 @@ import 'room_matcher/room_matcher_game.dart';
 import 'fruit_addition/fruit_addition_game.dart';
 import 'fruit_subtraction/fruit_subtraction_game.dart';
 import 'fruit_groups/fruit_groups_game.dart';
+import 'fruit_multi_subtract/fruit_multi_subtract_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -208,6 +209,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Find the total sum!',
       gradientColors: [const Color(0xFF1976D2), const Color(0xFF42A5F5)],
       page: const FruitGroupsGame(),
+    ),
+    _GameInfo(
+      title: 'Fruit Multi-Subtract',
+      emoji: '🧺🍎➖',
+      description: 'Groups and then take away!',
+      gradientColors: [const Color(0xFF6A1B9A), const Color(0xFFAB47BC)],
+      page: const FruitMultiSubtractGame(),
     ),
   ];
 
