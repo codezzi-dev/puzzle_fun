@@ -1,4 +1,6 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../shared/victory_audio_service.dart';
@@ -37,8 +39,17 @@ class _TracePathGameState extends ConsumerState<TracePathGame> with SingleTicker
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _successController.dispose();
     super.dispose();
+  }
+
+  Future<void> _speakSuccess() async {
+    final messages = ['Great job!', 'You traced it!', 'Yay! You\'re amazing!', 'Awesome tracing!'];
+    final message = messages[math.Random().nextInt(messages.length)];
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
+    tts.speak(message);
   }
 
   @override
@@ -54,7 +65,7 @@ class _TracePathGameState extends ConsumerState<TracePathGame> with SingleTicker
 
     if (state.isComplete && !_successController.isAnimating && _successController.value == 0) {
       _successController.forward();
-      victoryAudio.playVictorySound();
+      _speakSuccess();
     }
 
     return Scaffold(

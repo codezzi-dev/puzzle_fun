@@ -54,10 +54,17 @@ class _PatternSafariGameState extends ConsumerState<PatternSafariGame>
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _overlayController.dispose();
     _shakeController.dispose();
     _sequenceTimer?.cancel();
     super.dispose();
+  }
+
+  Future<void> _speakSuccess() async {
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
+    _speak("Amazing! You remembered them all!");
   }
 
   void _startSequence(SafariState state) {
@@ -98,8 +105,7 @@ class _PatternSafariGameState extends ConsumerState<PatternSafariGame>
         _speak("Can you repeat the pattern?");
       } else if (state.phase == SafariGamePhase.success) {
         _overlayController.forward(from: 0);
-        victoryAudio.playVictorySound();
-        _speak("Amazing! You remembered them all!");
+        _speakSuccess();
       } else if (state.phase == SafariGamePhase.failure) {
         _shakeController.forward(from: 0).then((_) => _shakeController.reverse());
         _speak("Oops! Let's try that one again.");
@@ -144,7 +150,12 @@ class _PatternSafariGameState extends ConsumerState<PatternSafariGame>
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              tts.stop();
+              victoryAudio.stop();
+              Navigator.pop(context);
+            },
+
             icon: const Icon(Icons.arrow_back_rounded),
             style: IconButton.styleFrom(
               backgroundColor: Colors.white,

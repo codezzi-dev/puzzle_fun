@@ -109,8 +109,15 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _successController.dispose();
     super.dispose();
+  }
+
+  Future<void> _speakSuccess() async {
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
+    tts.speak("Wonderful! You found the way!");
   }
 
   void _onFinish() {
@@ -119,7 +126,7 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       _isComplete = true;
     });
     _successController.forward();
-    victoryAudio.playVictorySound();
+    _speakSuccess();
   }
 
   void _onDanger() {
@@ -283,7 +290,11 @@ class _MazeFinderGameState extends State<MazeFinderGame> with SingleTickerProvid
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              tts.stop();
+              victoryAudio.stop();
+              Navigator.pop(context);
+            },
             icon: const Icon(Icons.arrow_back_rounded),
             style: IconButton.styleFrom(
               backgroundColor: Colors.white,

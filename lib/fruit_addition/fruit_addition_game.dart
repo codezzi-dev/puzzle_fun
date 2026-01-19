@@ -88,10 +88,13 @@ class _FruitAdditionGameState extends ConsumerState<FruitAdditionGame>
         );
       } else if (state.phase == AdditionGamePhase.success) {
         _overlayController.forward(from: 0);
-        victoryAudio.playVictorySound();
-        _speak(
-          'Amazing! ${state.leftCount} plus ${state.rightCount} equals ${state.correctAnswer}!',
-        );
+        () async {
+          await victoryAudio.playVictorySound();
+          await victoryAudio.waitForCompletion();
+          _speak(
+            'Amazing! ${state.leftCount} plus ${state.rightCount} equals ${state.correctAnswer}!',
+          );
+        }();
       }
     }
 

@@ -57,12 +57,12 @@ class _ColorMixerGameState extends ConsumerState<ColorMixerGame> with TickerProv
       _lastPhase = state.phase;
       _lastSpokenMessage = state.motivationalMessage;
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (state.phase == ColorMixerPhase.success && isNewPhase) {
           // Play victory sound and then speak success message
-          victoryAudio.playVictorySound().then((_) {
-            _speak(state.motivationalMessage);
-          });
+          await victoryAudio.playVictorySound();
+          await victoryAudio.waitForCompletion();
+          _speak(state.motivationalMessage);
         } else {
           _speak(state.motivationalMessage);
         }

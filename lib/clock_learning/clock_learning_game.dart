@@ -63,10 +63,17 @@ class _ClockLearningGameState extends ConsumerState<ClockLearningGame>
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _overlayController.dispose();
     _buttonController.dispose();
     _clockPulseController.dispose();
     super.dispose();
+  }
+
+  Future<void> _speakSuccess(ClockState state) async {
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
+    _speak("Wonderful! You set the clock to ${state.spokenTime}!");
   }
 
   @override
@@ -84,8 +91,7 @@ class _ClockLearningGameState extends ConsumerState<ClockLearningGame>
         _speak("Move the hands to show ${state.spokenTime}!");
       } else if (state.phase == ClockGamePhase.success) {
         _overlayController.forward(from: 0);
-        victoryAudio.playVictorySound();
-        _speak("Wonderful! You set the clock to ${state.spokenTime}!");
+        _speakSuccess(state);
       }
     }
 
@@ -126,7 +132,11 @@ class _ClockLearningGameState extends ConsumerState<ClockLearningGame>
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              tts.stop();
+              victoryAudio.stop();
+              Navigator.pop(context);
+            },
             icon: const Icon(Icons.arrow_back_rounded),
             style: IconButton.styleFrom(
               backgroundColor: Colors.white,
@@ -138,6 +148,7 @@ class _ClockLearningGameState extends ConsumerState<ClockLearningGame>
           const Spacer(),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(25),

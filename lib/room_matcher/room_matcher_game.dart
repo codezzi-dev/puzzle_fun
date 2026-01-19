@@ -62,7 +62,7 @@ class _RoomMatcherGameState extends ConsumerState<RoomMatcherGame> with TickerPr
     tts.speak(text);
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
     final messages = [
       'Amazing job!',
       'You put everything in the right room!',
@@ -70,8 +70,9 @@ class _RoomMatcherGameState extends ConsumerState<RoomMatcherGame> with TickerPr
       'Perfect placement!',
     ];
     final message = messages[math.Random().nextInt(messages.length)];
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak(message);
-    victoryAudio.playVictorySound();
   }
 
   @override

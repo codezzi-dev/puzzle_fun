@@ -80,9 +80,10 @@ class _RobotColoringGameState extends ConsumerState<RobotColoringGame>
     tts.speak("Try again!");
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak("Wonderful! You colored the robot perfectly!");
-    victoryAudio.playVictorySound();
   }
 
   @override

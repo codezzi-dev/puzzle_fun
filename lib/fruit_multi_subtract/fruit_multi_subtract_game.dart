@@ -63,9 +63,18 @@ class _FruitMultiSubtractGameState extends ConsumerState<FruitMultiSubtractGame>
     tts.speak(text);
   }
 
+  Future<void> _speakSuccess(FmsState state) async {
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
+    _speak(
+      'Super! ${state.multiplier} groups of ${state.itemsPerBasket} minus ${state.takenCount} is ${state.remainingCount}!',
+    );
+  }
+
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _overlayController.dispose();
     _buttonController.dispose();
     _basketBounceController.dispose();
@@ -101,10 +110,7 @@ class _FruitMultiSubtractGameState extends ConsumerState<FruitMultiSubtractGame>
         );
       } else if (state.phase == FmsGamePhase.success) {
         _overlayController.forward(from: 0);
-        victoryAudio.playVictorySound();
-        _speak(
-          'Super! ${state.multiplier} groups of ${state.itemsPerBasket} minus ${state.takenCount} is ${state.remainingCount}!',
-        );
+        _speakSuccess(state);
       }
     }
 
@@ -145,7 +151,12 @@ class _FruitMultiSubtractGameState extends ConsumerState<FruitMultiSubtractGame>
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              tts.stop();
+              victoryAudio.stop();
+              Navigator.pop(context);
+            },
+
             icon: const Icon(Icons.arrow_back_rounded),
             style: IconButton.styleFrom(
               backgroundColor: Colors.white,

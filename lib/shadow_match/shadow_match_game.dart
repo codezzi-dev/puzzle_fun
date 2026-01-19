@@ -71,7 +71,7 @@ class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerPr
     tts.speak(text);
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
     final messages = [
       'Great job!',
       'You matched them all!',
@@ -79,8 +79,9 @@ class _ShadowMatchGameState extends ConsumerState<ShadowMatchGame> with TickerPr
       'Awesome matching!',
     ];
     final message = messages[math.Random().nextInt(messages.length)];
-    tts.speak(message);
-    victoryAudio.playVictorySound();
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
+    _speak(message);
   }
 
   @override

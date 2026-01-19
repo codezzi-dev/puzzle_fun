@@ -61,7 +61,7 @@ class _SizeSorterGameState extends ConsumerState<SizeSorterGame> with TickerProv
     tts.speak(text);
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
     final messages = [
       'Fantastic!',
       'You organized them perfectly!',
@@ -69,8 +69,9 @@ class _SizeSorterGameState extends ConsumerState<SizeSorterGame> with TickerProv
       'Well done!',
     ];
     final message = messages[math.Random().nextInt(messages.length)];
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     _speak(message);
-    victoryAudio.playVictorySound();
   }
 
   @override

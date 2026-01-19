@@ -98,11 +98,12 @@ class _ShapeMasterState extends ConsumerState<ShapeMaster> with TickerProviderSt
     tts.speak('Find $shapeName!');
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
     final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
     final message = messages[math.Random().nextInt(messages.length)];
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak(message);
-    victoryAudio.playVictorySound();
   }
 
   @override

@@ -84,15 +84,17 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
     tts.speak('Great! $shapeName placed!');
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
     final messages = ['Amazing job!', 'You built the robot!', 'Wonderful!', 'Perfect!'];
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak(messages[math.Random().nextInt(messages.length)]);
-    victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _bounceController.dispose();
     _pulseController.dispose();
     _overlayController.dispose();
@@ -159,7 +161,12 @@ class _RobotBuilderGameState extends ConsumerState<RobotBuilderGame> with Ticker
         children: [
           _buildIconButton(
             icon: Icons.arrow_back_rounded,
-            onTap: () => Navigator.of(context).pop(),
+            onTap: () {
+              tts.stop();
+              victoryAudio.stop();
+              Navigator.of(context).pop();
+            },
+
             color: const Color(0xFF7B68EE),
           ),
           const Spacer(),

@@ -85,15 +85,17 @@ class _BodyPartsGameState extends ConsumerState<BodyPartsGame> with TickerProvid
     tts.speak('Find $name!');
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
     final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak(messages[math.Random().nextInt(messages.length)]);
-    victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _bounceController.dispose();
     _pulseController.dispose();
     _sparkleController.dispose();
@@ -199,7 +201,12 @@ class _BodyPartsGameState extends ConsumerState<BodyPartsGame> with TickerProvid
         children: [
           _buildIconButton(
             icon: Icons.arrow_back_rounded,
-            onTap: () => Navigator.of(context).pop(),
+            onTap: () {
+              tts.stop();
+              victoryAudio.stop();
+              Navigator.of(context).pop();
+            },
+
             color: const Color(0xFFE63946),
           ),
           const Spacer(),

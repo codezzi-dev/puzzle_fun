@@ -60,9 +60,17 @@ class _FruitGroupsGameState extends ConsumerState<FruitGroupsGame> with TickerPr
     tts.speak(text);
   }
 
+  Future<void> _speakSuccess(FruitGroupsState state) async {
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
+    String equationText = state.basketCounts.join(' + ');
+    _speak('Super! $equationText is ${state.correctAnswer}!');
+  }
+
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _overlayController.dispose();
     _buttonController.dispose();
     _basketBounceController.dispose();
@@ -92,9 +100,7 @@ class _FruitGroupsGameState extends ConsumerState<FruitGroupsGame> with TickerPr
         _speak('$equationText equals... Tap the answer!');
       } else if (state.phase == FruitGroupsGamePhase.success) {
         _overlayController.forward(from: 0);
-        victoryAudio.playVictorySound();
-        String equationText = state.basketCounts.join(' + ');
-        _speak('Super! $equationText is ${state.correctAnswer}!');
+        _speakSuccess(state);
       }
     }
 
@@ -136,7 +142,12 @@ class _FruitGroupsGameState extends ConsumerState<FruitGroupsGame> with TickerPr
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              tts.stop();
+              victoryAudio.stop();
+              Navigator.pop(context);
+            },
+
             icon: const Icon(Icons.arrow_back_rounded),
             style: IconButton.styleFrom(
               backgroundColor: Colors.white,

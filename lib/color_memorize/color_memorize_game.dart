@@ -98,16 +98,18 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
     tts.speak('Find $colorName $characterName?');
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
     final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
     final message = messages[math.Random().nextInt(messages.length)];
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak(message);
-    victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _characterBounceController.dispose();
     _colorPulseController.dispose();
     _sparkleController.dispose();
@@ -249,7 +251,12 @@ class _ColorMemorizeState extends ConsumerState<ColorMemorize> with TickerProvid
           // Back button
           _buildIconButton(
             icon: Icons.arrow_back_rounded,
-            onTap: () => Navigator.of(context).pop(),
+            onTap: () {
+              tts.stop();
+              victoryAudio.stop();
+              Navigator.of(context).pop();
+            },
+
             color: const Color(0xFF6A4C93),
           ),
 

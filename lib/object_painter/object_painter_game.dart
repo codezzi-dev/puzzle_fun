@@ -80,11 +80,12 @@ class _ObjectPainterGameState extends ConsumerState<ObjectPainterGame>
     tts.speak("Try again!");
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak(
       "Wonderful! You painted the ${ref.read(objectPainterProvider).currentObject.name} perfectly!",
     );
-    victoryAudio.playVictorySound();
   }
 
   @override

@@ -49,12 +49,14 @@ class _SequenceBuilderGameState extends ConsumerState<SequenceBuilderGame>
     tts.speak(text);
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
     final messages = [
       "Amazing! You got it right!",
       "Wonderful! Perfect order!",
       "Great job! You're a sequencing star!",
     ];
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak(messages[math.Random().nextInt(messages.length)]);
   }
 
@@ -76,7 +78,6 @@ class _SequenceBuilderGameState extends ConsumerState<SequenceBuilderGame>
         !_successController.isAnimating &&
         _successController.value == 0) {
       _successController.forward();
-      victoryAudio.playVictorySound();
       _speakSuccess();
     }
 

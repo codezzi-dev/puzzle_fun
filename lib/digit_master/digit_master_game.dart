@@ -85,16 +85,18 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
     tts.speak('Find $digitName!');
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
     final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
     final message = messages[math.Random().nextInt(messages.length)];
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak(message);
-    victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _digitBounceController.dispose();
     _digitPulseController.dispose();
     _sparkleController.dispose();
@@ -221,7 +223,12 @@ class _DigitMasterState extends ConsumerState<DigitMaster> with TickerProviderSt
         children: [
           _buildIconButton(
             icon: Icons.arrow_back_rounded,
-            onTap: () => Navigator.of(context).pop(),
+            onTap: () {
+              tts.stop();
+              victoryAudio.stop();
+              Navigator.of(context).pop();
+            },
+
             color: const Color(0xFFFF9F1C),
           ),
           const Spacer(),

@@ -28,6 +28,7 @@ import 'fruit_subtraction/fruit_subtraction_game.dart';
 import 'fruit_groups/fruit_groups_game.dart';
 import 'fruit_multi_subtract/fruit_multi_subtract_game.dart';
 import 'color_mixer/color_mixer_game.dart';
+import 'color_alchemy/color_alchemy_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -224,6 +225,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Mix colors to create new ones!',
       gradientColors: [const Color(0xFF00B4D8), const Color(0xFF90E0EF)],
       page: const ColorMixerGame(),
+    ),
+    _GameInfo(
+      title: 'Color Alchemy',
+      emoji: '🧪🔮',
+      description: 'Discover new colors by mixing!',
+      gradientColors: [const Color(0xFF9B5DE5), const Color(0xFFF15BB5)],
+      page: const ColorAlchemyGame(),
     ),
   ];
 

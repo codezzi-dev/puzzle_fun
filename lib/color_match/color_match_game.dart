@@ -55,9 +55,10 @@ class _ColorMatchGameState extends ConsumerState<ColorMatchGame> with TickerProv
     tts.speak('Match the colors! Draw a line from each color to the matching shape.');
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak('Perfect! You matched all the colors!');
-    victoryAudio.playVictorySound();
   }
 
   void _speakCorrect(String colorName) {

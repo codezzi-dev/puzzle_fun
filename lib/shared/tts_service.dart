@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'victory_audio_service.dart';
 
 /// Shared TTS service for consistent voice feedback across all games.
 /// Automatically stops previous speech before starting new speech.
@@ -30,6 +31,7 @@ class TtsService {
   /// This ensures new commands immediately interrupt old ones.
   Future<void> speak(String text) async {
     try {
+      await victoryAudio.stop(); // Stop any ongoing victory music
       await _flutterTts.stop(); // Stop any ongoing speech first
       await _flutterTts.speak(text);
     } catch (e) {

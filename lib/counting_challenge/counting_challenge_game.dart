@@ -52,9 +52,16 @@ class _CountingChallengeState extends ConsumerState<CountingChallenge>
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _overlayController.dispose();
     _buttonController.dispose();
     super.dispose();
+  }
+
+  Future<void> _speakSuccess(CountingState state) async {
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
+    _speak('Amazing! You counted ${state.count} ${state.currentItem.name}!');
   }
 
   @override
@@ -71,8 +78,7 @@ class _CountingChallengeState extends ConsumerState<CountingChallenge>
         _speak('Touch the number ${state.count}!');
       } else if (state.phase == CountingGamePhase.success) {
         _overlayController.forward(from: 0);
-        victoryAudio.playVictorySound();
-        _speak('Amazing! You counted ${state.count} ${state.currentItem.name}!');
+        _speakSuccess(state);
       }
     }
 
@@ -113,7 +119,12 @@ class _CountingChallengeState extends ConsumerState<CountingChallenge>
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              tts.stop();
+              victoryAudio.stop();
+              Navigator.pop(context);
+            },
+
             icon: const Icon(Icons.arrow_back_rounded),
             style: IconButton.styleFrom(
               backgroundColor: Colors.white,

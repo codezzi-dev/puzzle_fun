@@ -80,16 +80,18 @@ class _MissingMysteryGameState extends ConsumerState<MissingMysteryGame>
     tts.speak(text);
   }
 
-  void _speakSuccess() {
+  Future<void> _speakSuccess() async {
     final messages = ['Great job!', 'You found it!', 'Yay! That\'s right!', 'Awesome!'];
     final message = messages[math.Random().nextInt(messages.length)];
+    await victoryAudio.playVictorySound();
+    await victoryAudio.waitForCompletion();
     tts.speak(message);
-    victoryAudio.playVictorySound();
   }
 
   @override
   void dispose() {
     tts.stop();
+    victoryAudio.stop();
     _bounceController.dispose();
     _sparkleController.dispose();
     _overlayController.dispose();
@@ -211,6 +213,7 @@ class _MissingMysteryGameState extends ConsumerState<MissingMysteryGame>
               tts.stop();
               Navigator.pop(context);
             },
+
             color: const Color(0xFF6A4C93),
           ),
           const Spacer(),
