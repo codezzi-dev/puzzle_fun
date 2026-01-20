@@ -29,6 +29,7 @@ import 'fruit_groups/fruit_groups_game.dart';
 import 'fruit_multi_subtract/fruit_multi_subtract_game.dart';
 import 'color_mixer/color_mixer_game.dart';
 import 'color_alchemy/color_alchemy_game.dart';
+import 'opposite_pairs/opposite_pairs_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -232,6 +233,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Discover new colors by mixing!',
       gradientColors: [const Color(0xFF9B5DE5), const Color(0xFFF15BB5)],
       page: const ColorAlchemyGame(),
+    ),
+    _GameInfo(
+      title: 'Opposite Pairs',
+      emoji: '↔️',
+      description: 'Match the opposites!',
+      gradientColors: [const Color(0xFF4361EE), const Color(0xFF3F37C9)],
+      page: const OppositePairsGame(),
     ),
   ];
 
