@@ -30,6 +30,7 @@ import 'fruit_multi_subtract/fruit_multi_subtract_game.dart';
 import 'color_mixer/color_mixer_game.dart';
 import 'color_alchemy/color_alchemy_game.dart';
 import 'opposite_pairs/opposite_pairs_game.dart';
+import 'food_maker/food_maker_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -240,6 +241,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Match the opposites!',
       gradientColors: [const Color(0xFF4361EE), const Color(0xFF3F37C9)],
       page: const OppositePairsGame(),
+    ),
+    _GameInfo(
+      title: 'Food Maker',
+      emoji: '🍕🧁',
+      description: 'Decorate the food!',
+      gradientColors: [const Color(0xFFFF9800), const Color(0xFFFF5722)],
+      page: const FoodMakerGame(),
     ),
   ];
 
