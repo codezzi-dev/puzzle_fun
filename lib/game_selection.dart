@@ -31,6 +31,7 @@ import 'color_mixer/color_mixer_game.dart';
 import 'color_alchemy/color_alchemy_game.dart';
 import 'opposite_pairs/opposite_pairs_game.dart';
 import 'food_maker/food_maker_game.dart';
+import 'musical_mimic/musical_mimic_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -248,6 +249,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Decorate the food!',
       gradientColors: [const Color(0xFFFF9800), const Color(0xFFFF5722)],
       page: const FoodMakerGame(),
+    ),
+    _GameInfo(
+      title: 'Musical Mimic',
+      emoji: '🎹',
+      description: 'Repeat the melody!',
+      gradientColors: [const Color(0xFFE91E63), const Color(0xFF9C27B0)],
+      page: const MusicalMimicGame(),
     ),
   ];
 
