@@ -32,6 +32,7 @@ import 'color_alchemy/color_alchemy_game.dart';
 import 'opposite_pairs/opposite_pairs_game.dart';
 import 'food_maker/food_maker_game.dart';
 import 'musical_mimic/musical_mimic_game.dart';
+import 'train_addition/train_addition_game.dart';
 
 class GameSelectionScreen extends StatefulWidget {
   const GameSelectionScreen({super.key});
@@ -256,6 +257,13 @@ class _GameSelectionScreenState extends State<GameSelectionScreen> with TickerPr
       description: 'Repeat the melody!',
       gradientColors: [const Color(0xFFE91E63), const Color(0xFF9C27B0)],
       page: const MusicalMimicGame(),
+    ),
+    _GameInfo(
+      title: 'Train Addition',
+      emoji: '🚂➕',
+      description: 'Add passengers to the train!',
+      gradientColors: [const Color(0xFF0D47A1), const Color(0xFF1976D2)],
+      page: const TrainAdditionGame(),
     ),
   ];
 
