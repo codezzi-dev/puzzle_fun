@@ -62,8 +62,8 @@ class MixingPot extends StatelessWidget {
   }
 
   Color _getLiquidColor() {
-    if (currentMix.isEmpty) return Colors.white.withOpacity(0.5);
-    if (currentMix.length == 1) return currentMix[0].color.withOpacity(0.7);
+    if (currentMix.isEmpty) return Colors.white.withValues(alpha: 0.5);
+    if (currentMix.length == 1) return currentMix[0].color.withValues(alpha: 0.7);
     if (resultColor != null) return resultColor!.color;
 
     // Fallback mixing logic if resultColor is not passed (testing phase mid-mix)
@@ -73,7 +73,7 @@ class MixingPot extends StatelessWidget {
   Gradient? _getLiquidGradient() {
     if (currentMix.length < 2) return null;
     return RadialGradient(
-      colors: [Colors.white.withOpacity(0.3), _getLiquidColor()],
+      colors: [Colors.white.withValues(alpha: 0.3), _getLiquidColor()],
       center: Alignment.topLeft,
       radius: 1.0,
     );

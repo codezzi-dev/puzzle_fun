@@ -127,9 +127,9 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              state.themeColor.withOpacity(0.15),
+              state.themeColor.withValues(alpha: 0.15),
               Colors.white,
-              state.themeColor.withOpacity(0.1),
+              state.themeColor.withValues(alpha: 0.1),
             ],
           ),
         ),
@@ -222,7 +222,11 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
-            BoxShadow(color: color.withOpacity(0.2), blurRadius: 10, offset: const Offset(0, 4)),
+            BoxShadow(
+              color: color.withValues(alpha: 0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
           ],
         ),
         child: Icon(icon, color: color, size: 24),
@@ -237,7 +241,7 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
-          BoxShadow(color: color.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 2)),
+          BoxShadow(color: color.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
       child: Row(
@@ -270,7 +274,7 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
               borderRadius: BorderRadius.circular(40),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -291,7 +295,7 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: state.themeColor.withOpacity(0.1),
+                        color: state.themeColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -313,7 +317,7 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
             onTap: () => notifier.startPlaying(),
             text: "LET'S COOK!",
             icon: Icons.restaurant_rounded,
-            colors: [state.themeColor, state.themeColor.withOpacity(0.8)],
+            colors: [state.themeColor, state.themeColor.withValues(alpha: 0.8)],
           ),
         ],
       ),
@@ -325,9 +329,9 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
       margin: const EdgeInsets.symmetric(horizontal: 24),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: state.themeColor.withOpacity(0.2), width: 2),
+        border: Border.all(color: state.themeColor.withValues(alpha: 0.2), width: 2),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -397,11 +401,11 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
                       width: 360,
                       height: 360,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.5),
+                        color: Colors.white.withValues(alpha: 0.5),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 30,
                             spreadRadius: 5,
                           ),
@@ -463,7 +467,7 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
             borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 25,
                 offset: const Offset(0, -5),
               ),
@@ -487,9 +491,12 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
                         child: Container(
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
-                            color: state.themeColor.withOpacity(0.05),
+                            color: state.themeColor.withValues(alpha: 0.05),
                             borderRadius: BorderRadius.circular(25),
-                            border: Border.all(color: state.themeColor.withOpacity(0.1), width: 2),
+                            border: Border.all(
+                              color: state.themeColor.withValues(alpha: 0.1),
+                              width: 2,
+                            ),
                           ),
                           child: Text(topping.emoji, style: const TextStyle(fontSize: 55)),
                         ),
@@ -549,7 +556,7 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
             borderRadius: BorderRadius.circular(30),
             boxShadow: [
               BoxShadow(
-                color: colors[0].withOpacity(0.3),
+                color: colors[0].withValues(alpha: 0.3),
                 blurRadius: 15,
                 offset: const Offset(0, 8),
               ),
@@ -578,7 +585,7 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
 
   Widget _buildSuccessOverlay(FoodMakerState state, FoodMakerNotifier notifier) {
     return Container(
-      color: Colors.black.withOpacity(0.7),
+      color: Colors.black.withValues(alpha: 0.7),
       child: Center(
         child: ScaleTransition(
           scale: _overlayScaleAnim,
@@ -593,7 +600,11 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
               ),
               borderRadius: BorderRadius.circular(40),
               boxShadow: [
-                BoxShadow(color: Colors.orange.withOpacity(0.3), blurRadius: 40, spreadRadius: 5),
+                BoxShadow(
+                  color: Colors.orange.withValues(alpha: 0.3),
+                  blurRadius: 40,
+                  spreadRadius: 5,
+                ),
               ],
             ),
             child: Column(
@@ -610,7 +621,7 @@ class _FoodMakerGameState extends ConsumerState<FoodMakerGame> with TickerProvid
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Text(state.currentBase.emoji, style: const TextStyle(fontSize: 100)),

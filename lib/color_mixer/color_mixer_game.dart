@@ -172,7 +172,7 @@ class _ColorMixerGameState extends ConsumerState<ColorMixerGame> with TickerProv
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       margin: const EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
       ),
@@ -215,7 +215,7 @@ class _ColorMixerGameState extends ConsumerState<ColorMixerGame> with TickerProv
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: color.color.withOpacity(0.2),
+        color: color.color.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.color, width: 2),
       ),
